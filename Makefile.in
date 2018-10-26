@@ -1,0 +1,31 @@
+source = /home/alborzgh/siteResponseTool
+
+FF  = gfortran
+CC  = gcc
+CXX = g++
+
+CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3 -ffloat-store
+FFNOPTFLAG = -Wall -O
+CCOPTFLAG  = -Wall -Wno-reorder -O2
+
+LINCLUDE = -I$(source) \
+	   -I$(source)/FEM \
+	   -I$(source)/SiteResponse 
+
+NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
+
+MINCLUDE = -I/usr/include \
+	   -I/usr/include/c++/4.7
+
+FEMlib  = $(source)/lib/libFEM.a
+SRTlib  = $(source)/lib/libSRT.a
+
+.f.o:
+	$(FF) -c $(FFOPTFLAG) $(LINCLUDE) $<
+
+.c.o:
+	$(CC) -c $(CCOPTFLAG) $(LINCLUDE) $<
+
+.cpp.o:
+	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $<
+
