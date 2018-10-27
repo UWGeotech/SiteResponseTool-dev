@@ -118,7 +118,8 @@ SSPbrick::SSPbrick(int tag, int Nd1, int Nd2, int Nd3, int Nd4, int Nd5, int Nd6
 	mNodeCrd(SSPB_NUM_DIM,SSPB_NUM_NODE),
 	mVol(0),
 	Bnot(6,SSPB_NUM_DOF),
-	Kstab(SSPB_NUM_DOF,SSPB_NUM_DOF),
+	Kstab(SSPB_NUM_DOF, SSPB_NUM_DOF),
+	dampTan(SSPB_NUM_DOF, SSPB_NUM_DOF),
 	xi(8),
 	et(8),
 	ze(8),
@@ -176,6 +177,7 @@ SSPbrick::SSPbrick()
 	mVol(0),
 	Bnot(6,SSPB_NUM_DOF),
 	Kstab(SSPB_NUM_DOF,SSPB_NUM_DOF),
+	dampTan(SSPB_NUM_DOF, SSPB_NUM_DOF),
 	xi(8),
 	et(8),
 	ze(8),
@@ -535,7 +537,8 @@ SSPbrick::getMass(void)
 	return mMass;
 }
 
-const Matrix & SSPbrick::getDamp(void)
+const Matrix & 
+SSPbrick::getDamp(void)
 {
 	// get material tangent
 	Matrix Cmat = theMaterial->getDampTangent();
@@ -544,9 +547,23 @@ const Matrix & SSPbrick::getDamp(void)
 	{
 		return this->Element::getDamp();
 	}
-	Matrix dampTan(24, 24);
+
+	dampTan.Zero();
 	dampTan.addMatrixTripleProduct(1.0, Bnot, Cmat, mVol);
-	return this->Element::getDamp() + dampTan;
+	/*if (alphaM != 0.0)
+		dampTan.addMatrix(0.0, this->getMass(), alphaM);
+	if (betaK != 0.0)
+		dampTan.addMatrix(1.0, this->getTangentStiff(), betaK);
+	if (betaK0 != 0.0)
+		dampTan.addMatrix(1.0, this->getInitialStiff(), betaK0);
+	if (betaKc != 0.0)
+		dampTan.addMatrix(1.0, *Kc, betaKc);*/
+	dampTan += this->Element::getDamp();
+	return dampTan;
+
+
+
+	return this->Element::getDamp();
 }
 
 void

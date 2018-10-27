@@ -189,9 +189,9 @@ SiteResponseModel::generateTotalStressModel()
 	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
 	{
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		//theMat = new J2CyclicBoundingSurface(numLayers - layerCount, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		//	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
-		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 20000.0, 0.3, theLayer.getRho());
+		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+			theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 20000.0, 0.3, theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
 		if (PRINTDEBUG)
@@ -238,7 +238,7 @@ SiteResponseModel::generateTotalStressModel()
 	matStage.setInt(0);
 	while ((thisEle = theEleIter()) != 0)
 	{
-		//thisEle->updateParameter(1, matStage);
+		thisEle->updateParameter(1, matStage);
 	}
 
 
@@ -279,7 +279,7 @@ SiteResponseModel::generateTotalStressModel()
 	matStage.setInt(1);
 	while ((thisEle = theEleIter()) != 0)
 	{
-		//thisEle->updateParameter(1, matStage);
+		thisEle->updateParameter(1, matStage);
 	}
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
@@ -293,8 +293,8 @@ SiteResponseModel::generateTotalStressModel()
 	// add the compliant base
 	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
 	UniaxialMaterial* theViscousMats[2];
-	theViscousMats[0] = new ViscousMaterial(1, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
-	theViscousMats[1] = new ViscousMaterial(2, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
+	theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
+	theViscousMats[1] = new ViscousMaterial(numLayers + 20, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
 	//theViscousMats[0] = new ElasticMaterial(1, 20000.0, 0.0); OPS_addUniaxialMaterial(theViscousMats[0]);
 	//theViscousMats[1] = new ElasticMaterial(2, 20000.0, 0.0); OPS_addUniaxialMaterial(theViscousMats[1]);
 	ID directions(2);
@@ -360,7 +360,7 @@ SiteResponseModel::generateTotalStressModel()
 	load(2) = 0.0;
 	theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
 
-	//LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
+	// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
 
 	theDomain->addLoadPattern(theLP);
 
@@ -374,11 +374,11 @@ SiteResponseModel::generateTotalStressModel()
 
 
 
-	DirectIntegrationAnalysis* theTransientAnalysis;
-	theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	//DirectIntegrationAnalysis* theTransientAnalysis;
+	//theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
-	//VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
-	//theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
+	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
 	theDomain->setCurrentTime(0.0);
 
@@ -429,8 +429,8 @@ SiteResponseModel::generateTotalStressModel()
 
 	for (int analysisCount = 0; analysisCount < 8000; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		//int converged = theTransientAnalysis->analyze(1, 0.002, 0.001, 0.02, 1);
-		int converged = theTransientAnalysis->analyze(1, 0.002);
+		int converged = theTransientAnalysis->analyze(1, 0.002, 0.001, 0.02, 1);
+		//int converged = theTransientAnalysis->analyze(1, 0.002);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}

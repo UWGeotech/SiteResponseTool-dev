@@ -128,6 +128,7 @@ class SSPbrick : public Element
 	Matrix Bnot;                                        // mapping matrix for membrane modes
 	Matrix Kstab;                                       // stabilization stiffness matrix
 	Matrix mNodeCrd;                                    // nodal coordinate array
+	Matrix dampTan;
 	
 	Vector xi;                                          // xi evaluated at the nodes
 	Vector et;                                          // eta evaluated at the nodes
