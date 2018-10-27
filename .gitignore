@@ -1,0 +1,9 @@
+*.o
+*.out
+*.a
+*.swp
+siteresponse
+lib/*
+bin/*
+test/*
+Test/*
