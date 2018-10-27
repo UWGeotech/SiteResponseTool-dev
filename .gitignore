@@ -1,9 +1,22 @@
+# Ignore files in the Unix distribution
 *.o
 *.out
 *.a
 *.swp
-siteresponse
+bin/siteresponse
 lib/*
 bin/*
 test/*
 Test/*
+
+# Ignore files in the Windows distribution
+VS/.vs
+*.exe
+*.ilk
+*.pdb
+*.filters
+*.user
+*.tlog
+*.obj
+*.idb
+SiteResponse.log
