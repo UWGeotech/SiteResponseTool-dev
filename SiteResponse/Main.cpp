@@ -2,6 +2,7 @@
 #include "FEModel.h"
 #include "siteLayering.h"
 #include "soillayer.h"
+#include "outcropMotion.h"
 
 #include "StandardStream.h"
 #include "OPS_Stream.h"
@@ -10,7 +11,7 @@
 StandardStream sserr;
 OPS_Stream *opserrPtr = &sserr;
 
-SiteLayering setupLayers()
+SiteLayering setupDummyLayers()
 {
 	SiteLayering res;
 	res.addNewLayer(SoilLayer("Clay1", 2.0,  98.78, 184.79, 2.05, 200.0, 1.0, 1.0));
@@ -26,9 +27,9 @@ SiteLayering setupLayers()
 int main(int argc, char** argv)
 {
 
-	if (argc < 2)
+	if (argc < 3)
 	{
-		opserr << "Need at least 2 arguments. The .loc (layering) file and the name of the motion." << endln;
+		opserr << "Need at least 3 arguments. The .loc (layering) file and the name of the motions." << endln;
 		std::getchar();
 		return -1;
 	}
@@ -38,9 +39,13 @@ int main(int argc, char** argv)
 
 	opserr << layersFN.c_str() << " , " << motionFN.c_str() << endln;
 
+	OutcropMotion motionX(motionFN.c_str());
+	OutcropMotion motionY;
+
 	SiteLayering siteLayers(layersFN.c_str());
 
-	SiteResponseModel model(siteLayers);
+	SiteResponseModel model(siteLayers, &motionX, &motionY);
+	model.runTotalStressModel();
 	
 	return 0;
 }

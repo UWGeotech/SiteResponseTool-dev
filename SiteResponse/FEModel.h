@@ -6,6 +6,7 @@
 
 #include "siteLayering.h"
 #include "soillayer.h"
+#include "outcropMotion.h"
 
 #define MAX_FREQUENCY 50.0
 #define NODES_PER_WAVELENGTH 10
@@ -14,15 +15,17 @@ class SiteResponseModel {
 
 public:
 	SiteResponseModel();
-	SiteResponseModel(SiteLayering);
+	SiteResponseModel(SiteLayering, OutcropMotion*, OutcropMotion*);
 	~SiteResponseModel();
+
+	int runTestModel();
+	int runTotalStressModel();
 
 private:
 	Domain *theDomain;
-	SiteLayering SRM_layering;
-
-	int generateTestModel();
-	int generateTotalStressModel();
+	SiteLayering    SRM_layering;
+	OutcropMotion*  theMotionX;
+	OutcropMotion*  theMotionY;
 };
 
 

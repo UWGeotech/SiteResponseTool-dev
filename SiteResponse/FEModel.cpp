@@ -61,16 +61,25 @@
 
 #define PRINTDEBUG false
 
-SiteResponseModel::SiteResponseModel() 
+SiteResponseModel::SiteResponseModel() :
+	theMotionX(0),
+	theMotionY(0)
 {
 
 }
 
-SiteResponseModel::SiteResponseModel(SiteLayering layering) :
-	SRM_layering(layering)
+SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motionX, OutcropMotion* motionY) :
+	SRM_layering(layering),
+	theMotionX(motionX),
+	theMotionY(motionY)
 {
-	theDomain = new Domain();
-	this->generateTotalStressModel();
+	if (theMotionX->isInitialized() || theMotionY->isInitialized())
+		theDomain = new Domain();
+	else
+	{
+		opserr << "No motion is specified." << endln;
+		exit(-1);
+	}
 }
 
 SiteResponseModel::~SiteResponseModel() {
@@ -80,7 +89,7 @@ SiteResponseModel::~SiteResponseModel() {
 }
 
 int
-SiteResponseModel::generateTotalStressModel()
+SiteResponseModel::runTotalStressModel()
 {
 	Vector zeroVec(3);
 	zeroVec.Zero();
@@ -335,11 +344,11 @@ SiteResponseModel::generateTotalStressModel()
 
 	// apply the motion
 
-	PathTimeSeries* theTS_disp = NULL;
-	PathTimeSeries* theTS_vel = new PathTimeSeries(1, "Motion1.vel", "Motion1.time", 1.0, true);
-	PathTimeSeries* theTS_acc = new PathTimeSeries(1, "Motion1.acc", "Motion1.time", 9.81, true);
+	//PathTimeSeries* theTS_disp = NULL;
+	//PathTimeSeries* theTS_vel = new PathTimeSeries(1, "Motion1.vel", "Motion1.time", 1.0, true);
+	//PathTimeSeries* theTS_acc = new PathTimeSeries(1, "Motion1.acc", "Motion1.time", 9.81, true);
 
-	GroundMotion* theMotion = new GroundMotion(theTS_disp, theTS_vel, theTS_acc);
+	//GroundMotion* theMotion = new GroundMotion(theTS_disp, theTS_vel, theTS_acc);
 
 
 	//MultiSupportPattern* theLP = new MultiSupportPattern(1);
@@ -350,20 +359,39 @@ SiteResponseModel::generateTotalStressModel()
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
-	LoadPattern* theLP = new LoadPattern(1, vis_C);
-	theLP->setTimeSeries(theTS_vel);
+	if (theMotionX->isInitialized())
+	{
+		LoadPattern* theLP = new LoadPattern(1, vis_C);
+		theLP->setTimeSeries(theMotionX->getVelSeries());
 
-	NodalLoad* theLoad;
-	Vector load(3);
-	load(0) = 1.0;
-	load(1) = 0.0;
-	load(2) = 0.0;
-	theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
+		NodalLoad* theLoad;
+		Vector load(3);
+		load(0) = 1.0;
+		load(1) = 0.0;
+		load(2) = 0.0;
+		theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
 
-	// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
+		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
 
-	theDomain->addLoadPattern(theLP);
+		theDomain->addLoadPattern(theLP);
+	}
 
+	if (theMotionY->isInitialized())
+	{
+		LoadPattern* theLP = new LoadPattern(2, vis_C);
+		theLP->setTimeSeries(theMotionY->getVelSeries());
+
+		NodalLoad* theLoad;
+		Vector load(3);
+		load(0) = 0.0;
+		load(1) = 0.0;
+		load(2) = 1.0;
+		theLoad = new NodalLoad(2, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
+
+		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
+
+		theDomain->addLoadPattern(theLP);
+	}
 
 
 	delete theIntegrator;
@@ -452,7 +480,7 @@ SiteResponseModel::generateTotalStressModel()
 
 
 int
-SiteResponseModel::generateTestModel()
+SiteResponseModel::runTestModel()
 {
 	Vector zeroVec(3);
 	zeroVec.Zero();

@@ -115,9 +115,6 @@
     <ClCompile Include="..\..\FEM\FE_Element.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\SiteResponse\FEModel.cpp">
-      <Filter>FEM</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\FEM\Graph.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
@@ -373,6 +370,8 @@
     <ClCompile Include="..\..\SiteResponse\siteLayering.cpp" />
     <ClCompile Include="..\..\SiteResponse\soillayer.cpp" />
     <ClCompile Include="..\..\SiteResponse\Main.cpp" />
+    <ClCompile Include="..\..\SiteResponse\FEModel.cpp" />
+    <ClCompile Include="..\..\SiteResponse\outcropMotion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h">
@@ -523,9 +522,6 @@
       <Filter>FEM</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FEM\FEM_ObjectBroker.h">
-      <Filter>FEM</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\SiteResponse\FEModel.h">
       <Filter>FEM</Filter>
     </ClInclude>
     <ClInclude Include="..\..\FEM\Fiber.h">
@@ -857,6 +853,8 @@
     </ClInclude>
     <ClInclude Include="..\..\SiteResponse\soillayer.h" />
     <ClInclude Include="..\..\SiteResponse\siteLayering.h" />
+    <ClInclude Include="..\..\SiteResponse\FEModel.h" />
+    <ClInclude Include="..\..\SiteResponse\outcropMotion.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FEM">
