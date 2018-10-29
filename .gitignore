@@ -14,7 +14,6 @@ VS/.vs
 *.exe
 *.ilk
 *.pdb
-*.filters
 *.user
 *.tlog
 *.obj
