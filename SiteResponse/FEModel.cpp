@@ -316,7 +316,7 @@ SiteResponseModel::runTotalStressModel()
 	theSP = new SP_Constraint(numNodes + 1, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
 	//theSP = new SP_Constraint(numNodes + 2, 0, 0.0); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(numNodes + 2, 2, 0.0); theDomain->addSP_Constraint(theSP);
+	//theSP = new SP_Constraint(numNodes + 2, 2, 0.0); theDomain->addSP_Constraint(theSP);
 
 	theMP = new MP_Constraint(1, numNodes + 2, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 
@@ -398,7 +398,7 @@ SiteResponseModel::runTotalStressModel()
 	delete theAnalysis;
 
 	TransientIntegrator* theTransientIntegrator = new Newmark(0.5, 0.25);
-	theTest->setTolerance(1.0e-6);
+	theTest->setTolerance(1.0e-5);
 
 
 
@@ -455,7 +455,7 @@ SiteResponseModel::runTotalStressModel()
 	theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
 	theDomain->addRecorder(*theRecorder);
 
-	for (int analysisCount = 0; analysisCount < 8000; ++analysisCount) {
+	for (int analysisCount = 0; analysisCount < 4000; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		int converged = theTransientAnalysis->analyze(1, 0.002, 0.001, 0.02, 1);
 		//int converged = theTransientAnalysis->analyze(1, 0.002);
@@ -517,8 +517,8 @@ SiteResponseModel::runTestModel()
 
 	Element* theEle;
 	theMat = OPS_getNDMaterial(1);
-	//theEle = new SSPbrick(1, 1, 2, 3, 4, 5, 6, 7, 8, *theMat, 0.0, 0.0, 0.0); theDomain->addElement(theEle);
-	theEle = new Brick(1, 1, 2, 3, 4, 5, 6, 7, 8, *theMat, 0.0, 0.0, 0.0); theDomain->addElement(theEle);
+	theEle = new SSPbrick(1, 1, 2, 3, 4, 5, 6, 7, 8, *theMat, 0.0, 0.0, 0.0); theDomain->addElement(theEle);
+	//theEle = new Brick(1, 1, 2, 3, 4, 5, 6, 7, 8, *theMat, 0.0, 0.0, 0.0); theDomain->addElement(theEle);
 
 	//LinearSeries* theTS_disp;
 	//theTS_disp = new LinearSeries(1, 1.0);
