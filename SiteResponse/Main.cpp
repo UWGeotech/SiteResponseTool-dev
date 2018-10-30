@@ -36,14 +36,14 @@ int main(int argc, char** argv)
 
 	std::string layersFN(argv[1]);
 	std::string motionXFN(argv[2]);
-	std::string motionYFN(argv[3]);
+	std::string motionZFN(argv[3]);
 
 	OutcropMotion motionX(motionXFN.c_str());
-	OutcropMotion motionY(motionYFN.c_str());
+	OutcropMotion motionZ(motionZFN.c_str());
 
 	SiteLayering siteLayers(layersFN.c_str());
 
-	SiteResponseModel model(siteLayers, &motionX, &motionY);
+	SiteResponseModel model(siteLayers, &motionX, &motionZ);
 	model.runTotalStressModel();
 	
 	return 0;
