@@ -27,7 +27,7 @@ SiteLayering setupDummyLayers()
 int main(int argc, char** argv)
 {
 
-	if (argc < 3)
+	if (argc < 4)
 	{
 		opserr << "Need at least 3 arguments. The .loc (layering) file and the name of the motions." << endln;
 		std::getchar();
@@ -35,12 +35,11 @@ int main(int argc, char** argv)
 	}
 
 	std::string layersFN(argv[1]);
-	std::string motionFN(argv[2]);
+	std::string motionXFN(argv[2]);
+	std::string motionYFN(argv[3]);
 
-	opserr << layersFN.c_str() << " , " << motionFN.c_str() << endln;
-
-	OutcropMotion motionX(motionFN.c_str());
-	OutcropMotion motionY;
+	OutcropMotion motionX(motionXFN.c_str());
+	OutcropMotion motionY(motionYFN.c_str());
 
 	SiteLayering siteLayers(layersFN.c_str());
 
