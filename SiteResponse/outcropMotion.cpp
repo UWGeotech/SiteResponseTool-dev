@@ -5,6 +5,7 @@
 
 bool fileExists(const char* fileName)
 {
+	// open the file to see if it exists
 	std::ifstream file(fileName);
 	if (file)
 		return true;
@@ -22,6 +23,8 @@ int readDT(const char* fileName, int& numSteps, std::vector<double>& dt)
 		std::string line;
 		res = 1;
 		double t_n, t_n1;
+
+		// find the first non-empty line
 		while (getline(file, line))
 		{
 			// skip comment lines
@@ -32,6 +35,7 @@ int readDT(const char* fileName, int& numSteps, std::vector<double>& dt)
 			break;
 		}
 
+		// count number of lines and calculate the dt for each step
 		while (getline(file, line))
 		{
 			// skip comment lines
@@ -66,29 +70,40 @@ OutcropMotion::OutcropMotion(const char* fName):
 	isThisInitialized(true),
 	m_numSteps(0)
 {
+	// assuming time, displacement, velocity and acceleration are located in different files
 	std::string motionName(fName);
 	std::string timeFName = motionName  + ".time";
 	std::string accFName  = motionName  + ".acc";
 	std::string velFName  = motionName  + ".vel";
 	std::string dispFName = motionName  + ".disp";
 	
+	// check to see if the time file exists
 	if (readDT(timeFName.c_str(), m_numSteps, m_dt) > 0)
 	{
+		// assuming acceleration is in g's
 		if (fileExists(accFName.c_str()))
 			theAccSeries = new PathTimeSeries(1, accFName.c_str(), timeFName.c_str(), 9.81, true);
+
+		// assuming velocity is in m/s
 		if (fileExists(velFName.c_str()))
 			theVelSeries = new PathTimeSeries(2, velFName.c_str(), timeFName.c_str(), 1.0, true);
+
+		// assuming displcement is in m
 		if (fileExists(dispFName.c_str()))
 			theDispSeries = new PathTimeSeries(3, dispFName.c_str(), timeFName.c_str(), 1.0, true);
+
+		// create a ground motion. It's useful for UniformExcitatpon or MultipleSupport 
 		if ((theAccSeries != NULL) || (theVelSeries != NULL) || (theDispSeries != NULL) )
 			theGroundMotion = new GroundMotion(theDispSeries, theVelSeries, theAccSeries, NULL);
 		else
 		{
+			// only time file exists. This is a problem
 			isThisInitialized = false;
 			opserr << "None of the files " << accFName.c_str() << " or " << velFName.c_str() << " or " << dispFName.c_str() << " exist." << endln;
 		}
 	}
 	else {
+		// the time file does not exist. This is a problem
 		isThisInitialized = false;
 		opserr << "The file " << timeFName.c_str() << " containing the array of time does not exist." << endln;
 	}

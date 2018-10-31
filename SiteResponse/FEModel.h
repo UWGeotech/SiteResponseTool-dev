@@ -25,7 +25,7 @@ private:
 	Domain *theDomain;
 	SiteLayering    SRM_layering;
 	OutcropMotion*  theMotionX;
-	OutcropMotion*  theMotionY;
+	OutcropMotion*  theMotionZ;
 };
 
 

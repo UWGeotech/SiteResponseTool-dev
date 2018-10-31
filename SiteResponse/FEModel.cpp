@@ -63,7 +63,7 @@
 
 SiteResponseModel::SiteResponseModel() :
 	theMotionX(0),
-	theMotionY(0)
+	theMotionZ(0)
 {
 
 }
@@ -71,9 +71,9 @@ SiteResponseModel::SiteResponseModel() :
 SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motionX, OutcropMotion* motionY) :
 	SRM_layering(layering),
 	theMotionX(motionX),
-	theMotionY(motionY)
+	theMotionZ(motionY)
 {
-	if (theMotionX->isInitialized() || theMotionY->isInitialized())
+	if (theMotionX->isInitialized() || theMotionZ->isInitialized())
 		theDomain = new Domain();
 	else
 	{
@@ -98,6 +98,7 @@ SiteResponseModel::runTotalStressModel()
 	std::vector<int> layerNumNodes;
 	std::vector<double> layerElemSize;
 
+	// setup the geometry and mesh parameters
 	int numLayers = SRM_layering.getNumLayers();
 	int numElems = 0;
 	int numNodes = 0;
@@ -156,18 +157,9 @@ SiteResponseModel::runTotalStressModel()
 		nCount += layerNumNodes[layerCount];
 	}
 
-	//int count = 0;
-	//NodeIter& theNodeIter = theDomain->getNodes();
-	//Node * thisNode;
-	//while ((thisNode = theNodeIter()) != 0)
-	//{
-	//	count++;
-	//	opserr << "Node " << thisNode->getTag() << " = " << thisNode->getCrds() << endln;
-	//}
-
 	// apply fixities
 	SP_Constraint* theSP;
-	ID theSPtoRemove(8);
+	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
 	theSP = new SP_Constraint(1, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
 	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(1, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
@@ -231,14 +223,7 @@ SiteResponseModel::runTotalStressModel()
 	if (PRINTDEBUG)
 		opserr << "Total number of elements = " << nElem << endln;
 
-	//int count = 0;
-	//ElementIter& theEleIter = theDomain->getElements();
-	//Element * thisEle;
-	//while ((thisEle = theEleIter()) != 0)
-	//{
-	//	count++;
-	//	opserr << "Element " << thisEle->getTag() << " = " << thisEle->getExternalNodes() << endln;
-	//}
+
 
 	// update material stage
 	ElementIter& theEleIter = theDomain->getElements();
@@ -247,10 +232,12 @@ SiteResponseModel::runTotalStressModel()
 	matStage.setInt(0);
 	while ((thisEle = theEleIter()) != 0)
 	{
+		// this is not the best way of doing this. different material use different ID'd for material stage.
 		thisEle->updateParameter(1, matStage);
 	}
 
 
+	// create analysis objects - I use static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
 	CTestNormDispIncr* theTest = new CTestNormDispIncr(1.0e-7, 30, 1);
 	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
@@ -299,27 +286,26 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	// add the compliant base
+	// add the compliant base - use the last layer properties
 	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
 	UniaxialMaterial* theViscousMats[2];
 	theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
 	theViscousMats[1] = new ViscousMaterial(numLayers + 20, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
-	//theViscousMats[0] = new ElasticMaterial(1, 20000.0, 0.0); OPS_addUniaxialMaterial(theViscousMats[0]);
-	//theViscousMats[1] = new ElasticMaterial(2, 20000.0, 0.0); OPS_addUniaxialMaterial(theViscousMats[1]);
 	ID directions(2);
 	directions(0) = 0; directions(1) = 2;
 
+	// create dashpot nodes and apply proper fixities
 	theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 	theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 	theSP = new SP_Constraint(numNodes + 1, 0, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(numNodes + 1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(numNodes + 1, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
-	//theSP = new SP_Constraint(numNodes + 2, 0, 0.0); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	//theSP = new SP_Constraint(numNodes + 2, 2, 0.0); theDomain->addSP_Constraint(theSP);
 
+	// apply equalDOF to the node connected to the column
 	theMP = new MP_Constraint(1, numNodes + 2, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 
+	// remove fixities created for gravity
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(1)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(2)); delete theSP;
@@ -329,39 +315,36 @@ SiteResponseModel::runTotalStressModel()
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(6)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(7)); delete theSP;
 	
+	// equalDOF the first 4 nodes
 	Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
 	ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
-	
 	theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 3, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 4, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 
+	// create the dashpot element
 	Vector x(3); x(0) = 1.0; x(1) = 0.0; x(2) = 0.0;
 	Vector y(3); y(1) = 1.0; y(0) = 0.0; y(2) = 0.0;
 	theEle = new ZeroLength(numElems + 1, 3, numNodes + 1, numNodes + 2, x, y, 2, theViscousMats, directions);
 	theDomain->addElement(theEle);
-
-
-	// apply the motion
-
-	//PathTimeSeries* theTS_disp = NULL;
-	//PathTimeSeries* theTS_vel = new PathTimeSeries(1, "Motion1.vel", "Motion1.time", 1.0, true);
-	//PathTimeSeries* theTS_acc = new PathTimeSeries(1, "Motion1.acc", "Motion1.time", 9.81, true);
-
-	//GroundMotion* theMotion = new GroundMotion(theTS_disp, theTS_vel, theTS_acc);
-
-
-	//MultiSupportPattern* theLP = new MultiSupportPattern(1);
-	//theLP->addMotion(*theMotion, 1);
 	
+	// apply the motion
+	int numSteps = 0;
+	std::vector<double> dt;
+
+	// using multiple support
+	//MultiSupportPattern* theLP = new MultiSupportPattern(1);
+	//theLP->addMotion(*theMotionX->getGroundMotion(), 1);
 	//theLP->addSP_Constraint(new ImposedMotionSP(1, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(2, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
-	int numSteps = 0;
-	std::vector<double> dt;
+	// using uniform excitation
+	// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
+	//theDomain->addLoadPattern(theLP);
 
+	// using a stress input with the dashpot
 	if (theMotionX->isInitialized())
 	{
 		LoadPattern* theLP = new LoadPattern(1, vis_C);
@@ -372,12 +355,11 @@ SiteResponseModel::runTotalStressModel()
 		load(0) = 1.0;
 		load(1) = 0.0;
 		load(2) = 0.0;
+
 		theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
-
-		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
-
 		theDomain->addLoadPattern(theLP);
 
+		// update the number of steps as well as the dt vector
 		int temp = theMotionX->getNumSteps();
 		if ( temp > numSteps)
 		{
@@ -386,37 +368,35 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	if (theMotionY->isInitialized())
+	if (theMotionZ->isInitialized())
 	{
 		LoadPattern* theLP = new LoadPattern(2, vis_C);
-		theLP->setTimeSeries(theMotionY->getVelSeries());
+		theLP->setTimeSeries(theMotionZ->getVelSeries());
 
 		NodalLoad* theLoad;
 		Vector load(3);
 		load(0) = 0.0;
 		load(1) = 0.0;
 		load(2) = 1.0;
+
 		theLoad = new NodalLoad(2, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
-
-		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
-
 		theDomain->addLoadPattern(theLP);
 
-		int temp = theMotionY->getNumSteps();
+		int temp = theMotionZ->getNumSteps();
 		if (temp > numSteps)
 		{
 			numSteps = temp;
-			dt = theMotionY->getDTvector();
+			dt = theMotionZ->getDTvector();
 		}
 	}
 
-
+	// I have to change to a transient analysis
+	// remove the static analysis and create new transient objects
 	delete theIntegrator;
 	delete theAnalysis;
 
 	TransientIntegrator* theTransientIntegrator = new Newmark(0.5, 0.25);
 	theTest->setTolerance(1.0e-5);
-
 
 
 	//DirectIntegrationAnalysis* theTransientAnalysis;
@@ -425,9 +405,11 @@ SiteResponseModel::runTotalStressModel()
 	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
 	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
+	// reset time in the domain
 	theDomain->setCurrentTime(0.0);
 
 	// setup Rayleigh damping 
+	// apply 2% at the natural frequency and 5*natural frequency
 	double natFreq = SRM_layering.getNaturalPeriod();
 	double dampRatio = 0.02;
 	double pi = 4.0 * atan(1.0);
@@ -440,6 +422,7 @@ SiteResponseModel::runTotalStressModel()
 	}
 	theDomain->setRayleighDampingFactors(a0, a1, 0.0, 0.0);
 
+	// create the output streams
 	OPS_Stream* theOutputStream;
 	OPS_Stream* theOutputStream2;
 	Recorder* theRecorder;
@@ -472,6 +455,7 @@ SiteResponseModel::runTotalStressModel()
 	theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
 	theDomain->addRecorder(*theRecorder);
 
+	// perform analysis
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
@@ -482,15 +466,33 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	if (PRINTDEBUG)
-	{
-		Information info;
-		theEle = theDomain->getElement(1);
-		theEle->getResponse(1, info);
-		opserr << "Stress = " << info.getData();
-		theEle->getResponse(2, info);
-		opserr << "Strain = " << info.getData();
-	}
+	//if (PRINTDEBUG)
+	//{
+	//	Information info;
+	//	theEle = theDomain->getElement(1);
+	//	theEle->getResponse(1, info);
+	//	opserr << "Stress = " << info.getData();
+	//	theEle->getResponse(2, info);
+	//	opserr << "Strain = " << info.getData();
+	//}
+
+	//int count = 0;
+	//NodeIter& theNodeIter = theDomain->getNodes();
+	//Node * thisNode;
+	//while ((thisNode = theNodeIter()) != 0)
+	//{
+	//	count++;
+	//	opserr << "Node " << thisNode->getTag() << " = " << thisNode->getCrds() << endln;
+	//}
+
+	//int count = 0;
+	//ElementIter& theEleIter = theDomain->getElements();
+	//Element * thisEle;
+	//while ((thisEle = theEleIter()) != 0)
+	//{
+	//	count++;
+	//	opserr << "Element " << thisEle->getTag() << " = " << thisEle->getExternalNodes() << endln;
+	//}
 
 	return 0;
 }
