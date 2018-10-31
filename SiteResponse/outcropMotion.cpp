@@ -92,12 +92,6 @@ OutcropMotion::OutcropMotion(const char* fName):
 		isThisInitialized = false;
 		opserr << "The file " << timeFName.c_str() << " containing the array of time does not exist." << endln;
 	}
-
-	opserr << "Num Steps = " << m_numSteps << endln;
-	for (int ii = 0; ii < m_numSteps - 1; ++ii)
-	{
-		opserr << "i = " << ii + 1 << " : " << m_dt[ii] << endln;
-	}
 }
 
 OutcropMotion::~OutcropMotion() 
