@@ -32,6 +32,7 @@
 #include "DataFileStream.h"
 #include "Recorder.h"
 #include "UniaxialMaterial.h"
+#include "ElementStateParameter.h"
 
 
 #include "SSPbrick.h"
@@ -56,6 +57,7 @@
 #include "ElementRecorder.h"
 #include "ViscousMaterial.h"
 #include "ZeroLength.h"
+#include "SingleDomParamIter.h"
 
 #include "Information.h"
 
@@ -199,8 +201,15 @@ SiteResponseModel::runTotalStressModel()
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 	}
 
-	// create soil elements
+	// create soil elements and add the material state parameter
 	Element* theEle;
+	Parameter* theParameter;
+	char** paramArgs = new char*[2];
+
+	paramArgs[0] = new char[15];
+	paramArgs[1] = new char[5];
+	sprintf(paramArgs[0], "materialState");
+
 	int nElem = 0;
 
 	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
@@ -214,6 +223,12 @@ SiteResponseModel::runTotalStressModel()
 				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -9.81 * theMat->getRho(), 0.0);
 			theDomain->addElement(theEle);
 
+
+			theParameter = new Parameter(nElem + elemCount + 1, 0, 0, 0);
+			sprintf(paramArgs[1], "%d", theMat->getTag());
+			theEle->setParameter(const_cast<const char**>(paramArgs), 2, *theParameter);
+			theDomain->addParameter(theParameter);
+
 			if (PRINTDEBUG)
 				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << endln;
 		}
@@ -226,15 +241,12 @@ SiteResponseModel::runTotalStressModel()
 
 
 	// update material stage
-	ElementIter& theEleIter = theDomain->getElements();
-	Element * thisEle;
-	Information matStage;
-	matStage.setInt(0);
-	while ((thisEle = theEleIter()) != 0)
+	ParameterIter& theParamIter = theDomain->getParameters();
+	while ((theParameter = theParamIter()) != 0)
 	{
-		// this is not the best way of doing this. different material use different ID'd for material stage.
-		thisEle->updateParameter(1, matStage);
+		theParameter->update(0.0);
 	}
+
 
 
 	// create analysis objects - I use static analysis for gravity
@@ -271,11 +283,10 @@ SiteResponseModel::runTotalStressModel()
 	}
 
 	// update material response to plastic
-	theEleIter = theDomain->getElements();
-	matStage.setInt(1);
-	while ((thisEle = theEleIter()) != 0)
+	theParamIter = theDomain->getParameters();
+	while ((theParameter = theParamIter()) != 0)
 	{
-		thisEle->updateParameter(1, matStage);
+		theParameter->update(1.0);
 	}
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
@@ -424,36 +435,43 @@ SiteResponseModel::runTotalStressModel()
 
 	// create the output streams
 	OPS_Stream* theOutputStream;
-	OPS_Stream* theOutputStream2;
 	Recorder* theRecorder;
-	ID nodesToRecord(8);
-	ID dofToRecord(3);
-	ID elemsToRecord(5);
-	nodesToRecord[0] = 1;
-	nodesToRecord[1] = 2;
-	nodesToRecord[2] = 3;
-	nodesToRecord[3] = 4;
-	nodesToRecord[4] = 5;
-	nodesToRecord[5] = 6;
-	nodesToRecord[6] = 7;
-	nodesToRecord[7] = 8;
-	dofToRecord[0] = 0;
-	dofToRecord[1] = 1;
-	dofToRecord[2] = 2;
-	elemsToRecord[0] = 1;
-	elemsToRecord[1] = 2;
-	elemsToRecord[2] = 3;
-	elemsToRecord[3] = 4;
-	elemsToRecord[4] = 5;
-	const char* eleArgs = "stress";
 
-	theOutputStream = new DataFileStream("Output.out", OVERWRITE, 2, 0, false, 6, false);
-	theOutputStream2 = new DataFileStream("Output2.out", OVERWRITE, 2, 0, false, 6, false);
+	// record last node's results
+	ID nodesToRecord(1);
+	nodesToRecord(0) = numNodes;
+
+	ID dofToRecord(3);
+	dofToRecord(0) = 0;
+	dofToRecord(1) = 1;
+	dofToRecord(2) = 2;
+
+	theOutputStream = new DataFileStream("surface.acc", OVERWRITE, 2, 0, false, 6, false);
 	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
 	theDomain->addRecorder(*theRecorder);
 
-	theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
+	theOutputStream = new DataFileStream("surface.vel", OVERWRITE, 2, 0, false, 6, false);
+	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
 	theDomain->addRecorder(*theRecorder);
+
+	theOutputStream = new DataFileStream("surface.disp", OVERWRITE, 2, 0, false, 6, false);
+	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+	theDomain->addRecorder(*theRecorder);
+
+
+	// record element results
+	// OPS_Stream* theOutputStream2;
+	// ID elemsToRecord(5);
+	// elemsToRecord(0) = 1;
+	// elemsToRecord(1) = 2;
+	// elemsToRecord(2) = 3;
+	// elemsToRecord(3) = 4;
+	// elemsToRecord(4) = 5;
+	// const char* eleArgs = "stress";
+	// 
+	// theOutputStream2 = new DataFileStream("Output2.out", OVERWRITE, 2, 0, false, 6, false);
+	// theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
+	// theDomain->addRecorder(*theRecorder);
 
 	// perform analysis
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
