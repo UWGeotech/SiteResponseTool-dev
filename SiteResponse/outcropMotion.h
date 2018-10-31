@@ -1,3 +1,4 @@
+#include <vector>
 #include "PathSeries.h"
 #include "PathTimeSeries.h"
 #include "GroundMotion.h"
@@ -16,7 +17,10 @@ public:
 	PathTimeSeries*  getVelSeries() { return theVelSeries; };
 	PathTimeSeries*  getAccSeries() { return theAccSeries; };
 	GroundMotion*    getGroundMotion() { return theGroundMotion; };
-	bool             isInitialized() { return isThisInitialized; };
+	  
+	bool                isInitialized() { return isThisInitialized; };
+	std::vector<double> getDTvector() { return m_dt; };
+	int                 getNumSteps() { return m_numSteps; };
 
 private:
 	PathTimeSeries* theAccSeries;
@@ -25,6 +29,8 @@ private:
 	GroundMotion*  theGroundMotion;
 
 	bool isThisInitialized;
+	int  m_numSteps;
+	std::vector<double> m_dt;
 };
 
 

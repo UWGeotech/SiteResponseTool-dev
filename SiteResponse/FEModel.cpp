@@ -359,6 +359,9 @@ SiteResponseModel::runTotalStressModel()
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
+	int numSteps = 0;
+	std::vector<double> dt;
+
 	if (theMotionX->isInitialized())
 	{
 		LoadPattern* theLP = new LoadPattern(1, vis_C);
@@ -374,6 +377,13 @@ SiteResponseModel::runTotalStressModel()
 		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
 
 		theDomain->addLoadPattern(theLP);
+
+		int temp = theMotionX->getNumSteps();
+		if ( temp > numSteps)
+		{
+			numSteps = temp;
+			dt = theMotionX->getDTvector();
+		}
 	}
 
 	if (theMotionY->isInitialized())
@@ -391,6 +401,13 @@ SiteResponseModel::runTotalStressModel()
 		// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
 
 		theDomain->addLoadPattern(theLP);
+
+		int temp = theMotionY->getNumSteps();
+		if (temp > numSteps)
+		{
+			numSteps = temp;
+			dt = theMotionY->getDTvector();
+		}
 	}
 
 
@@ -455,9 +472,10 @@ SiteResponseModel::runTotalStressModel()
 	theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
 	theDomain->addRecorder(*theRecorder);
 
-	for (int analysisCount = 0; analysisCount < 4000; ++analysisCount) {
+	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theTransientAnalysis->analyze(1, 0.002, 0.001, 0.02, 1);
+		double stepDT = dt[analysisCount];
+		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
 		//int converged = theTransientAnalysis->analyze(1, 0.002);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;

@@ -1,14 +1,50 @@
 #include "outcropMotion.h"
 #include <string>
 #include <fstream>
+#include <sstream>
 
 bool fileExists(const char* fileName)
 {
 	std::ifstream file(fileName);
 	if (file)
 		return true;
-	else
-		return false;
+
+	return false;
+}
+
+int readDT(const char* fileName, int& numSteps, std::vector<double>& dt)
+{
+	int res = -1;
+	numSteps = 0;
+	std::ifstream file(fileName);
+	if (file)
+	{
+		std::string line;
+		res = 1;
+		double t_n, t_n1;
+		while (getline(file, line))
+		{
+			// skip comment lines
+			if ((line == "") || (line[0] == '%') || (line[0] == '#'))
+				continue;
+			std::istringstream lines(line);
+			lines >> t_n;
+			break;
+		}
+
+		while (getline(file, line))
+		{
+			// skip comment lines
+			if ((line == "") || (line[0] == '%') || (line[0] == '#'))
+				continue;
+			std::istringstream lines(line);
+			lines >> t_n1;
+			dt.push_back(t_n1 - t_n);
+			t_n = t_n1;
+			++numSteps;
+		}
+	}
+	return res;
 }
 
 OutcropMotion::OutcropMotion() :
@@ -16,7 +52,8 @@ OutcropMotion::OutcropMotion() :
 	theAccSeries(),
 	theVelSeries(),
 	theDispSeries(),
-	isThisInitialized(false)
+	isThisInitialized(false),
+	m_numSteps(0)
 {
 
 }
@@ -26,7 +63,8 @@ OutcropMotion::OutcropMotion(const char* fName):
 	theAccSeries(),
 	theVelSeries(),
 	theDispSeries(),
-	isThisInitialized(true)
+	isThisInitialized(true),
+	m_numSteps(0)
 {
 	std::string motionName(fName);
 	std::string timeFName = motionName  + ".time";
@@ -34,7 +72,7 @@ OutcropMotion::OutcropMotion(const char* fName):
 	std::string velFName  = motionName  + ".vel";
 	std::string dispFName = motionName  + ".disp";
 	
-	if (fileExists(timeFName.c_str()))
+	if (readDT(timeFName.c_str(), m_numSteps, m_dt) > 0)
 	{
 		if (fileExists(accFName.c_str()))
 			theAccSeries = new PathTimeSeries(1, accFName.c_str(), timeFName.c_str(), 9.81, true);
@@ -53,6 +91,12 @@ OutcropMotion::OutcropMotion(const char* fName):
 	else {
 		isThisInitialized = false;
 		opserr << "The file " << timeFName.c_str() << " containing the array of time does not exist." << endln;
+	}
+
+	opserr << "Num Steps = " << m_numSteps << endln;
+	for (int ii = 0; ii < m_numSteps - 1; ++ii)
+	{
+		opserr << "i = " << ii + 1 << " : " << m_dt[ii] << endln;
 	}
 }
 
