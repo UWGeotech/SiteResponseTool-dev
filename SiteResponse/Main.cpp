@@ -27,21 +27,40 @@ SiteLayering setupDummyLayers()
 int main(int argc, char** argv)
 {
 
-	if (argc < 4)
+	if (argc < 3)
 	{
-		opserr << "Need at least 3 arguments. The .loc (layering) file and the name of the motions." << endln;
+		opserr << "Need at least 2 arguments. The .loc (layering) file and the name of the motion in the x-direction." << endln;
 		std::getchar();
 		return -1;
 	}
 
+	// read the layering file
 	std::string layersFN(argv[1]);
-	std::string motionXFN(argv[2]);
-	std::string motionZFN(argv[3]);
-
-	OutcropMotion motionX(motionXFN.c_str());
-	OutcropMotion motionZ(motionZFN.c_str());
-
 	SiteLayering siteLayers(layersFN.c_str());
+
+
+	// read the motion
+	OutcropMotion motionX;
+	OutcropMotion motionZ;
+
+	if (strcmp(argv[2], "-bbp") == 0)
+	{
+		// read bbp style motion
+
+	}
+	else {
+		// read OpenSees style motion
+		std::string motionXFN(argv[2]);
+		motionX.setMotion(motionXFN.c_str());
+
+		if (argc > 3)
+		{
+			std::string motionZFN(argv[3]);
+			motionZ.setMotion(motionXFN.c_str());
+		}
+	}
+
+
 
 	SiteResponseModel model(siteLayers, &motionX, &motionZ);
 	model.runTotalStressModel();

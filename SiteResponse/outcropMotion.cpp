@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 
+#include "Vector.h"
+
 bool fileExists(const char* fileName)
 {
 	// open the file to see if it exists
@@ -67,16 +69,29 @@ OutcropMotion::OutcropMotion(const char* fName):
 	theAccSeries(),
 	theVelSeries(),
 	theDispSeries(),
-	isThisInitialized(true),
+	isThisInitialized(false),
 	m_numSteps(0)
 {
+	this->setMotion(fName);
+}
+
+OutcropMotion::~OutcropMotion() 
+{
+
+}
+
+void
+OutcropMotion::setMotion(const char* fName)
+{
+	isThisInitialized = true;
+
 	// assuming time, displacement, velocity and acceleration are located in different files
 	std::string motionName(fName);
-	std::string timeFName = motionName  + ".time";
-	std::string accFName  = motionName  + ".acc";
-	std::string velFName  = motionName  + ".vel";
-	std::string dispFName = motionName  + ".disp";
-	
+	std::string timeFName = motionName + ".time";
+	std::string accFName = motionName + ".acc";
+	std::string velFName = motionName + ".vel";
+	std::string dispFName = motionName + ".disp";
+
 	// check to see if the time file exists
 	if (readDT(timeFName.c_str(), m_numSteps, m_dt) > 0)
 	{
@@ -93,7 +108,7 @@ OutcropMotion::OutcropMotion(const char* fName):
 			theDispSeries = new PathTimeSeries(3, dispFName.c_str(), timeFName.c_str(), 1.0, true);
 
 		// create a ground motion. It's useful for UniformExcitatpon or MultipleSupport 
-		if ((theAccSeries != NULL) || (theVelSeries != NULL) || (theDispSeries != NULL) )
+		if ((theAccSeries != NULL) || (theVelSeries != NULL) || (theDispSeries != NULL))
 			theGroundMotion = new GroundMotion(theDispSeries, theVelSeries, theAccSeries, NULL);
 		else
 		{
@@ -108,8 +123,64 @@ OutcropMotion::OutcropMotion(const char* fName):
 		opserr << "The file " << timeFName.c_str() << " containing the array of time does not exist." << endln;
 	}
 }
-
-OutcropMotion::~OutcropMotion() 
+void                
+OutcropMotion::setBBPMotion(const char* fName, int colNum)
 {
+	Vector Path(100000);
+	Vector Time(100000);
+	m_numSteps = 0;
+	std::ifstream file(fName);
+	if (file)
+	{
+		std::string line;
+		double t_n, t_n1;
+		double dummy;
 
+		// find the first non-empty line
+		while (getline(file, line))
+		{
+			// skip comment lines
+			if ((line == "") || (line[0] == '%') || (line[0] == '#'))
+				continue;
+			std::istringstream lines(line);
+			lines >> t_n;
+			for (int ii = 0; ii < colNum - 1; ii++)
+				lines >> dummy;
+			lines >> Path(0);
+			break;
+		}
+
+		// count number of lines and calculate the dt for each step
+		while (getline(file, line))
+		{
+			// skip comment lines
+			if ((line == "") || (line[0] == '%') || (line[0] == '#'))
+				continue;
+			std::istringstream lines(line);
+			lines >> t_n1;
+			m_dt.push_back(t_n1 - t_n);
+			t_n = t_n1;
+			++m_numSteps;
+			for (int ii = 0; ii < colNum - 1; ii++)
+				lines >> dummy;
+			lines >> Path(m_numSteps);
+		}
+		theVelSeries = new PathTimeSeries(2, Path, Time, 1.0, false);
+		isThisInitialized = true;
+		
+		// create a ground motion. It's useful for UniformExcitatpon or MultipleSupport 
+		if ((theAccSeries != NULL) || (theVelSeries != NULL) || (theDispSeries != NULL))
+			theGroundMotion = new GroundMotion(theDispSeries, theVelSeries, theAccSeries, NULL);
+		else
+		{
+			isThisInitialized = false;
+			opserr << "File " << fName << " seems to be empty." << endln;
+		}
+	}
+	else {
+		// the time file does not exist. This is a problem
+		isThisInitialized = false;
+		opserr << "File " << fName << " does not exist." << endln;
+	}
+	return;
 }

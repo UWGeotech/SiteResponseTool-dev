@@ -21,6 +21,8 @@ public:
 	bool                isInitialized() { return isThisInitialized; };
 	std::vector<double> getDTvector() { return m_dt; };
 	int                 getNumSteps() { return m_numSteps; };
+	void                setMotion(const char* fName);
+	void                setBBPMotion(const char* fName, int colNum);
 
 private:
 	PathTimeSeries* theAccSeries;
