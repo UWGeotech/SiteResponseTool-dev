@@ -1,4 +1,6 @@
 #include <vector>
+#include <iostream>
+#include <sstream>
 
 #include "FEModel.h"
 
@@ -486,6 +488,8 @@ SiteResponseModel::runTotalStressModel()
 	// theDomain->addRecorder(*theRecorder);
 
 	// perform analysis
+	opserr << "Analysis started:" << endln;
+	std::stringstream progressBar;
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
@@ -493,8 +497,26 @@ SiteResponseModel::runTotalStressModel()
 		//int converged = theTransientAnalysis->analyze(1, 0.002);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+
+			if ((20 * analysisCount) % numSteps == 0)
+			{
+				progressBar << "\r[";
+				for (int ii = 0; ii < (int)(20 * analysisCount / numSteps); ii++)
+					progressBar << ".";
+				for (int ii = (int)(20 * analysisCount / numSteps); ii < 20; ii++)
+					progressBar << "-";
+
+				progressBar << "]  " << (int)(100 * analysisCount / numSteps) << "%";
+				opsout << progressBar.str().c_str();
+				opsout.flush();
+			}
+		}
+		else {
+			opserr << "Site response analysis did not converge." << endln;
+			exit(-1);
 		}
 	}
+	opserr << endln;
 
 	//if (PRINTDEBUG)
 	//{

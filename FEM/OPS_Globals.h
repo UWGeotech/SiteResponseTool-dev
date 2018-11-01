@@ -40,7 +40,9 @@
 #include <OPS_Stream.h>
 //extern OPS_Stream &opserr;
 extern OPS_Stream *opserrPtr;
+extern OPS_Stream *opsoutPtr;
 #define opserr (*opserrPtr)
+#define opsout (*opsoutPtr)
 #define endln "\n"
 
 #include <string.h>

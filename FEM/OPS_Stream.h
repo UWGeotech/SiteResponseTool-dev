@@ -83,6 +83,8 @@ class OPS_Stream:  public MovableObject
   virtual int recvSelf(int commitTag, Channel &theChannel, 
 		       FEM_ObjectBroker &theBroker) =0;
 
+  virtual void flush() { return; };
+
  private:
   void indent();
   int numIndent;

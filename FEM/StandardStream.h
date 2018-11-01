@@ -72,6 +72,8 @@ class StandardStream : public OPS_Stream
   OPS_Stream& operator<<(bool b);
   OPS_Stream& operator<<(double n);
   OPS_Stream& operator<<(float n);
+  
+  void flush();
 
   int sendSelf(int commitTag, Channel &theChannel);  
   int recvSelf(int commitTag, Channel &theChannel, 

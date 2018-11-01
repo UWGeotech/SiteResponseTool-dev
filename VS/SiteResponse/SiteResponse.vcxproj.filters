@@ -372,6 +372,9 @@
     <ClCompile Include="..\..\SiteResponse\Main.cpp" />
     <ClCompile Include="..\..\SiteResponse\FEModel.cpp" />
     <ClCompile Include="..\..\SiteResponse\outcropMotion.cpp" />
+    <ClCompile Include="..\..\FEM\FileStream.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h">
@@ -855,6 +858,9 @@
     <ClInclude Include="..\..\SiteResponse\siteLayering.h" />
     <ClInclude Include="..\..\SiteResponse\FEModel.h" />
     <ClInclude Include="..\..\SiteResponse\outcropMotion.h" />
+    <ClInclude Include="..\..\FEM\FileStream.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FEM">

@@ -5,11 +5,14 @@
 #include "outcropMotion.h"
 
 #include "StandardStream.h"
+#include "FileStream.h"
 #include "OPS_Stream.h"
 
 
 StandardStream sserr;
-OPS_Stream *opserrPtr = &sserr;
+FileStream ferr("log");
+OPS_Stream *opserrPtr = &ferr;
+OPS_Stream *opsoutPtr = &sserr;
 
 SiteLayering setupDummyLayers()
 {

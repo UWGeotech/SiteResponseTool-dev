@@ -404,6 +404,12 @@ StandardStream::operator<<(float n)
  return *this;
 }
 
+void StandardStream::flush()
+{
+	if (echoApplication == true)
+		cerr.flush();
+}
+
 
 void
 StandardStream::indent(void)

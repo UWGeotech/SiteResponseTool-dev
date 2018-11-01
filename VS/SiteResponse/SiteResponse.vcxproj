@@ -57,6 +57,7 @@
     <ClCompile Include="..\..\FEM\EquiSolnAlgo.cpp" />
     <ClCompile Include="..\..\FEM\FE_EleIter.cpp" />
     <ClCompile Include="..\..\FEM\FE_Element.cpp" />
+    <ClCompile Include="..\..\FEM\FileStream.cpp" />
     <ClCompile Include="..\..\FEM\Graph.cpp" />
     <ClCompile Include="..\..\FEM\GraphNumberer.cpp" />
     <ClCompile Include="..\..\FEM\GroundMotion.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\FEM\FiberResponse.h" />
     <ClInclude Include="..\..\FEM\File.h" />
     <ClInclude Include="..\..\FEM\FileIter.h" />
+    <ClInclude Include="..\..\FEM\FileStream.h" />
     <ClInclude Include="..\..\FEM\FrictionModel.h" />
     <ClInclude Include="..\..\FEM\FrictionResponse.h" />
     <ClInclude Include="..\..\FEM\G3Globals.h" />
