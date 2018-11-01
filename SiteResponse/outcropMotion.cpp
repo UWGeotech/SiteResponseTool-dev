@@ -163,8 +163,9 @@ OutcropMotion::setBBPMotion(const char* fName, int colNum)
 			++m_numSteps;
 			for (int ii = 0; ii < colNum - 1; ii++)
 				lines >> dummy;
+			lines >> dummy;
+			Path(m_numSteps) = dummy / 100.0;
 			Time(m_numSteps) = t_n1;
-			lines >> Path(m_numSteps);
 		}
 		Path.resize(m_numSteps+1);
 		Time.resize(m_numSteps+1);

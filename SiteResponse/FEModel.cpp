@@ -516,7 +516,14 @@ SiteResponseModel::runTotalStressModel()
 			exit(-1);
 		}
 	}
-	opserr << endln;
+	progressBar << "\r[";
+	for (int ii = 0; ii < 20; ii++)
+		progressBar << ".";
+
+	progressBar << "] 100%";
+	opsout << progressBar.str().c_str();
+	opsout.flush();
+	opsout << endln;
 
 	//if (PRINTDEBUG)
 	//{

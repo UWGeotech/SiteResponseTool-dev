@@ -120,6 +120,7 @@ OBJS = \
        SP_Constraint.o \
        SSPbrick.o \
        StandardStream.o \
+       FileStream.o \
        StaticAnalysis.o \
        StaticIntegrator.o \
        StringContainer.o \
