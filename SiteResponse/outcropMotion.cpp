@@ -166,8 +166,8 @@ OutcropMotion::setBBPMotion(const char* fName, int colNum)
 			Time(m_numSteps) = t_n1;
 			lines >> Path(m_numSteps);
 		}
-		Path.resize(m_numSteps);
-		Time.resize(m_numSteps);
+		Path.resize(m_numSteps+1);
+		Time.resize(m_numSteps+1);
 		theVelSeries = new PathTimeSeries(2, Path, Time, 1.0, false);
 		isThisInitialized = true;
 		
