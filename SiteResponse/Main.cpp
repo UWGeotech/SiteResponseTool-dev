@@ -45,8 +45,10 @@ int main(int argc, char** argv)
 
 	if (strcmp(argv[2], "-bbp") == 0)
 	{
+		std::string bbpFName(argv[3]);
 		// read bbp style motion
-
+		motionX.setBBPMotion(bbpFName.c_str(), 1);
+		motionZ.setBBPMotion(bbpFName.c_str(), 2);
 	}
 	else {
 		// read OpenSees style motion
