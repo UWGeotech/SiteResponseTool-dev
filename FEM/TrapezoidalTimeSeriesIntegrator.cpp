@@ -72,8 +72,6 @@ TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSeries, double delta)
     return 0;
   }
 
-  opserr << theSeries->getDuration();
-
   // Add one to get ceiling out of type cast
   int numSteps = (int)(theSeries->getDuration()/delta + 1.0);
 

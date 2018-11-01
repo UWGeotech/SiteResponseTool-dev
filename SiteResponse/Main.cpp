@@ -51,6 +51,8 @@ int main(int argc, char** argv)
 	{
 		std::string bbpFName(argv[3]);
 		bbpOName = std::string(argv[4]);
+		std::string bbpLName = std::string(argv[5]);
+		ferr.setFile(bbpLName.c_str(), APPEND);
 		// read bbp style motion
 		motionX.setBBPMotion(bbpFName.c_str(), 1);
 		motionZ.setBBPMotion(bbpFName.c_str(), 2);
