@@ -18,14 +18,16 @@ public:
 	SiteResponseModel(SiteLayering, OutcropMotion*, OutcropMotion*);
 	~SiteResponseModel();
 
-	int runTestModel();
-	int runTotalStressModel();
+	int   runTestModel();
+	int   runTotalStressModel();
+	void  setOutputDir(std::string outDir) { theOutputDir = outDir; };
 
 private:
 	Domain *theDomain;
 	SiteLayering    SRM_layering;
 	OutcropMotion*  theMotionX;
 	OutcropMotion*  theMotionZ;
+	std::string     theOutputDir;
 };
 
 
