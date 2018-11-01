@@ -498,7 +498,7 @@ SiteResponseModel::runTotalStressModel()
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 
-			if ((20 * analysisCount) % numSteps == 0)
+			if (analysisCount % (int)(numSteps / 20) == 0)
 			{
 				progressBar << "\r[";
 				for (int ii = 0; ii < (int)(20 * analysisCount / numSteps); ii++)
