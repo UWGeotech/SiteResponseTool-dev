@@ -17,6 +17,8 @@ archive: $(OBJS)
 	ar rv $(FEMlib) $(OBJS)
 
 libs:
+	(mkdir -p bin)
+	(mkdir -p lib)
 	(cd FEM; make archive)
 	(cd SiteResponse; make archive)
 

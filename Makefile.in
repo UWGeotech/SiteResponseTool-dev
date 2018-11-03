@@ -1,4 +1,4 @@
-source = /home/alborzgh/siteResponseTool
+source = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 FF  = gfortran
 CC  = gcc
@@ -14,8 +14,7 @@ LINCLUDE = -I$(source) \
 
 NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
 
-MINCLUDE = -I/usr/include \
-	   -I/usr/include/c++/4.7
+MINCLUDE = -I/usr/include 
 
 FEMlib  = $(source)/lib/libFEM.a
 SRTlib  = $(source)/lib/libSRT.a
