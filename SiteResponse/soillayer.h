@@ -1,3 +1,18 @@
+/* ********************************************************************* **
+**                 Site Response Analysis Tool                           **
+**   -----------------------------------------------------------------   **
+**                                                                       **
+**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 University of Washington                              **
+**                                                                       **
+**   Date: October 2018                                                  **
+**                                                                       **
+** ********************************************************************* */
+
+
+
+
+
 #ifndef SOILLAYER_H
 #define SOILLAYER_H
 

@@ -1,3 +1,18 @@
+/* ********************************************************************* **
+**                 Site Response Analysis Tool                           **
+**   -----------------------------------------------------------------   **
+**                                                                       **
+**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 University of Washington                              **
+**                                                                       **
+**   Date: October 2018                                                  **
+**                                                                       **
+** ********************************************************************* */
+
+
+
+
+
 #include "siteLayering.h"
 
 #include <iostream>
