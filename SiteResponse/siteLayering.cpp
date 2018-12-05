@@ -65,8 +65,8 @@ SiteLayering::addNewLayer(SoilLayer newLayer)
 		sl_layers.push_back(newLayer);
 		return;
 	}
-	sl_equivalentVS = sl_totalThickness / (sl_totalThickness / sl_equivalentVS + newLayer.getThickness() / newLayer.getShearVelocity());
-	sl_equivalentVP = sl_totalThickness / (sl_totalThickness / sl_equivalentVP + newLayer.getThickness() / newLayer.getCompVelocity());
+	sl_equivalentVS = (sl_totalThickness + newLayer.getThickness()) / (sl_totalThickness / sl_equivalentVS + newLayer.getThickness() / newLayer.getShearVelocity());
+	sl_equivalentVP = (sl_totalThickness + newLayer.getThickness()) / (sl_totalThickness / sl_equivalentVP + newLayer.getThickness() / newLayer.getCompVelocity());
 	sl_totalThickness += newLayer.getThickness();
 	sl_numLayers++;
 	sl_layers.push_back(newLayer);
