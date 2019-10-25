@@ -58,8 +58,9 @@ int main(int argc, char** argv)
 	SiteLayering siteLayers(layersFN.c_str());
 
 
-	// read the motion
+	// read the motion, assumes Y is the vertical motion
 	OutcropMotion motionX;
+	OutcropMotion motionY;
 	OutcropMotion motionZ;
 
 	if (strcmp(argv[2], "-bbp") == 0)
@@ -81,12 +82,17 @@ int main(int argc, char** argv)
 		{
 			std::string motionZFN(argv[3]);
 			motionZ.setMotion(motionXFN.c_str());
+			if (argc > 4)
+			{
+				std::string motionYFN(argv[4]);
+				motionY.setMotion(motionYFN.c_str());
+			}
 		}
 	}
 
 
 
-	SiteResponseModel model(siteLayers, &motionX, &motionZ);
+	SiteResponseModel model(siteLayers, &motionX, &motionY, &motionZ);
 	model.setOutputDir(bbpOName);
 	model.runTotalStressModel();
 	
