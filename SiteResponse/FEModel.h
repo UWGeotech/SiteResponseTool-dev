@@ -30,7 +30,7 @@ class SiteResponseModel {
 
 public:
 	SiteResponseModel();
-	SiteResponseModel(SiteLayering, OutcropMotion*, OutcropMotion*);
+	SiteResponseModel(SiteLayering, OutcropMotion*, OutcropMotion*, OutcropMotion*);
 	~SiteResponseModel();
 
 	int   runTestModel();
@@ -41,6 +41,7 @@ private:
 	Domain *theDomain;
 	SiteLayering    SRM_layering;
 	OutcropMotion*  theMotionX;
+	OutcropMotion*  theMotionY;
 	OutcropMotion*  theMotionZ;
 	std::string     theOutputDir;
 };

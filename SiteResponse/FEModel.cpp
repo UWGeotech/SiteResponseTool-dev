@@ -95,13 +95,14 @@ SiteResponseModel::SiteResponseModel() :
 
 }
 
-SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motionX, OutcropMotion* motionY) :
+SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motionX, OutcropMotion* motionY, OutcropMotion* motionZ) :
 	SRM_layering(layering),
 	theMotionX(motionX),
-	theMotionZ(motionY),
+	theMotionY(motionY),
+	theMotionZ(motionZ),
 	theOutputDir(".")
 {
-	if (theMotionX->isInitialized() || theMotionZ->isInitialized())
+	if (theMotionX->isInitialized() || theMotionY->isInitialized()|| theMotionZ->isInitialized())
 		theDomain = new Domain();
 	else
 	{
@@ -189,16 +190,16 @@ SiteResponseModel::runTotalStressModel()
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
 	theSP = new SP_Constraint(1, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
-	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(1, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(1, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
 	theSP = new SP_Constraint(2, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
-	theSP = new SP_Constraint(2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(2, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(2, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
 	theSP = new SP_Constraint(3, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
-	theSP = new SP_Constraint(3, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(3, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(3, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
 	theSP = new SP_Constraint(4, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
-	theSP = new SP_Constraint(4, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(4, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(4, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
 	// apply equalDOF
@@ -377,9 +378,9 @@ SiteResponseModel::runTotalStressModel()
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
-	// using uniform excitation
-	// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
-	//theDomain->addLoadPattern(theLP);
+	// using uniform excitation to apply vertical motion
+	LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 1, 0.0, 1.0);
+	theDomain->addLoadPattern(theLP);
 
 	// using a stress input with the dashpot
 	if (theMotionX->isInitialized())
@@ -598,9 +599,16 @@ SiteResponseModel::runTestModel()
 		theSP = new SP_Constraint(4, counter, 0.0, true); theDomain->addSP_Constraint(theSP);
 	}
 
+	// MP_Constraint* theMP;
+	// Matrix Ccr(3, 3); Ccr(0, 0) = 1.0; Ccr(1, 1) = 1.0; Ccr(2, 2) = 1.0;
+	// ID rcDOF(3); rcDOF(0) = 0; rcDOF(1) = 1; rcDOF(2) = 2;
+	// theMP = new MP_Constraint(5, 6, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
+	// theMP = new MP_Constraint(5, 7, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
+	// theMP = new MP_Constraint(5, 8, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
+
 	MP_Constraint* theMP;
-	Matrix Ccr(3, 3); Ccr(0, 0) = 1.0; Ccr(1, 1) = 1.0; Ccr(2, 2) = 1.0;
-	ID rcDOF(3); rcDOF(0) = 0; rcDOF(1) = 1; rcDOF(2) = 2;
+	Matrix Ccr(2, 2); Ccr(0, 0) = 1.0; Ccr(1, 1) = 1.0;
+	ID rcDOF(2); rcDOF(0) = 0; rcDOF(1) = 2;
 	theMP = new MP_Constraint(5, 6, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(5, 7, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(5, 8, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
