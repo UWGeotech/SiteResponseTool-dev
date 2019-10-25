@@ -80,13 +80,14 @@
 
 #define PRINTDEBUG false
 
-
+// fix the directory separator in windows versus unix
 #if defined(WIN32) || defined(_WIN32) 
 #define PATH_SEPARATOR "\\" 
 #else 
 #define PATH_SEPARATOR "/" 
 #endif 
 
+// empty constructor
 SiteResponseModel::SiteResponseModel() :
 	theMotionX(0),
 	theMotionZ(0),
@@ -95,12 +96,14 @@ SiteResponseModel::SiteResponseModel() :
 
 }
 
+// main constructor
 SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motionX, OutcropMotion* motionY) :
 	SRM_layering(layering),
 	theMotionX(motionX),
 	theMotionZ(motionY),
 	theOutputDir(".")
 {
+	// check if the motion is specified and create a FE domain
 	if (theMotionX->isInitialized() || theMotionZ->isInitialized())
 		theDomain = new Domain();
 	else
@@ -110,12 +113,14 @@ SiteResponseModel::SiteResponseModel(SiteLayering layering, OutcropMotion* motio
 	}
 }
 
+// class destructor - delete the FE domain id it's created
 SiteResponseModel::~SiteResponseModel() {
 	if (theDomain != NULL)
 		delete theDomain;
 	theDomain = NULL;
 }
 
+// run a total stress site response analysis
 int
 SiteResponseModel::runTotalStressModel()
 {
@@ -130,20 +135,26 @@ SiteResponseModel::runTotalStressModel()
 	int numLayers = SRM_layering.getNumLayers();
 	int numElems = 0;
 	int numNodes = 0;
+
+	// loop over the layers and setup the mesh
 	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
 	{
 		double thisLayerThick = SRM_layering.getLayer(layerCount).getThickness();
 		double thisLayerVS = SRM_layering.getLayer(layerCount).getShearVelocity();
 		double thisLayerMinWL = thisLayerVS / MAX_FREQUENCY;
 
+		// calculate the thickness of elements in this layer
 		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
 
+		// calculate number of elements in this layer
 		int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
 
+		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
 		layerNumNodes.push_back(4 * (thisLayerNumEle + (layerCount == 0)));
 		layerElemSize.push_back(thisLayerThick / thisLayerNumEle);
 
+		// add up number of elements and nodes
 		numElems += thisLayerNumEle;
 		numNodes += 4 * (thisLayerNumEle + (layerCount == numLayers - 2));
 
@@ -153,7 +164,7 @@ SiteResponseModel::runTotalStressModel()
 			   << ", Num Nodes = " << 4 * (thisLayerNumEle + (layerCount == 0)) << endln;
 	}
 
-	// create the nodes
+	// FE mesh - create the nodes
 	Node* theNode;
 
 	double yCoord = 0.0;
@@ -185,7 +196,7 @@ SiteResponseModel::runTotalStressModel()
 		nCount += layerNumNodes[layerCount];
 	}
 
-	// apply fixities
+	// FE mesh - apply fixities
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
 	theSP = new SP_Constraint(1, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
@@ -201,7 +212,7 @@ SiteResponseModel::runTotalStressModel()
 	theSP = new SP_Constraint(4, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(4, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
-	// apply equalDOF
+	// FE mesh - apply equalDOF
 	MP_Constraint* theMP;
 	Matrix Ccr(3, 3); Ccr(0, 0) = 1.0; Ccr(1, 1) = 1.0; Ccr(2, 2) = 1.0;
 	ID rcDOF(3); rcDOF(0) = 0; rcDOF(1) = 1; rcDOF(2) = 2;
@@ -212,11 +223,12 @@ SiteResponseModel::runTotalStressModel()
 		theMP = new MP_Constraint(nodeCount + 1, nodeCount + 4, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 	}
 
-	// create the materials
+	// FE mesh - create the materials
 	NDMaterial* theMat;
 	SoilLayer theLayer;
 	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
 	{
+		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
 		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
 			theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
@@ -227,7 +239,7 @@ SiteResponseModel::runTotalStressModel()
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 	}
 
-	// create soil elements and add the material state parameter
+	// FE mesh - create soil elements and add the material state parameter
 	Element* theEle;
 	Parameter* theParameter;
 	char** paramArgs = new char*[2];
@@ -266,7 +278,7 @@ SiteResponseModel::runTotalStressModel()
 
 
 
-	// update material stage
+	// FE mesh - update material stage
 	ParameterIter& theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
 	{
@@ -275,7 +287,7 @@ SiteResponseModel::runTotalStressModel()
 
 
 
-	// create analysis objects - I use static analysis for gravity
+	// FE mesh - create analysis objects - I use static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
 	CTestNormDispIncr* theTest = new CTestNormDispIncr(1.0e-7, 30, 1);
 	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
@@ -308,7 +320,7 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	// update material response to plastic
+	// FE mesh - update material response to plastic
 	theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
 	{
@@ -323,7 +335,7 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	// add the compliant base - use the last layer properties
+	// FE mesh - add the compliant base - use the last layer properties
 	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
 	UniaxialMaterial* theViscousMats[2];
 	theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
@@ -331,7 +343,7 @@ SiteResponseModel::runTotalStressModel()
 	ID directions(2);
 	directions(0) = 0; directions(1) = 2;
 
-	// create dashpot nodes and apply proper fixities
+	// FE mesh - create dashpot nodes and apply proper fixities
 	theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 	theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 	theSP = new SP_Constraint(numNodes + 1, 0, 0.0, true); theDomain->addSP_Constraint(theSP);
@@ -339,10 +351,10 @@ SiteResponseModel::runTotalStressModel()
 	theSP = new SP_Constraint(numNodes + 1, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 
-	// apply equalDOF to the node connected to the column
+	// FE mesh - apply equalDOF to the node connected to the column
 	theMP = new MP_Constraint(1, numNodes + 2, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 
-	// remove fixities created for gravity
+	// FE mesh - remove fixities created for gravity
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(1)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(2)); delete theSP;
@@ -352,24 +364,24 @@ SiteResponseModel::runTotalStressModel()
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(6)); delete theSP;
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(7)); delete theSP;
 	
-	// equalDOF the first 4 nodes
+	// FE mesh - equalDOF the first 4 nodes
 	Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
 	ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
 	theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 3, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 4, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 
-	// create the dashpot element
+	// FE mesh - create the dashpot element
 	Vector x(3); x(0) = 1.0; x(1) = 0.0; x(2) = 0.0;
 	Vector y(3); y(1) = 1.0; y(0) = 0.0; y(2) = 0.0;
 	theEle = new ZeroLength(numElems + 1, 3, numNodes + 1, numNodes + 2, x, y, 2, theViscousMats, directions);
 	theDomain->addElement(theEle);
 	
-	// apply the motion
+	// FE mesh - apply the motion
 	int numSteps = 0;
 	std::vector<double> dt;
 
-	// using multiple support
+	// FE mesh - using multiple support
 	//MultiSupportPattern* theLP = new MultiSupportPattern(1);
 	//theLP->addMotion(*theMotionX->getGroundMotion(), 1);
 	//theLP->addSP_Constraint(new ImposedMotionSP(1, 0, 1, 1));
@@ -377,11 +389,11 @@ SiteResponseModel::runTotalStressModel()
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
-	// using uniform excitation
+	// FE mesh - using uniform excitation
 	// LoadPattern* theLP = new UniformExcitation(*theMotion, 1, 1, 0.0, 1.0);
 	//theDomain->addLoadPattern(theLP);
 
-	// using a stress input with the dashpot
+	// FE mesh - using a stress input with the dashpot
 	if (theMotionX->isInitialized())
 	{
 		LoadPattern* theLP = new LoadPattern(1, vis_C);
@@ -428,7 +440,7 @@ SiteResponseModel::runTotalStressModel()
 	}
 
 	// I have to change to a transient analysis
-	// remove the static analysis and create new transient objects
+	// FE mesh - remove the static analysis and create new transient objects
 	delete theIntegrator;
 	delete theAnalysis;
 
@@ -442,10 +454,10 @@ SiteResponseModel::runTotalStressModel()
 	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
 	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
-	// reset time in the domain
+	// FE mesh - reset time in the domain
 	theDomain->setCurrentTime(0.0);
 
-	// setup Rayleigh damping 
+	// FE mesh - setup Rayleigh damping 
 	// apply 2% at the natural frequency and 5*natural frequency
 	double natFreq = SRM_layering.getNaturalPeriod();
 	double dampRatio = 0.02;
@@ -459,7 +471,7 @@ SiteResponseModel::runTotalStressModel()
 	}
 	theDomain->setRayleighDampingFactors(a0, a1, 0.0, 0.0);
 
-	// create the output streams
+	// FE mesh - create the output streams
 	OPS_Stream* theOutputStream;
 	Recorder* theRecorder;
 
@@ -502,7 +514,7 @@ SiteResponseModel::runTotalStressModel()
 	// theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
 	// theDomain->addRecorder(*theRecorder);
 
-	// perform analysis
+	// FE mesh - perform analysis
 	opserr << "Analysis started:" << endln;
 	std::stringstream progressBar;
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
