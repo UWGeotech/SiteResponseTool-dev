@@ -52,6 +52,12 @@ SoilLayer::getMatBulkModulus()
 }
 
 double
+SoilLayer::getMatPoissonRatio()
+{
+	return (sl_vp*sl_vp - 2.0* sl_vs*sl_vs)/(sl_vp*sl_vp - sl_vs* sl_vs) / 2.0;
+}
+
+double
 SoilLayer::getNaturalPeriod()
 {
 	return 4.0 * sl_thickness / sl_vs;

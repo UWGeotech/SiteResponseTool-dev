@@ -78,7 +78,7 @@
 
 #include "Information.h"
 
-#define PRINTDEBUG false
+#define PRINTDEBUG true
 
 // fix the directory separator in windows versus unix
 #if defined(WIN32) || defined(_WIN32) 
@@ -149,6 +149,9 @@ SiteResponseModel::runTotalStressModel()
 
 		// calculate number of elements in this layer
 		int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		
+		// ***** !!!!!! remove this - this is only for debugging purposes
+		thisLayerNumEle = 50;
 
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
@@ -200,18 +203,18 @@ SiteResponseModel::runTotalStressModel()
 	// FE mesh - apply fixities
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
-	theSP = new SP_Constraint(1, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
+	theSP = new SP_Constraint(1, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
 	theSP = new SP_Constraint(1, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(1, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
-	theSP = new SP_Constraint(2, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
+	theSP = new SP_Constraint(1, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
+	theSP = new SP_Constraint(2, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
 	theSP = new SP_Constraint(2, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(2, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
-	theSP = new SP_Constraint(3, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
+	theSP = new SP_Constraint(2, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
+	theSP = new SP_Constraint(3, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
 	theSP = new SP_Constraint(3, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(3, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
-	theSP = new SP_Constraint(4, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
+	theSP = new SP_Constraint(3, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
+	theSP = new SP_Constraint(4, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
 	theSP = new SP_Constraint(4, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(4, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
+	theSP = new SP_Constraint(4, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
 	// FE mesh - apply equalDOF
 	MP_Constraint* theMP;
@@ -231,13 +234,16 @@ SiteResponseModel::runTotalStressModel()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-			theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
-		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 20000.0, 0.3, theLayer.getRho());
+		// theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		// 	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
+		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
 		if (PRINTDEBUG)
+		{
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
+			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+		}
 	}
 
 	// FE mesh - create soil elements and add the material state parameter
@@ -353,7 +359,9 @@ SiteResponseModel::runTotalStressModel()
 	theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 
 	// FE mesh - apply equalDOF to the node connected to the column
-	theMP = new MP_Constraint(1, numNodes + 2, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
+	Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
+	ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
+	theMP = new MP_Constraint(1, numNodes + 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 
 	// FE mesh - remove fixities created for gravity
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
@@ -366,8 +374,6 @@ SiteResponseModel::runTotalStressModel()
 	theSP = theDomain->removeSP_Constraint(theSPtoRemove(7)); delete theSP;
 	
 	// FE mesh - equalDOF the first 4 nodes
-	Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
-	ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
 	theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 3, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 	theMP = new MP_Constraint(1, 4, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
@@ -390,9 +396,12 @@ SiteResponseModel::runTotalStressModel()
 	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
 	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
 
-	// using uniform excitation to apply vertical motion
-	LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 1, 0.0, 1.0);
-	theDomain->addLoadPattern(theLP);
+	if (theMotionY->isInitialized())
+	{
+		// using uniform excitation to apply vertical motion
+		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -9.81);
+		theDomain->addLoadPattern(theLP);
+	}
 
 	// FE mesh - using a stress input with the dashpot
 	if (theMotionX->isInitialized())
@@ -449,8 +458,8 @@ SiteResponseModel::runTotalStressModel()
 	theTest->setTolerance(1.0e-5);
 
 
-	//DirectIntegrationAnalysis* theTransientAnalysis;
-	//theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	// DirectIntegrationAnalysis* theTransientAnalysis;
+	// theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
 	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
 	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
@@ -461,16 +470,22 @@ SiteResponseModel::runTotalStressModel()
 	// FE mesh - setup Rayleigh damping 
 	// apply 2% at the natural frequency and 5*natural frequency
 	double natFreq = SRM_layering.getNaturalPeriod();
-	double dampRatio = 0.02;
+	double dampRatio = 0.01;
 	double pi = 4.0 * atan(1.0);
-	double a0 = dampRatio * (10.0 * pi * natFreq) / 3.0 ;
-	double a1 = dampRatio / (6.0 * pi * natFreq);
+	// double a0 = dampRatio * (10.0 * pi * natFreq) / 3.0 ;
+	// double a1 = dampRatio / (6.0 * pi * natFreq);
+
+	// ****** !!!!! remove this - this is only for debugging purposes
+	double omega1 = 2.0*pi*0.1;
+	double omega2 = 2.0*pi*10.0;
+	double a0 = dampRatio * (2.0 * omega1 * omega2) / (omega1 + omega2) ;
+	double a1 = dampRatio * (2.0/(omega1 + omega2));
 	if (PRINTDEBUG)
 	{
 		opserr << "f1 = " << natFreq << "    f2 = " << 5.0 * natFreq << endln;
 		opserr << "a0 = " << a0 << "    a1 = " << a1 << endln;
 	}
-	theDomain->setRayleighDampingFactors(a0, a1, 0.0, 0.0);
+	theDomain->setRayleighDampingFactors(a0, 0.0, a1, 0.0);
 
 	// FE mesh - create the output streams
 	OPS_Stream* theOutputStream;
@@ -522,7 +537,7 @@ SiteResponseModel::runTotalStressModel()
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
 		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
-		//int converged = theTransientAnalysis->analyze(1, 0.002);
+		// int converged = theTransientAnalysis->analyze(1, stepDT);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 
