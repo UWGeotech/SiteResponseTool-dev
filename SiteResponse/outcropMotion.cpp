@@ -112,7 +112,7 @@ OutcropMotion::setMotion(const char* fName)
 	{
 		// assuming acceleration is in g's
 		if (fileExists(accFName.c_str()))
-			theAccSeries = new PathTimeSeries(1, accFName.c_str(), timeFName.c_str(), 9.81, true);
+			theAccSeries = new PathTimeSeries(1, accFName.c_str(), timeFName.c_str(), 1.0, true);
 
 		// assuming velocity is in m/s
 		if (fileExists(velFName.c_str()))
