@@ -150,9 +150,6 @@ SiteResponseModel::runTotalStressModel()
 		// calculate number of elements in this layer
 		int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
 		
-		// ***** !!!!!! remove this - this is only for debugging purposes
-		thisLayerNumEle = 50;
-
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
 		layerNumNodes.push_back(4 * (thisLayerNumEle + (layerCount == 0)));
@@ -500,6 +497,7 @@ SiteResponseModel::runTotalStressModel()
 	dofToRecord(1) = 1;
 	dofToRecord(2) = 2;
 
+	// surface recorder
 	std::string outFile = theOutputDir + PATH_SEPARATOR +  "surface.acc";
 	theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
@@ -515,6 +513,36 @@ SiteResponseModel::runTotalStressModel()
 	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
 	theDomain->addRecorder(*theRecorder);
 
+
+	// recorder for bottom of layers
+	nCount = 0;
+	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	{		
+		nodesToRecord(0) = nCount + 1;
+
+		
+			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+			<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+		
+
+		nCount += layerNumNodes[layerCount];
+	}
 
 	// record element results
 	// OPS_Stream* theOutputStream2;
