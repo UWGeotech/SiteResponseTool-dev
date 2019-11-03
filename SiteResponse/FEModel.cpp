@@ -78,14 +78,7 @@
 
 #include "Information.h"
 
-#define PRINTDEBUG true
-
-// fix the directory separator in windows versus unix
-#if defined(WIN32) || defined(_WIN32) 
-#define PATH_SEPARATOR "\\" 
-#else 
-#define PATH_SEPARATOR "/" 
-#endif 
+#include "SRT_Globals.h"
 
 // empty constructor
 SiteResponseModel::SiteResponseModel() :

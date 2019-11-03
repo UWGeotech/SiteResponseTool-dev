@@ -4,13 +4,14 @@ FF  = gfortran
 CC  = gcc
 CXX = g++
 
-CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3 -ffloat-store
+CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3 -ffloat-store -std=c++11
 FFNOPTFLAG = -Wall -O
 CCOPTFLAG  = -Wall -Wno-reorder -O2
 
 LINCLUDE = -I$(source) \
 	   -I$(source)/FEM \
-	   -I$(source)/SiteResponse 
+	   -I$(source)/SiteResponse \
+	   -I$(source)/Utilities
 
 NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
 
@@ -18,6 +19,7 @@ MINCLUDE = -I/usr/include
 
 FEMlib  = $(source)/lib/libFEM.a
 SRTlib  = $(source)/lib/libSRT.a
+UTILlib = $(source)/lib/libUtil.a
 
 .f.o:
 	$(FF) -c $(FFOPTFLAG) $(LINCLUDE) $<
