@@ -22,12 +22,15 @@
 #include "StandardStream.h"
 #include "FileStream.h"
 #include "OPS_Stream.h"
-
+#include "ConfigManager.h"
+#include "SRT_Globals.h"
 
 StandardStream sserr;
 FileStream ferr("log");
 OPS_Stream *opserrPtr = &ferr;
 OPS_Stream *opsoutPtr = &sserr;
+
+ConfigManager* program_config;
 
 SiteLayering setupDummyLayers()
 {
@@ -90,7 +93,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-
+	program_config = ConfigManager::get_Instance();
 
 	SiteResponseModel model(siteLayers, &motionX, &motionY, &motionZ);
 	model.setOutputDir(bbpOName);
