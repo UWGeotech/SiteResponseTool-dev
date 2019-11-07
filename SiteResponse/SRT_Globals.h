@@ -5,6 +5,8 @@
 extern ConfigManager* program_config;
 
 #define PRINTDEBUG true
+#define UNIFORMEXCITATION true
+
 
 // fix the directory separator in windows versus unix
 #if defined(WIN32) || defined(_WIN32) 
