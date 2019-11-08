@@ -25,7 +25,7 @@ SoilLayer::SoilLayer() :
 }
 
 
-SoilLayer::SoilLayer(std::string name, double thickness, double vs, double vp, double rho, double Su, double hG, double m) :
+SoilLayer::SoilLayer(std::string name, double thickness, double vs, double vp, double rho, double Su, double hG, double m, double h0, double chi) :
 	sl_name(name),
 	sl_thickness(thickness),
 	sl_vs(vs), sl_vp(vp), sl_su(Su),

@@ -225,7 +225,7 @@ SiteResponseModel::runTotalStressModel()
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
 		// theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		// 	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.5);
+		// 	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.0, 0.5);
 		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
@@ -340,40 +340,43 @@ SiteResponseModel::runTotalStressModel()
 	ID directions(2);
 	directions(0) = 0; directions(1) = 2;
 
-	// FE mesh - create dashpot nodes and apply proper fixities
-	theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
-	theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
-	theSP = new SP_Constraint(numNodes + 1, 0, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(numNodes + 1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(numNodes + 1, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	if (!UNIFORMEXCITATION)
+		{
+		// FE mesh - create dashpot nodes and apply proper fixities
+		theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
+		theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
+		theSP = new SP_Constraint(numNodes + 1, 0, 0.0, true); theDomain->addSP_Constraint(theSP);
+		theSP = new SP_Constraint(numNodes + 1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+		theSP = new SP_Constraint(numNodes + 1, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
+		theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 
-	// FE mesh - apply equalDOF to the node connected to the column
-	Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
-	ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
-	theMP = new MP_Constraint(1, numNodes + 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+		// FE mesh - apply equalDOF to the node connected to the column
+		Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
+		ID constDOF(2); constDOF(0) = 0; constDOF(1) = 2;
+		theMP = new MP_Constraint(1, numNodes + 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
 
-	// FE mesh - remove fixities created for gravity
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(1)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(2)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(3)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(4)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(5)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(6)); delete theSP;
-	theSP = theDomain->removeSP_Constraint(theSPtoRemove(7)); delete theSP;
-	
-	// FE mesh - equalDOF the first 4 nodes
-	theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
-	theMP = new MP_Constraint(1, 3, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
-	theMP = new MP_Constraint(1, 4, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+		// FE mesh - remove fixities created for gravity
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(1)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(2)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(3)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(4)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(5)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(6)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(7)); delete theSP;
 
-	// FE mesh - create the dashpot element
-	Vector x(3); x(0) = 1.0; x(1) = 0.0; x(2) = 0.0;
-	Vector y(3); y(1) = 1.0; y(0) = 0.0; y(2) = 0.0;
-	theEle = new ZeroLength(numElems + 1, 3, numNodes + 1, numNodes + 2, x, y, 2, theViscousMats, directions);
-	theDomain->addElement(theEle);
-	
+		// FE mesh - equalDOF the first 4 nodes
+		theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+		theMP = new MP_Constraint(1, 3, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+		theMP = new MP_Constraint(1, 4, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+
+		// FE mesh - create the dashpot element
+		Vector x(3); x(0) = 1.0; x(1) = 0.0; x(2) = 0.0;
+		Vector y(3); y(1) = 1.0; y(0) = 0.0; y(2) = 0.0;
+		theEle = new ZeroLength(numElems + 1, 3, numNodes + 1, numNodes + 2, x, y, 2, theViscousMats, directions);
+		theDomain->addElement(theEle);
+	}
+
 	// FE mesh - apply the motion
 	int numSteps = 0;
 	std::vector<double> dt;
@@ -393,8 +396,23 @@ SiteResponseModel::runTotalStressModel()
 		theDomain->addLoadPattern(theLP);
 	}
 
+	if (UNIFORMEXCITATION)
+	{
+		// using uniform excitation in horizontal directions
+		if (theMotionX->isInitialized())
+		{
+			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -9.81);
+			theDomain->addLoadPattern(theLP);
+		}
+		if (theMotionZ->isInitialized())
+		{
+			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, -9.81);
+			theDomain->addLoadPattern(theLP);
+		}
+	}
+
 	// FE mesh - using a stress input with the dashpot
-	if (theMotionX->isInitialized())
+	if (theMotionX->isInitialized() && !UNIFORMEXCITATION)
 	{
 		LoadPattern* theLP = new LoadPattern(1, vis_C);
 		theLP->setTimeSeries(theMotionX->getVelSeries());
@@ -417,7 +435,7 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	if (theMotionZ->isInitialized())
+	if (theMotionZ->isInitialized() && !UNIFORMEXCITATION)
 	{
 		LoadPattern* theLP = new LoadPattern(2, vis_C);
 		theLP->setTimeSeries(theMotionZ->getVelSeries());
@@ -662,7 +680,7 @@ SiteResponseModel::runTestModel()
 	theMP = new MP_Constraint(5, 8, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
 
 	NDMaterial* theMat;
-	theMat = new J2CyclicBoundingSurface(1, 20000.0, 25000.0, 100.0, 0.0, 20000.0, 1.0, 0.0, 0.5);
+	theMat = new J2CyclicBoundingSurface(1, 20000.0, 25000.0, 100.0, 0.0, 20000.0, 1.0, 0.0, 0.0, 0.5);
 	OPS_addNDMaterial(theMat);
 
 	Element* theEle;

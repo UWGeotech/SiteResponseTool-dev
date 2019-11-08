@@ -147,6 +147,9 @@
     <ClCompile Include="..\..\SiteResponse\outcropMotion.cpp" />
     <ClCompile Include="..\..\SiteResponse\siteLayering.cpp" />
     <ClCompile Include="..\..\SiteResponse\soillayer.cpp" />
+    <ClCompile Include="..\..\Utilities\ConfigIO.cpp" />
+    <ClCompile Include="..\..\Utilities\ConfigManager.cpp" />
+    <ClCompile Include="..\..\Utilities\DefaultConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h" />
@@ -313,6 +316,9 @@
     <ClInclude Include="..\..\SiteResponse\outcropMotion.h" />
     <ClInclude Include="..\..\SiteResponse\siteLayering.h" />
     <ClInclude Include="..\..\SiteResponse\soillayer.h" />
+    <ClInclude Include="..\..\Utilities\ConfigIO.h" />
+    <ClInclude Include="..\..\Utilities\ConfigManager.h" />
+    <ClInclude Include="..\..\Utilities\DefaultConfig.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -386,7 +392,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;$(SolutionDir)\..\Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;_bool_h;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -426,7 +432,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;$(SolutionDir)\..\Utilities;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;_bool_h;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
