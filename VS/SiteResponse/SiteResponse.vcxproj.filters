@@ -375,6 +375,15 @@
     <ClCompile Include="..\..\FEM\FileStream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Utilities\ConfigIO.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\ConfigManager.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\DefaultConfig.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h">
@@ -861,10 +870,22 @@
     <ClInclude Include="..\..\FEM\FileStream.h">
       <Filter>FEM</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Utilities\ConfigIO.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\ConfigManager.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\DefaultConfig.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FEM">
       <UniqueIdentifier>{6d85d288-fe6b-4007-856e-4eec6cb8f3f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{0e0fdfd9-20d9-4594-ab5c-1178b2f404e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
