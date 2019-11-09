@@ -224,9 +224,10 @@ SiteResponseModel::runTotalStressModel()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		// theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		// 	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.0, 0.5);
-		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
+		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
 		if (PRINTDEBUG)
@@ -403,11 +404,26 @@ SiteResponseModel::runTotalStressModel()
 		{
 			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -9.81);
 			theDomain->addLoadPattern(theLP);
+
+			// update the number of steps as well as the dt vector
+			int temp = theMotionX->getNumSteps();
+			if (temp > numSteps)
+			{
+				numSteps = temp;
+				dt = theMotionX->getDTvector();
+			}
 		}
 		if (theMotionZ->isInitialized())
 		{
 			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, -9.81);
 			theDomain->addLoadPattern(theLP);
+
+			int temp = theMotionZ->getNumSteps();
+			if (temp > numSteps)
+			{
+				numSteps = temp;
+				dt = theMotionZ->getDTvector();
+			}
 		}
 	}
 
@@ -531,7 +547,6 @@ SiteResponseModel::runTotalStressModel()
 	{		
 		nodesToRecord(0) = nCount + 1;
 
-		
 			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
 			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 			<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
