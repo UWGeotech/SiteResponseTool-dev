@@ -135,13 +135,13 @@ SiteResponseModel::runTotalStressModel()
 	{
 		double thisLayerThick = SRM_layering.getLayer(layerCount).getThickness();
 		double thisLayerVS = SRM_layering.getLayer(layerCount).getShearVelocity();
-		double thisLayerMinWL = thisLayerVS / MAX_FREQUENCY;
+		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
 
 		// calculate the thickness of elements in this layer
 		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
 
 		// calculate number of elements in this layer
-		int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		int thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
 		
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
@@ -152,7 +152,7 @@ SiteResponseModel::runTotalStressModel()
 		numElems += thisLayerNumEle;
 		numNodes += 4 * (thisLayerNumEle + (layerCount == numLayers - 2));
 
-		if (PRINTDEBUG)
+		if (program_config->getBooleanProperty("General|PrintDebug"))
 			opserr << "Layer " << SRM_layering.getLayer(layerCount).getName().c_str() << " : Num Elements = " << thisLayerNumEle
 			   << "(" << thisLayerThick / thisLayerNumEle << "), "
 			   << ", Num Nodes = " << 4 * (thisLayerNumEle + (layerCount == 0)) << endln;
@@ -165,7 +165,7 @@ SiteResponseModel::runTotalStressModel()
 	int nCount = 0;
 	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
 	{
-		if (PRINTDEBUG)
+		if (program_config->getBooleanProperty("General|PrintDebug"))
 			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
 			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 			<< " - Element Thickness = " << layerElemSize[layerCount] << endln;
@@ -177,7 +177,7 @@ SiteResponseModel::runTotalStressModel()
 			theNode = new Node(nCount + nodeCount + 3, 3, 1.0, yCoord, 1.0); theDomain->addNode(theNode);
 			theNode = new Node(nCount + nodeCount + 4, 3, 1.0, yCoord, 0.0); theDomain->addNode(theNode);
 
-			if (PRINTDEBUG)
+			if (program_config->getBooleanProperty("General|PrintDebug"))
 			{
 				opserr << "Node " << nCount + nodeCount + 1 << " - 0.0" << ", " << yCoord << ", 0.0" << endln;
 				opserr << "Node " << nCount + nodeCount + 2 << " - 0.0" << ", " << yCoord << ", 1.0" << endln;
@@ -229,7 +229,7 @@ SiteResponseModel::runTotalStressModel()
 		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
-		if (PRINTDEBUG)
+		if (program_config->getBooleanProperty("General|PrintDebug"))
 		{
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
@@ -255,7 +255,7 @@ SiteResponseModel::runTotalStressModel()
 			int node1Tag = 4 * (nElem + elemCount);
 			
 			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
-				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -9.81 * theMat->getRho(), 0.0);
+				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho(), 0.0);
 			theDomain->addElement(theEle);
 
 
@@ -264,13 +264,13 @@ SiteResponseModel::runTotalStressModel()
 			theEle->setParameter(const_cast<const char**>(paramArgs), 2, *theParameter);
 			theDomain->addParameter(theParameter);
 
-			if (PRINTDEBUG)
+			if (program_config->getBooleanProperty("General|PrintDebug"))
 				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << endln;
 		}
 		nElem += layerNumElems[numLayers - layerCount - 2];
 	}
 
-	if (PRINTDEBUG)
+	if (program_config->getBooleanProperty("General|PrintDebug"))
 		opserr << "Total number of elements = " << nElem << endln;
 
 
@@ -286,7 +286,7 @@ SiteResponseModel::runTotalStressModel()
 
 	// FE mesh - create analysis objects - I use static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
-	CTestNormDispIncr* theTest = new CTestNormDispIncr(1.0e-7, 30, 1);
+	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
 	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
 	StaticIntegrator* theIntegrator    = new LoadControl(0.05, 1, 0.05, 1.0);
 	//TransientIntegrator* theIntegrator = new Newmark(0.5, 0.25);
@@ -340,8 +340,8 @@ SiteResponseModel::runTotalStressModel()
 	ID directions(2);
 	directions(0) = 0; directions(1) = 2;
 
-	if (!UNIFORMEXCITATION)
-		{
+	if (! program_config->getBooleanProperty("Analysis|RigidBase"))
+	{
 		// FE mesh - create dashpot nodes and apply proper fixities
 		theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 		theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
@@ -392,40 +392,31 @@ SiteResponseModel::runTotalStressModel()
 	if (theMotionY->isInitialized())
 	{
 		// using uniform excitation to apply vertical motion
-		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -9.81);
+		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -program_config->getFloatProperty("Units|g"));
 		theDomain->addLoadPattern(theLP);
-	}
-
-	if (UNIFORMEXCITATION)
-	{
-		// using uniform excitation in horizontal directions
-		if (theMotionX->isInitialized())
-		{
-			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -9.81);
-			theDomain->addLoadPattern(theLP);
-		}
-		if (theMotionZ->isInitialized())
-		{
-			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, -9.81);
-			theDomain->addLoadPattern(theLP);
-		}
 	}
 
 	// FE mesh - using a stress input with the dashpot
-	if (theMotionX->isInitialized() && !UNIFORMEXCITATION)
+	if (theMotionX->isInitialized())
 	{
-		LoadPattern* theLP = new LoadPattern(1, vis_C);
-		theLP->setTimeSeries(theMotionX->getVelSeries());
+		// check if rigid base
+		if (program_config->getBooleanProperty("Analysis|RigidBase"))
+		{
+			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -program_config->getFloatProperty("Units|g"));
+			theDomain->addLoadPattern(theLP);
+		} else {
+			LoadPattern* theLP = new LoadPattern(1, vis_C);
+			theLP->setTimeSeries(theMotionX->getVelSeries());
 
-		NodalLoad* theLoad;
-		Vector load(3);
-		load(0) = 1.0;
-		load(1) = 0.0;
-		load(2) = 0.0;
+			NodalLoad* theLoad;
+			Vector load(3);
+			load(0) = 1.0;
+			load(1) = 0.0;
+			load(2) = 0.0;
 
-		theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
-		theDomain->addLoadPattern(theLP);
-
+			theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
+			theDomain->addLoadPattern(theLP);
+		}
 		// update the number of steps as well as the dt vector
 		int temp = theMotionX->getNumSteps();
 		if ( temp > numSteps)
@@ -435,20 +426,26 @@ SiteResponseModel::runTotalStressModel()
 		}
 	}
 
-	if (theMotionZ->isInitialized() && !UNIFORMEXCITATION)
+	if (theMotionZ->isInitialized()) 
 	{
-		LoadPattern* theLP = new LoadPattern(2, vis_C);
-		theLP->setTimeSeries(theMotionZ->getVelSeries());
+		// check if rigid base
+		if (program_config->getBooleanProperty("Analysis|RigidBase"))
+		{
+			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, -program_config->getFloatProperty("Units|g"));
+			theDomain->addLoadPattern(theLP);
+		} else {
+			LoadPattern* theLP = new LoadPattern(2, vis_C);
+			theLP->setTimeSeries(theMotionZ->getVelSeries());
 
-		NodalLoad* theLoad;
-		Vector load(3);
-		load(0) = 0.0;
-		load(1) = 0.0;
-		load(2) = 1.0;
+			NodalLoad* theLoad;
+			Vector load(3);
+			load(0) = 0.0;
+			load(1) = 0.0;
+			load(2) = 1.0;
 
-		theLoad = new NodalLoad(2, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
-		theDomain->addLoadPattern(theLP);
-
+			theLoad = new NodalLoad(2, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
+			theDomain->addLoadPattern(theLP);
+		}
 		int temp = theMotionZ->getNumSteps();
 		if (temp > numSteps)
 		{
@@ -462,9 +459,8 @@ SiteResponseModel::runTotalStressModel()
 	delete theIntegrator;
 	delete theAnalysis;
 
-	TransientIntegrator* theTransientIntegrator = new Newmark(0.5, 0.25);
-	theTest->setTolerance(1.0e-5);
-
+	TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
 
 	// DirectIntegrationAnalysis* theTransientAnalysis;
 	// theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
@@ -475,26 +471,32 @@ SiteResponseModel::runTotalStressModel()
 	// FE mesh - reset time in the domain
 	theDomain->setCurrentTime(0.0);
 
-	// FE mesh - setup Rayleigh damping 
-	// apply 2% at the natural frequency and 5*natural frequency
-	double natFreq = SRM_layering.getNaturalPeriod();
-	double dampRatio = 0.01;
-	double pi = 4.0 * atan(1.0);
-	// double a0 = dampRatio * (10.0 * pi * natFreq) / 3.0 ;
-	// double a1 = dampRatio / (6.0 * pi * natFreq);
-
-	// ****** !!!!! remove this - this is only for debugging purposes
-	double omega1 = 2.0*pi*0.1;
-	double omega2 = 2.0*pi*10.0;
-	double a0 = dampRatio * (2.0 * omega1 * omega2) / (omega1 + omega2) ;
-	double a1 = dampRatio * (2.0/(omega1 + omega2));
-	if (PRINTDEBUG)
+	// define Rayleigh damping
+	double omega1 = 0.0;
+	double omega2 = 0.0;
+	if (program_config->getBooleanProperty("Analysis|Damping|ModalRayleigh"))
 	{
-		opserr << "f1 = " << natFreq << "    f2 = " << 5.0 * natFreq << endln;
-		opserr << "a0 = " << a0 << "    a1 = " << a1 << endln;
+		double natPeriod = SRM_layering.getNaturalPeriod();
+		omega1 = 2.0 * PI * (2*program_config->getFloatProperty("Analysis|Damping|Mode1") - 1) / natPeriod; 
+		omega2 = 2.0 * PI * (2*program_config->getFloatProperty("Analysis|Damping|Mode2") - 1) / natPeriod; 
+	} else {
+		omega1 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency1"); 
+		omega2 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency2"); 
 	}
-	theDomain->setRayleighDampingFactors(a0, 0.0, a1, 0.0);
 
+
+	if (program_config->getBooleanProperty("Analysis|Damping|ElemByElem"))
+	{
+		opserr << "This part is not implemented yet." << endln;
+		exit(-1);
+	} else {
+		double dampRatio = program_config->getFloatProperty("Analysis|Damping|Ratio");
+		double a0 = dampRatio * (2.0 * omega1 * omega2) / (omega1 + omega2) ;
+		double a1 = dampRatio * (2.0/(omega1 + omega2));
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "a0 = " << a0 << "    a1 = " << a1 << endln;
+		theDomain->setRayleighDampingFactors(a0, 0.0, a1, 0.0);
+	}
 	// FE mesh - create the output streams
 	OPS_Stream* theOutputStream;
 	Recorder* theRecorder;
@@ -532,9 +534,9 @@ SiteResponseModel::runTotalStressModel()
 		nodesToRecord(0) = nCount + 1;
 
 		
-			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
-			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
-			<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
+		opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+		<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+		<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
 
 		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
 		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
@@ -607,7 +609,7 @@ SiteResponseModel::runTotalStressModel()
 	opsout.flush();
 	opsout << endln;
 
-	//if (PRINTDEBUG)
+	//if (program_config->getBooleanProperty("General|PrintDebug"))
 	//{
 	//	Information info;
 	//	theEle = theDomain->getElement(1);

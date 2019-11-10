@@ -4,9 +4,10 @@
 
 extern ConfigManager* program_config;
 
-#define PRINTDEBUG true
-#define UNIFORMEXCITATION true
+#define PI 3.14159265359
 
+#define CONFIG_TYPE json
+// #define CONFIG_TYPE default
 
 // fix the directory separator in windows versus unix
 #if defined(WIN32) || defined(_WIN32) 
