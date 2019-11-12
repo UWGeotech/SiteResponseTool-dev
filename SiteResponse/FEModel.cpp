@@ -141,7 +141,8 @@ SiteResponseModel::runTotalStressModel()
 		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
 
 		// calculate number of elements in this layer
-		int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		//int thisLayerNumEle = NODES_PER_WAVELENGTH * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		int thisLayerNumEle = 1;
 		
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
@@ -395,6 +396,14 @@ SiteResponseModel::runTotalStressModel()
 		// using uniform excitation to apply vertical motion
 		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -9.81);
 		theDomain->addLoadPattern(theLP);
+
+		// update the number of steps as well as the dt vector
+		int temp = theMotionY->getNumSteps();
+		if (temp > numSteps)
+		{
+			numSteps = temp;
+			dt = theMotionY->getDTvector();
+		}
 	}
 
 	if (UNIFORMEXCITATION)
