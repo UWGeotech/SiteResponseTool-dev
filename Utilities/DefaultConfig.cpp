@@ -6,7 +6,8 @@
 
 DefaultConfig::DefaultConfig()
 {
-    config_data[std::string("Meshing|MaxFrequency")] = std::string("50.0");
+	config_data[std::string("Meshing|Manual")] = std::string("False");
+	config_data[std::string("Meshing|MaxFrequency")] = std::string("50.0");
     config_data[std::string("Meshing|NumNodesPerWaveLength")] = std::string("4");
     config_data[std::string("General|PrintDebug")] = std::string("False");
     config_data[std::string("Units|g")] = std::string("9.81");
