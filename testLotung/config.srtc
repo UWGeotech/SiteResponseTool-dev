@@ -1,13 +1,13 @@
 {
     "Meshing":
     {
-        "Manual":"False",
+        "Manual":"True",
         "MaxFrequency":"50.0",
         "NumNodesPerWaveLength":"4"
     },
     "General":
     {
-        "PrintDebug":"False"
+        "PrintDebug":"True"
     },
     "Units":
     {
@@ -36,7 +36,7 @@
             "Newmark_Beta":"0.25",
             "Newmark_Gamma":"0.50"
         },
-        "RigidBase":"False",
+        "RigidBase":"True",
         "Damping":
         {
             "Ratio":"0.01",

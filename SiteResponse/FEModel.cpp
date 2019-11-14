@@ -138,11 +138,12 @@ SiteResponseModel::runTotalStressModel()
 		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
 
 		// calculate the thickness of elements in this layer
-		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
-
-		// calculate number of elements in this layer
-		int thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
-		
+		int thisLayerNumEle = 1;
+		if (!program_config->getBooleanProperty("Meshing|Manual")){
+			thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
+			// calculate number of elements in this layer
+			thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		}
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
 		layerNumNodes.push_back(4 * (thisLayerNumEle + (layerCount == 0)));

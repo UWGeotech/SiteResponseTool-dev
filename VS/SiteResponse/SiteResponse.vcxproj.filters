@@ -384,6 +384,9 @@
     <ClCompile Include="..\..\Utilities\DefaultConfig.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Utilities\JsonConfig.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h">
@@ -877,6 +880,9 @@
       <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Utilities\DefaultConfig.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\JsonConfig.h">
       <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
