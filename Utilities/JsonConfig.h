@@ -1,15 +1,17 @@
 #include <map>
 #include <string>
+#include <fstream>
 #include "ConfigIO.h"
+#include "json.hpp"
 
-#ifndef DEFAULTCONFIG_H
-#define DEFAULTCONFIG_H
+#ifndef JSONCONFIG_H
+#define JSONCONFIG_H
 
-class DefaultConfig: public ConfigIO
+class JSONConfig: public ConfigIO
 {
 public:
-    DefaultConfig();
-    ~DefaultConfig();
+    JSONConfig(const char* json_file);
+    ~JSONConfig();
 
 
     virtual std::string getStringProperty(std::string key);
@@ -18,6 +20,7 @@ public:
     virtual bool getBooleanProperty(std::string key);
 
 private:
+    nlohmann::json config_json;
     std::map <std::string, std::string> config_data;
     std::string getValueFromKey(std::string key);
 };
