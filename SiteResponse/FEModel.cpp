@@ -541,29 +541,32 @@ SiteResponseModel::runTotalStressModel()
 	nCount = 0;
 	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
 	{		
-		nodesToRecord(0) = nCount + 1;
+		opserr << "layer_IO : " << SRM_layering.getLayer(layerCount).get_IO() << endln;
+		if (SRM_layering.getLayer(layerCount).get_IO())
+		{
+			nodesToRecord(0) = nCount + 1;
 
-		opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
-		<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
-		<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
+			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+				<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+				<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
-		
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
-		nCount += layerNumNodes[layerCount];
+			nCount += layerNumNodes[layerCount];
+		}
 	}
 
 	// record element results
