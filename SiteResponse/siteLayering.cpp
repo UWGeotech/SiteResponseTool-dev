@@ -93,11 +93,12 @@ SiteLayering::readFromFile(const char* layerFileName)
 			continue;	
 		std::string layerName;
 		double thick, vs, vp, rho, su, hG, m, h0, chi;
+		bool IO;
 		std::istringstream lines(line);
-		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi;
+		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi >> IO;
 		//std::cout << "Layer : " << layerName << ", " << thick << ", " << vs << ", " << vp << ", " << rho << ", " << su << ", " << hG << ", " << m << ", " << h0 << ", " << chi <<std::endl;
 
-		SoilLayer newLayer(layerName, thick, vs, vp, rho, su, hG, m, h0, chi);
+		SoilLayer newLayer(layerName, thick, vs, vp, rho, su, hG, m, h0, chi, IO);
 		this->addNewLayer(newLayer);
 	}
 	layerFile.close();
