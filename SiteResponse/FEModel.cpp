@@ -276,14 +276,12 @@ SiteResponseModel::runTotalStressModel()
 		opserr << "Total number of elements = " << nElem << endln;
 
 
-
 	// FE mesh - update material stage
 	ParameterIter& theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
 	{
 		theParameter->update(0.0);
 	}
-
 
 
 	// FE mesh - create analysis objects - I use static analysis for gravity
@@ -542,9 +540,10 @@ SiteResponseModel::runTotalStressModel()
 	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
 	{		
 		opserr << "layer_IO : " << SRM_layering.getLayer(layerCount).get_IO() << endln;
+		nodesToRecord(0) = nCount + 1;
 		if (SRM_layering.getLayer(layerCount).get_IO())
 		{
-			nodesToRecord(0) = nCount + 1;
+			//nodesToRecord(0) = nCount + 1;
 
 			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
 				<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
@@ -565,8 +564,9 @@ SiteResponseModel::runTotalStressModel()
 			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
 			theDomain->addRecorder(*theRecorder);
 
-			nCount += layerNumNodes[layerCount];
+			//nCount += layerNumNodes[layerCount];
 		}
+		nCount += layerNumNodes[layerCount];
 	}
 
 	// record element results

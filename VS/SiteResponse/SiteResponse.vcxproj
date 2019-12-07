@@ -326,7 +326,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{6AA68FDF-93BA-4D2B-BF9E-2EA539955002}</ProjectGuid>
     <RootNamespace>SiteResponse</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

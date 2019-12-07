@@ -23,7 +23,7 @@
 SiteLayering::SiteLayering()
 {
 	sl_natPeriod = 0.0;
-        sl_numLayers = 0;
+    sl_numLayers = 0;
 	sl_natPeriod = 0.0;
 	sl_totalThickness = 0.0;
 	sl_equivalentVS = 0.0;
@@ -33,7 +33,7 @@ SiteLayering::SiteLayering()
 SiteLayering::SiteLayering(const char* layerFileName)
 {
 	sl_natPeriod = 0.0;
-        sl_numLayers = 0;
+    sl_numLayers = 0;
 	sl_natPeriod = 0.0;
 	sl_totalThickness = 0.0;
 	sl_equivalentVS = 0.0;
@@ -91,13 +91,17 @@ SiteLayering::readFromFile(const char* layerFileName)
 		// skip comment lines
 		if ((line == "") || (line[0] == '%') || (line[0] == '#'))
 			continue;	
-		std::string layerName;
+		std::string layerName, IOStr;
 		double thick, vs, vp, rho, su, hG, m, h0, chi;
 		bool IO;
 		std::istringstream lines(line);
-		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi >> IO;
-		//std::cout << "Layer : " << layerName << ", " << thick << ", " << vs << ", " << vp << ", " << rho << ", " << su << ", " << hG << ", " << m << ", " << h0 << ", " << chi <<std::endl;
-
+		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi >> IOStr;
+		//std::cout << "Layer : " << layerName << ", " << thick << ", " << vs << ", " << vp << ", " << rho << ", " << su << ", " << hG << ", " << m << ", " << h0 << ", " << chi << ", " << IOStr <<std::endl;
+		if (IOStr == "true" || IOStr == "True" || IOStr == "TRUE")
+			IO = true;
+		else
+		    IO = false;
+		
 		SoilLayer newLayer(layerName, thick, vs, vp, rho, su, hG, m, h0, chi, IO);
 		this->addNewLayer(newLayer);
 	}
