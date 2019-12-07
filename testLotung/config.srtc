@@ -39,7 +39,7 @@
         "RigidBase":"True",
         "Damping":
         {
-            "Ratio":"0.01",
+            "Ratio":"0.00",
             "Frequency1":"0.1",
             "Frequency2":"10.0",
             "Mode1":"1",
