@@ -234,7 +234,9 @@ SiteResponseModel::runTotalStressModel()
 		if (program_config->getBooleanProperty("General|PrintDebug"))
 		{
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
-			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			opserr << "        G = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus() << endln;
+
 		}
 	}
 
