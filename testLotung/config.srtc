@@ -29,7 +29,7 @@
         {
             "ConvergenceTest":
             {
-                "Tolerance":"1.0e-4",
+                "Tolerance":"1.0e-5",
                 "MaxNumIterations":"30",
                 "PrintTag":"1"
             },
