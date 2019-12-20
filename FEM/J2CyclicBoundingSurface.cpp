@@ -251,8 +251,10 @@ void J2CyclicBoundingSurface::plastic_integrator()
 
 		Vector devStrainDir(6);
 		double devStrainNorm = vector_norm(dStrain_dev, 2);
-		if (abs(devStrainNorm) < small)
+		if (abs(devStrainNorm) < small) {
+			m_stress_np1 = m_stress_n + m_bulk * dStrain_vol * eye + m_psi_np1 * convert_to_stressLike(dStrain_dev);
 			return;
+		}
 		else
 			devStrainDir = dStrain_dev / devStrainNorm;
 
@@ -311,6 +313,14 @@ void J2CyclicBoundingSurface::plastic_integrator()
 	else
 	{
 		if (debugFlag) opserr << "Loading continues..." << endln;
+
+		Vector devStrainDir(6);
+		double devStrainNorm = vector_norm(dStrain_dev, 2);
+		if (abs(devStrainNorm) < small) {
+			m_stress_np1 = m_stress_n + m_bulk * dStrain_vol * eye + m_psi_np1 * convert_to_stressLike(dStrain_dev);
+			return;
+		}
+
 		// calculate the initial residual
 		H_n = H(m_kappa_n);
 		H_np1 = H(m_kappa_np1);
