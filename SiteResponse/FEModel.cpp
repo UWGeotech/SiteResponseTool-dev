@@ -2,15 +2,13 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)					 **
+**					Pedro Arduino  (parduino@uw.edu)					 **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
-
-
 
 
 #include <vector>
@@ -195,16 +193,16 @@ SiteResponseModel::runTotalStressModel()
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
 	theSP = new SP_Constraint(1, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
-	theSP = new SP_Constraint(1, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(1, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
 	theSP = new SP_Constraint(2, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
-	theSP = new SP_Constraint(2, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(2, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
 	theSP = new SP_Constraint(3, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
-	theSP = new SP_Constraint(3, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(3, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(3, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
 	theSP = new SP_Constraint(4, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
-	theSP = new SP_Constraint(4, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(4, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(4, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
 	// FE mesh - apply equalDOF
@@ -236,7 +234,6 @@ SiteResponseModel::runTotalStressModel()
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
 			opserr << "        G = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus() << endln;
-
 		}
 	}
 
@@ -259,9 +256,8 @@ SiteResponseModel::runTotalStressModel()
 			int node1Tag = 4 * (nElem + elemCount);
 			
 			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
-				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho(), 0.0);
+				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
 			theDomain->addElement(theEle);
-
 
 			theParameter = new Parameter(nElem + elemCount + 1, 0, 0, 0);
 			sprintf(paramArgs[1], "%d", theMat->getTag());
@@ -313,7 +309,7 @@ SiteResponseModel::runTotalStressModel()
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theAnalysis->analyze(1);
+		int converged = theAnalysis->analyze(10);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
@@ -328,7 +324,7 @@ SiteResponseModel::runTotalStressModel()
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theAnalysis->analyze(1);
+		int converged = theAnalysis->analyze(10);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
@@ -493,7 +489,6 @@ SiteResponseModel::runTotalStressModel()
 		omega1 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency1"); 
 		omega2 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency2"); 
 	}
-
 
 	if (program_config->getBooleanProperty("Analysis|Damping|ElemByElem"))
 	{
