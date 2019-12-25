@@ -6,6 +6,8 @@
 bin/siteresponse
 lib/*
 bin/*
+test/*
+.vscode/*
 
 # Ignore files in the Windows distribution
 VS/.vs
