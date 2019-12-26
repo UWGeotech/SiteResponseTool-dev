@@ -32,6 +32,7 @@ OBJS = \
        DummyStream.o \
        EarthquakePattern.o \
        ElasticIsotropicMaterial.o \
+       ElasticIsotropicPlaneStrain2D.o \
        ElasticIsotropicThreeDimensional.o \
        ElasticMaterial.o \
        ElasticSection3d.o \
@@ -42,6 +43,7 @@ OBJS = \
        ElementResponse.o \
        ElementStateParameter.o \
        EquiSolnAlgo.o \
+       ErrorHandler.o \
        FE_Datastore.o \
        FE_EleIter.o \
        FE_Element.o \
@@ -98,6 +100,8 @@ OBJS = \
        PlaneStrainMaterial.o \
        PlaneStressMaterial.o \
        PlateFiberMaterial.o \
+       PM4Sand.o \
+       PM4Silt.o \
        Pressure_Constraint.o \
        PySimple1.o \
        QzSimple1.o \
@@ -118,7 +122,10 @@ OBJS = \
        SingleDomSP_Iter.o \
        SolutionAlgorithm.o \
        SP_Constraint.o \
+       SSPquad.o \
+       SSPquadUP.o \
        SSPbrick.o \
+       SSPbrickUP.o \
        StandardStream.o \
        FileStream.o \
        StaticAnalysis.o \

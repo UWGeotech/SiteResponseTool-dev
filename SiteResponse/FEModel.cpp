@@ -51,12 +51,17 @@
 #include "UniaxialMaterial.h"
 #include "ElementStateParameter.h"
 
-
+#include "SSPquad.h"
+#include "SSPquadUP.h"
 #include "SSPbrick.h"
+#include "SSPbrickUP.h"
 #include "Brick.h"
 #include "J2CyclicBoundingSurface.h"
 #include "ElasticIsotropicMaterial.h"
+#include "ElasticIsotropicPlaneStrain2D.h"
 #include "ElasticMaterial.h"
+#include "PM4Sand.h"
+#include "PM4Silt.h"
 #include "NewtonRaphson.h"
 #include "LoadControl.h"
 #include "Newmark.h"
@@ -116,7 +121,7 @@ SiteResponseModel::~SiteResponseModel() {
 
 // run a total stress site response analysis
 int
-SiteResponseModel::runTotalStressModel()
+SiteResponseModel::runTotalStressModel3D()
 {
 	Vector zeroVec(3);
 	zeroVec.Zero();
@@ -194,16 +199,16 @@ SiteResponseModel::runTotalStressModel()
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
 	theSP = new SP_Constraint(1, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
-	theSP = new SP_Constraint(1, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(1, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
 	theSP = new SP_Constraint(2, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
-	theSP = new SP_Constraint(2, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(2, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
 	theSP = new SP_Constraint(3, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
-	theSP = new SP_Constraint(3, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(3, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(3, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
 	theSP = new SP_Constraint(4, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
-	theSP = new SP_Constraint(4, 1, 0.0, false); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(4, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
 	theSP = new SP_Constraint(4, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
 	// FE mesh - apply equalDOF
@@ -640,6 +645,484 @@ SiteResponseModel::runTotalStressModel()
 	return 0;
 }
 
+
+
+// run a total stress site response analysis
+int
+SiteResponseModel::runEffectiveStressModel2D()
+{
+	Vector zeroVec(2);
+	zeroVec.Zero();
+
+	std::vector<int> layerNumElems;
+	std::vector<int> layerNumNodes;
+	std::vector<double> layerElemSize;
+
+	// setup the geometry and mesh parameters
+	int numLayers = SRM_layering.getNumLayers();
+	int numElems = 0;
+	int numNodes = 0;
+
+	// loop over the layers and setup the mesh
+	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	{
+		double thisLayerThick = SRM_layering.getLayer(layerCount).getThickness();
+		double thisLayerVS = SRM_layering.getLayer(layerCount).getShearVelocity();
+		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
+
+		// calculate the thickness of elements in this layer
+		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
+
+		// calculate number of elements in this layer
+		int thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		
+		// save these in a vector for later use
+		layerNumElems.push_back(thisLayerNumEle);
+		layerNumNodes.push_back(2 * (thisLayerNumEle + (layerCount == 0)));
+		layerElemSize.push_back(thisLayerThick / thisLayerNumEle);
+
+		// add up number of elements and nodes
+		numElems += thisLayerNumEle;
+		numNodes += 2 * (thisLayerNumEle + (layerCount == numLayers - 2));
+
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "Layer " << SRM_layering.getLayer(layerCount).getName().c_str() << " : Num Elements = " << thisLayerNumEle
+			   << "(" << thisLayerThick / thisLayerNumEle << "), "
+			   << ", Num Nodes = " << 2 * (thisLayerNumEle + (layerCount == 0)) << endln;
+	}
+
+	// FE mesh - create the nodes
+	Node* theNode;
+
+	double yCoord = 0.0;
+	int nCount = 0;
+	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	{
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+			<< " - Element Thickness = " << layerElemSize[layerCount] << endln;
+		
+		for (int nodeCount = 0; nodeCount < layerNumNodes[layerCount]; nodeCount += 2)
+		{
+			theNode = new Node(nCount + nodeCount + 1, 3, 0.0, yCoord, 0.0); theDomain->addNode(theNode);
+			theNode = new Node(nCount + nodeCount + 2, 3, 1.0, yCoord, 0.0); theDomain->addNode(theNode);
+
+			if (program_config->getBooleanProperty("General|PrintDebug"))
+			{
+				opserr << "Node " << nCount + nodeCount + 1 << " - 0.0" << ", " << yCoord << endln;
+				opserr << "Node " << nCount + nodeCount + 2 << " - 1.0" << ", " << yCoord << endln;
+			}
+
+			yCoord += layerElemSize[layerCount];
+		}
+		nCount += layerNumNodes[layerCount];
+	}
+
+	// FE mesh - apply fixities
+	SP_Constraint* theSP;
+	ID theSPtoRemove(2); // these fixities should be removed later on if compliant base is used
+	theSP = new SP_Constraint(1, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
+	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+	theSP = new SP_Constraint(2, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
+	theSP = new SP_Constraint(2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+
+	for (int nodeCount = 1; nodeCount <= numNodes; nodeCount++)
+	{
+		theSP = new SP_Constraint(nodeCount, 2, 0.0, true); theDomain->addSP_Constraint(theSP);
+	}
+
+	// FE mesh - apply equalDOF
+	MP_Constraint* theMP;
+	Matrix Ccr(2, 2); Ccr(0, 0) = 1.0; Ccr(1, 1) = 1.0;
+	ID rcDOF(2); rcDOF(0) = 0; rcDOF(1) = 1;
+	for (int nodeCount = 2; nodeCount < numNodes; nodeCount += 2)
+	{
+		theMP = new MP_Constraint(nodeCount + 1, nodeCount + 2, Ccr, rcDOF, rcDOF); theDomain->addMP_Constraint(theMP);
+	}
+
+	// FE mesh - create the materials
+	NDMaterial* theMat;
+	SoilLayer theLayer;
+	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	{
+		// get properties for this layer 
+		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
+		// theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		theMat = new PM4Sand(numLayers - layerCount - 1, 0.7, 200.0, 1.5, theLayer.getRho());
+		OPS_addNDMaterial(theMat);
+
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+		{
+			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
+			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+		}
+	}
+
+	// FE mesh - create soil elements and add the material state parameter
+	Element* theEle;
+	Parameter* theParameter;
+	char** paramArgs = new char*[2];
+
+	paramArgs[0] = new char[15];
+	paramArgs[1] = new char[5];
+	sprintf(paramArgs[0], "materialState");
+
+	int nElem = 0;
+
+	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	{
+		theMat = OPS_getNDMaterial(numLayers - layerCount - 1);
+		for (int elemCount = 0; elemCount < layerNumElems[numLayers - layerCount - 2]; ++elemCount)
+		{
+			int node1Tag = 2 * (nElem + elemCount);
+			
+			theEle = new SSPquadUP(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 4, node1Tag + 3, *theMat, 1.0, 2.1e6, 1.0, 1.0, 1.0, 0.7, 1.0e-5, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho());
+			theDomain->addElement(theEle);
+
+
+			theParameter = new Parameter(nElem + elemCount + 1, 0, 0, 0);
+			sprintf(paramArgs[1], "%d", theMat->getTag());
+			theEle->setParameter(const_cast<const char**>(paramArgs), 2, *theParameter);
+			theDomain->addParameter(theParameter);
+
+			if (program_config->getBooleanProperty("General|PrintDebug"))
+				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << endln;
+		}
+		nElem += layerNumElems[numLayers - layerCount - 2];
+	}
+
+	if (program_config->getBooleanProperty("General|PrintDebug"))
+		opserr << "Total number of elements = " << nElem << endln;
+
+
+
+	// FE mesh - update material stage
+	ParameterIter& theParamIter = theDomain->getParameters();
+	while ((theParameter = theParamIter()) != 0)
+	{
+		theParameter->update(0.0);
+	}
+
+
+
+	// FE mesh - create analysis objects - I use static analysis for gravity
+	AnalysisModel* theModel = new AnalysisModel();
+	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
+	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
+	StaticIntegrator* theIntegrator    = new LoadControl(0.05, 1, 0.05, 1.0);
+	//TransientIntegrator* theIntegrator = new Newmark(0.5, 0.25);
+	//ConstraintHandler* theHandler = new PenaltyConstraintHandler(1.0e14, 1.0e14);
+	ConstraintHandler* theHandler = new TransformationConstraintHandler();
+	RCM* theRCM = new RCM();
+	DOF_Numberer* theNumberer = new DOF_Numberer(*theRCM);
+	BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
+	LinearSOE* theSOE = new BandGenLinSOE(*theSolver);
+
+
+
+	//DirectIntegrationAnalysis* theAnalysis;
+	//theAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator, theTest);
+
+	//VariableTimeStepDirectIntegrationAnalysis* theAnalysis;
+	//theAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator, theTest);
+
+	StaticAnalysis *theAnalysis;
+	theAnalysis = new StaticAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator);
+	theAnalysis->setConvergenceTest(*theTest);
+
+	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
+		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
+		int converged = theAnalysis->analyze(1);
+		if (!converged) {
+			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+		}
+	}
+
+	// FE mesh - update material response to plastic
+	theParamIter = theDomain->getParameters();
+	while ((theParameter = theParamIter()) != 0)
+	{
+		theParameter->update(1.0);
+	}
+
+	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
+		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
+		int converged = theAnalysis->analyze(1);
+		if (!converged) {
+			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+		}
+	}
+
+	// FE mesh - add the compliant base - use the last layer properties
+	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
+	UniaxialMaterial* theViscousMats[2];
+	theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
+	ID directions(1);
+	directions(0) = 0;
+
+	if (! program_config->getBooleanProperty("Analysis|RigidBase"))
+	{
+		// FE mesh - create dashpot nodes and apply proper fixities
+		theNode = new Node(numNodes + 1, 2, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
+		theNode = new Node(numNodes + 2, 2, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
+		theSP = new SP_Constraint(numNodes + 1, 0, 0.0, true); theDomain->addSP_Constraint(theSP);
+		theSP = new SP_Constraint(numNodes + 1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+		theSP = new SP_Constraint(numNodes + 2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
+
+		// FE mesh - apply equalDOF to the node connected to the column
+		Matrix constrainInXZ(2, 2); constrainInXZ(0, 0) = 1.0; constrainInXZ(1, 1) = 1.0;
+		ID constDOF(2); constDOF(0) = 0; constDOF(1) = 1;
+		theMP = new MP_Constraint(1, numNodes + 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+
+		// FE mesh - remove fixities created for gravity
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(0)); delete theSP;
+		theSP = theDomain->removeSP_Constraint(theSPtoRemove(1)); delete theSP;
+
+		// FE mesh - equalDOF the first 2 nodes
+		theMP = new MP_Constraint(1, 2, constrainInXZ, constDOF, constDOF); theDomain->addMP_Constraint(theMP);
+
+		// FE mesh - create the dashpot element
+		Vector x(3); x(0) = 1.0; x(1) = 0.0; x(2) = 0.0;
+		Vector y(3); y(1) = 1.0; y(0) = 0.0; y(2) = 0.0;
+		theEle = new ZeroLength(numElems + 1, 2, numNodes + 1, numNodes + 2, x, y, 1, theViscousMats, directions);
+
+		theDomain->addElement(theEle);
+	}
+
+	// FE mesh - apply the motion
+	int numSteps = 0;
+	std::vector<double> dt;
+
+	// FE mesh - using multiple support
+	//MultiSupportPattern* theLP = new MultiSupportPattern(1);
+	//theLP->addMotion(*theMotionX->getGroundMotion(), 1);
+	//theLP->addSP_Constraint(new ImposedMotionSP(1, 0, 1, 1));
+	//theLP->addSP_Constraint(new ImposedMotionSP(2, 0, 1, 1));
+	//theLP->addSP_Constraint(new ImposedMotionSP(3, 0, 1, 1));
+	//theLP->addSP_Constraint(new ImposedMotionSP(4, 0, 1, 1));
+
+	if (theMotionY->isInitialized())
+	{
+		// using uniform excitation to apply vertical motion
+		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -program_config->getFloatProperty("Units|g"));
+		theDomain->addLoadPattern(theLP);
+	}
+
+	// FE mesh - using a stress input with the dashpot
+	if (theMotionX->isInitialized())
+	{
+		// check if rigid base
+		if (program_config->getBooleanProperty("Analysis|RigidBase"))
+		{
+			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -program_config->getFloatProperty("Units|g"));
+			theDomain->addLoadPattern(theLP);
+		} else {
+			LoadPattern* theLP = new LoadPattern(1, vis_C);
+			theLP->setTimeSeries(theMotionX->getVelSeries());
+
+			NodalLoad* theLoad;
+			Vector load(2);
+			load(0) = 1.0;
+			load(1) = 0.0;
+
+			theLoad = new NodalLoad(1, numNodes + 2, load, false); theLP->addNodalLoad(theLoad);
+			theDomain->addLoadPattern(theLP);
+		}
+		// update the number of steps as well as the dt vector
+		int temp = theMotionX->getNumSteps();
+		if ( temp > numSteps)
+		{
+			numSteps = temp;
+			dt = theMotionX->getDTvector();
+		}
+	}
+
+	// I have to change to a transient analysis
+	// FE mesh - remove the static analysis and create new transient objects
+	delete theIntegrator;
+	delete theAnalysis;
+
+	TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
+
+	// DirectIntegrationAnalysis* theTransientAnalysis;
+	// theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+
+	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
+	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	// FE mesh - reset time in the domain
+	theDomain->setCurrentTime(0.0);
+
+	// define Rayleigh damping
+	double omega1 = 0.0;
+	double omega2 = 0.0;
+	if (program_config->getBooleanProperty("Analysis|Damping|ModalRayleigh"))
+	{
+		double natPeriod = SRM_layering.getNaturalPeriod();
+		omega1 = 2.0 * PI * (2*program_config->getFloatProperty("Analysis|Damping|Mode1") - 1) / natPeriod; 
+		omega2 = 2.0 * PI * (2*program_config->getFloatProperty("Analysis|Damping|Mode2") - 1) / natPeriod; 
+	} else {
+		omega1 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency1"); 
+		omega2 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency2"); 
+	}
+
+
+	if (program_config->getBooleanProperty("Analysis|Damping|ElemByElem"))
+	{
+		opserr << "This part is not implemented yet." << endln;
+		exit(-1);
+	} else {
+		double dampRatio = program_config->getFloatProperty("Analysis|Damping|Ratio");
+		double a0 = dampRatio * (2.0 * omega1 * omega2) / (omega1 + omega2) ;
+		double a1 = dampRatio * (2.0/(omega1 + omega2));
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "a0 = " << a0 << "    a1 = " << a1 << endln;
+		theDomain->setRayleighDampingFactors(a0, 0.0, a1, 0.0);
+	}
+	// FE mesh - create the output streams
+	OPS_Stream* theOutputStream;
+	Recorder* theRecorder;
+
+	// record last node's results
+	ID nodesToRecord(1);
+	nodesToRecord(0) = numNodes;
+
+	ID dofToRecord(2);
+	dofToRecord(0) = 0;
+	dofToRecord(1) = 1;
+
+	// surface recorder
+	std::string outFile = theOutputDir + PATH_SEPARATOR +  "surface.acc";
+	theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
+	theDomain->addRecorder(*theRecorder);
+
+	outFile = theOutputDir + PATH_SEPARATOR + "surface.vel";
+	theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
+	theDomain->addRecorder(*theRecorder);
+
+	outFile = theOutputDir + PATH_SEPARATOR + "surface.disp";
+	theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+	theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+	theDomain->addRecorder(*theRecorder);
+
+
+	// recorder for bottom of layers
+	nCount = 0;
+	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	{		
+		nodesToRecord(0) = nCount + 1;
+
+		
+		opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+		<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+		<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+		theDomain->addRecorder(*theRecorder);
+		
+
+		nCount += layerNumNodes[layerCount];
+	}
+
+	// record element results
+	// OPS_Stream* theOutputStream2;
+	// ID elemsToRecord(5);
+	// elemsToRecord(0) = 1;
+	// elemsToRecord(1) = 2;
+	// elemsToRecord(2) = 3;
+	// elemsToRecord(3) = 4;
+	// elemsToRecord(4) = 5;
+	// const char* eleArgs = "stress";
+	// 
+	// theOutputStream2 = new DataFileStream("Output2.out", OVERWRITE, 2, 0, false, 6, false);
+	// theRecorder = new ElementRecorder(&elemsToRecord, &eleArgs, 1, true, *theDomain, *theOutputStream2, 0.0, NULL);
+	// theDomain->addRecorder(*theRecorder);
+
+	// FE mesh - perform analysis
+	opserr << "Analysis started:" << endln;
+	std::stringstream progressBar;
+	numSteps = 80000;
+	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
+		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
+		double stepDT = dt[analysisCount];
+		stepDT = 0.0001;
+		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
+		// int converged = theTransientAnalysis->analyze(1, stepDT);
+		if (!converged) {
+			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+
+			if (analysisCount % (int)(numSteps / 20) == 0)
+			{
+				progressBar << "\r[";
+				for (int ii = 0; ii < (int)(20 * analysisCount / numSteps); ii++)
+					progressBar << ".";
+				for (int ii = (int)(20 * analysisCount / numSteps); ii < 20; ii++)
+					progressBar << "-";
+
+				progressBar << "]  " << (int)(100 * analysisCount / numSteps) << "%";
+				opsout << progressBar.str().c_str();
+				opsout.flush();
+			}
+		}
+		else {
+			opserr << "Site response analysis did not converge." << endln;
+			exit(-1);
+		}
+	}
+	progressBar << "\r[";
+	for (int ii = 0; ii < 20; ii++)
+		progressBar << ".";
+
+	progressBar << "] 100%";
+	opsout << progressBar.str().c_str();
+	opsout.flush();
+	opsout << endln;
+
+	//if (program_config->getBooleanProperty("General|PrintDebug"))
+	//{
+	//	Information info;
+	//	theEle = theDomain->getElement(1);
+	//	theEle->getResponse(1, info);
+	//	opserr << "Stress = " << info.getData();
+	//	theEle->getResponse(2, info);
+	//	opserr << "Strain = " << info.getData();
+	//}
+
+	//int count = 0;
+	//NodeIter& theNodeIter = theDomain->getNodes();
+	//Node * thisNode;
+	//while ((thisNode = theNodeIter()) != 0)
+	//{
+	//	count++;
+	//	opserr << "Node " << thisNode->getTag() << " = " << thisNode->getCrds() << endln;
+	//}
+
+	//int count = 0;
+	//ElementIter& theEleIter = theDomain->getElements();
+	//Element * thisEle;
+	//while ((thisEle = theEleIter()) != 0)
+	//{
+	//	count++;
+	//	opserr << "Element " << thisEle->getTag() << " = " << thisEle->getExternalNodes() << endln;
+	//}
+
+	return 0;
+}
 
 
 int
