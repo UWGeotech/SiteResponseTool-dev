@@ -10,6 +10,7 @@
 class JSONConfig: public ConfigIO
 {
 public:
+    JSONConfig(){};
     JSONConfig(const char* json_file);
     ~JSONConfig();
 
