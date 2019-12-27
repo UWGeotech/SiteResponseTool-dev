@@ -63,6 +63,7 @@
 #include "NewtonRaphson.h"
 #include "LoadControl.h"
 #include "Newmark.h"
+#include "HHT.h"
 #include "PenaltyConstraintHandler.h"
 #include "TransformationConstraintHandler.h"
 #include "BandGenLinLapackSolver.h"
@@ -470,7 +471,11 @@ SiteResponseModel::runTotalStressModel3D()
 	delete theIntegrator;
 	delete theAnalysis;
 
-	TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	//Newmark Integrator
+	//TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	//Checking HHT Integrator
+	TransientIntegrator* theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
+
 	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
 
 	// DirectIntegrationAnalysis* theTransientAnalysis;

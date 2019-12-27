@@ -34,7 +34,8 @@
                 "PrintTag":"1"
             },
             "Newmark_Beta":"0.25",
-            "Newmark_Gamma":"0.50"
+            "Newmark_Gamma":"0.50",
+            "HHT_Alpha":"0.90"
         },
         "RigidBase":"True",
         "Damping":
