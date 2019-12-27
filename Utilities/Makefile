@@ -1,9 +1,12 @@
 include ../Makefile.in
 
 OBJS =  \
-       ConfigManager.o \
-	   DefaultConfig.o \
-	   JsonConfig.o
+       GeneralUtilities.o \
+       FileReader.o       \
+	   JsonReader.o       \
+       ConfigManager.o    \
+	   DefaultConfig.o    \
+	   JsonConfig.o    
 
 archive: $(OBJS)
 	ar rv $(UTILlib) $(OBJS)

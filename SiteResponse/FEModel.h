@@ -34,7 +34,8 @@ public:
 	~SiteResponseModel();
 
 	int   runTestModel();
-	int   runTotalStressModel();
+	int   runTotalStressModel3D();
+	int   runEffectiveStressModel2D();
 	void  setOutputDir(std::string outDir) { theOutputDir = outDir; };
 
 private:
