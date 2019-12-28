@@ -3,6 +3,7 @@
 #include <locale>
 #include <vector>
 #include <exception>
+#include "JsonReader.h"
 #include "JsonConfig.h"
 #include "OPS_Globals.h"
 
@@ -10,8 +11,8 @@ extern void split_string(const std::string& str, std::vector<std::string>& conta
 
 JSONConfig::JSONConfig(const char* json_file_name)
 {
-    std::ifstream json_file(json_file_name);
-    config_json = nlohmann::json::parse(json_file);
+    theReader = new JSONReader(json_file_name);
+    config_data = theReader->getDataAsMap();
 }
 
 JSONConfig::~JSONConfig()
@@ -22,26 +23,7 @@ JSONConfig::~JSONConfig()
 std::string
 JSONConfig::getValueFromKey(std::string key)
 {
-    // TODO: Make sure the key exists and the return the value.
-    std::vector<std::string> keys;
-    split_string(key, keys);
-    size_t key_size = keys.size();
-    
-    try
-    {
-        nlohmann::json object = config_json;
-        for (size_t count = 0; count < key_size - 1; count++)
-            object = object.at(keys[count]);
-
-        std::string res = object.at(keys[key_size-1]);
-
-        return res;        
-    }
-    catch(const std::exception& e)
-    {
-        opserr << "The configuration container is missing the config key named \"" << key.c_str() << "\"" << endln;;
-        exit(-1);
-    }
+    return static_cast<JSONReader*>(theReader)->getValueFromKey(key);
 }
 
 bool
