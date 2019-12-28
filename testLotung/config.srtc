@@ -1,7 +1,7 @@
 {
     "Meshing":
     {
-        "Manual":"False",
+        "Manual":"True",
         "MaxFrequency":"50.0",
         "NumNodesPerWaveLength":"4"
     },
@@ -34,12 +34,13 @@
                 "PrintTag":"1"
             },
             "Newmark_Beta":"0.25",
-            "Newmark_Gamma":"0.50"
+            "Newmark_Gamma":"0.50",
+            "HHT_Alpha":"0.90"
         },
-        "RigidBase":"False",
+        "RigidBase":"True",
         "Damping":
         {
-            "Ratio":"0.01",
+            "Ratio":"0.00",
             "Frequency1":"0.1",
             "Frequency2":"10.0",
             "Mode1":"1",

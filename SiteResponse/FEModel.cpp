@@ -2,15 +2,13 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)					 **
+**					Pedro Arduino  (parduino@uw.edu)					 **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
-
-
 
 
 #include <vector>
@@ -65,6 +63,7 @@
 #include "NewtonRaphson.h"
 #include "LoadControl.h"
 #include "Newmark.h"
+#include "HHT.h"
 #include "PenaltyConstraintHandler.h"
 #include "TransformationConstraintHandler.h"
 #include "BandGenLinLapackSolver.h"
@@ -143,11 +142,12 @@ SiteResponseModel::runTotalStressModel3D()
 		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
 
 		// calculate the thickness of elements in this layer
-		thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
-
-		// calculate number of elements in this layer
-		int thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
-		
+		int thisLayerNumEle = 1;
+		if (!program_config->getBooleanProperty("Meshing|Manual")){
+			thisLayerThick = (thisLayerThick < thisLayerMinWL) ? thisLayerMinWL : thisLayerThick;
+			// calculate number of elements in this layer
+			thisLayerNumEle = program_config->getIntProperty("Meshing|NumNodesPerWaveLength") * static_cast<int>(thisLayerThick / thisLayerMinWL) - 1;
+		}
 		// save these in a vector for later use
 		layerNumElems.push_back(thisLayerNumEle);
 		layerNumNodes.push_back(4 * (thisLayerNumEle + (layerCount == 0)));
@@ -229,15 +229,17 @@ SiteResponseModel::runTotalStressModel3D()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		// theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		// 	theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h() * theLayer.getMatShearModulus(), theLayer.getMat_m(), 0.0, 0.0, 0.5);
-		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
+		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		OPS_addNDMaterial(theMat);
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
 		{
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
-			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			opserr << "        G = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus() << endln;
 		}
 	}
 
@@ -260,9 +262,8 @@ SiteResponseModel::runTotalStressModel3D()
 			int node1Tag = 4 * (nElem + elemCount);
 			
 			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
-				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho(), 0.0);
+				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
 			theDomain->addElement(theEle);
-
 
 			theParameter = new Parameter(nElem + elemCount + 1, 0, 0, 0);
 			sprintf(paramArgs[1], "%d", theMat->getTag());
@@ -279,14 +280,12 @@ SiteResponseModel::runTotalStressModel3D()
 		opserr << "Total number of elements = " << nElem << endln;
 
 
-
 	// FE mesh - update material stage
 	ParameterIter& theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
 	{
 		theParameter->update(0.0);
 	}
-
 
 
 	// FE mesh - create analysis objects - I use static analysis for gravity
@@ -316,7 +315,7 @@ SiteResponseModel::runTotalStressModel3D()
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theAnalysis->analyze(1);
+		int converged = theAnalysis->analyze(10);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
@@ -331,7 +330,7 @@ SiteResponseModel::runTotalStressModel3D()
 
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theAnalysis->analyze(1);
+		int converged = theAnalysis->analyze(10);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
@@ -399,6 +398,14 @@ SiteResponseModel::runTotalStressModel3D()
 		// using uniform excitation to apply vertical motion
 		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -program_config->getFloatProperty("Units|g"));
 		theDomain->addLoadPattern(theLP);
+
+		// update the number of steps as well as the dt vector
+		int temp = theMotionY->getNumSteps();
+		if (temp > numSteps)
+		{
+			numSteps = temp;
+			dt = theMotionY->getDTvector();
+		}
 	}
 
 	// FE mesh - using a stress input with the dashpot
@@ -464,7 +471,11 @@ SiteResponseModel::runTotalStressModel3D()
 	delete theIntegrator;
 	delete theAnalysis;
 
-	TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	//Newmark Integrator
+	//TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	//Checking HHT Integrator
+	TransientIntegrator* theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
+
 	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
 
 	// DirectIntegrationAnalysis* theTransientAnalysis;
@@ -488,7 +499,6 @@ SiteResponseModel::runTotalStressModel3D()
 		omega1 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency1"); 
 		omega2 = 2.0 * PI * program_config->getFloatProperty("Analysis|Damping|Frequency2"); 
 	}
-
 
 	if (program_config->getBooleanProperty("Analysis|Damping|ElemByElem"))
 	{
@@ -536,29 +546,33 @@ SiteResponseModel::runTotalStressModel3D()
 	nCount = 0;
 	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
 	{		
+		opserr << "layer_IO : " << SRM_layering.getLayer(layerCount).get_IO() << endln;
 		nodesToRecord(0) = nCount + 1;
+		if (SRM_layering.getLayer(layerCount).get_IO())
+		{
+			//nodesToRecord(0) = nCount + 1;
 
-		
-		opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
-		<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
-		<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
+			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+				<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
+				<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
-		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
-		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
-		theDomain->addRecorder(*theRecorder);
-		
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
+			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
+			theDomain->addRecorder(*theRecorder);
 
+			//nCount += layerNumNodes[layerCount];
+		}
 		nCount += layerNumNodes[layerCount];
 	}
 

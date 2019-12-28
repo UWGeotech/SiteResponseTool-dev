@@ -91,13 +91,18 @@ SiteLayering::readFromFile(const char* layerFileName)
 		// skip comment lines
 		if ((line == "") || (line[0] == '%') || (line[0] == '#'))
 			continue;	
-		std::string layerName;
+		std::string layerName, IOStr;
 		double thick, vs, vp, rho, su, hG, m, h0, chi;
+		bool IO;
 		std::istringstream lines(line);
-		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi;
-		//std::cout << "Layer : " << layerName << ", " << thick << ", " << vs << ", " << vp << ", " << rho << ", " << su << ", " << hG << ", " << m << ", " << h0 << ", " << chi <<std::endl;
-
-		SoilLayer newLayer(layerName, thick, vs, vp, rho, su, hG, m, h0, chi);
+		lines >> layerName >> thick >> vs >> vp >> rho >> su >> hG >> m >> h0 >> chi >> IOStr;
+		//std::cout << "Layer : " << layerName << ", " << thick << ", " << vs << ", " << vp << ", " << rho << ", " << su << ", " << hG << ", " << m << ", " << h0 << ", " << chi << ", " << IOStr <<std::endl;
+		if (IOStr == "true" || IOStr == "True" || IOStr == "TRUE")
+			IO = true;
+		else
+		    IO = false;
+		
+		SoilLayer newLayer(layerName, thick, vs, vp, rho, su, hG, m, h0, chi, IO);
 		this->addNewLayer(newLayer);
 	}
 	layerFile.close();
