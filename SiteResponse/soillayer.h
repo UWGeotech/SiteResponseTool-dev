@@ -23,7 +23,7 @@ public:
 	SoilLayer();
 	~SoilLayer();
 
-	SoilLayer(std::string name, double thickness, double vs, double vp, double rho, double Su, double hG, double m, double h0, double chi);
+	SoilLayer(std::string name, double thickness, double vs, double vp, double rho, double Su, double hG, double m, double h0, double chi, bool IO);
 
 
 	std::string getName() { return sl_name;  };
@@ -36,6 +36,7 @@ public:
 	double      getMat_m() { return sl_m; };
 	double      getMat_h0() { return sl_h0; };
 	double      getMat_chi() { return sl_chi; };
+	double      get_IO() { return sl_IO; };
 
 	double      getMatShearModulus();
 	double      getMatBulkModulus();
@@ -53,6 +54,7 @@ private:
 	double sl_m;
 	double sl_h0;
 	double sl_chi;
+	bool sl_IO;
 };
 
 #endif
