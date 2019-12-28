@@ -113,6 +113,14 @@ IncrementalIntegrator::formTangent(int statFlag)
 }
 
 int
+IncrementalIntegrator::formTangent(int statFlag, double iFact, double cFact)
+{
+	iFactor = iFact;
+	cFactor = cFact;
+	return this->formTangent(statFlag);
+}
+
+int
 IncrementalIntegrator::formIndependentSensitivityLHS(int statFlag)
 {
     return this->formTangent(statFlag);

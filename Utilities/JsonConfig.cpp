@@ -6,14 +6,7 @@
 #include "JsonConfig.h"
 #include "OPS_Globals.h"
 
-void
-split_string(const std::string& str, std::vector<std::string>& container)
-{
-    std::stringstream ss(str);
-    std::string token;
-    while (std::getline(ss, token, '|'))
-        container.push_back(token);
-}
+extern void split_string(const std::string& str, std::vector<std::string>& container, char delimiter='|');
 
 JSONConfig::JSONConfig(const char* json_file_name)
 {

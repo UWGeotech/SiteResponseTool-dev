@@ -7,7 +7,7 @@
     },
     "General":
     {
-        "PrintDebug":"False"
+        "PrintDebug":"True"
     },
     "Units":
     {

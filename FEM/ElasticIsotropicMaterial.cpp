@@ -33,6 +33,7 @@
 
 #include <ElasticIsotropicMaterial.h>
 #include <ElasticIsotropicThreeDimensional.h>
+#include <ElasticIsotropicPlaneStrain2D.h>
 
 #include <Channel.h>
 #include <Information.h>
@@ -111,10 +112,14 @@ ElasticIsotropicMaterial::getRho()
 NDMaterial*
 ElasticIsotropicMaterial::getCopy (const char *type)
 {
-  
  if (strcmp(type,"ThreeDimensional") == 0 || strcmp(type,"3D") == 0) {
     ElasticIsotropicThreeDimensional *theModel;
     theModel = new ElasticIsotropicThreeDimensional (this->getTag(), E, v, rho);
+    return theModel;
+  }
+  else if (strcmp(type,"PlaneStrain2D") == 0 || strcmp(type,"PlaneStrain") == 0) {
+    ElasticIsotropicPlaneStrain2D *theModel;
+    theModel = new ElasticIsotropicPlaneStrain2D (this->getTag(), E, v, rho);
     return theModel;
   }
 
