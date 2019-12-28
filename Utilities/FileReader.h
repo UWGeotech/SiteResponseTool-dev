@@ -7,15 +7,14 @@
 class FileReader
 {
 public:
-    FileReader(){};
-    FileReader(const char* file);
+    FileReader();
+    FileReader(const char* file) ;
     ~FileReader();
 
-    virtual std::map<std::string, std::string> getDataAsMap();
-    virtual int setDataFile(const char* file);
+    virtual std::map<std::string, std::string> getDataAsMap(){};
+    virtual std::string getVaueFromKey(std::string key){};
+    virtual int setDataFile(const char* file){ return 0;};
 
-private:
-    std::map <std::string, std::string> data_map;
 };
 
 #endif
