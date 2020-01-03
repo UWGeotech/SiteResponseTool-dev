@@ -18,6 +18,7 @@
     {
         "Gravity":
         {
+		    "Solver":"UmfPack",
             "ConvergenceTest":
             {
                 "Tolerance":"1.0e-7",
