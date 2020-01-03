@@ -10,9 +10,6 @@
 ** ********************************************************************* */
 
 
-
-
-
 #include "soillayer.h"
 
 SoilLayer::SoilLayer() :
@@ -48,7 +45,7 @@ SoilLayer::getMatShearModulus()
 double
 SoilLayer::getMatBulkModulus()
 {
-	return sl_rho * (sl_vp * sl_vp - 4.0/3.0 * sl_vs * sl_vs);
+	return sl_rho * (sl_vp * sl_vp + 4.0/3.0 * sl_vs * sl_vs);
 }
 
 double

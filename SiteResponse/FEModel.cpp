@@ -68,6 +68,8 @@
 #include "TransformationConstraintHandler.h"
 #include "BandGenLinLapackSolver.h"
 #include "BandGenLinSOE.h"
+#include "UmfpackGenLinSolver.h"
+#include "UmfpackGenLinSOE.h"
 #include "GroundMotion.h"
 #include "ImposedMotionSP.h"
 #include "TimeSeriesIntegrator.h"
@@ -239,7 +241,9 @@ SiteResponseModel::runTotalStressModel3D()
 		{
 			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
-			opserr << "        G = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus() << endln;
+			opserr << "ID =" << numLayers - layerCount - 1 << ", Go = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus()
+				<< ", Su = " << theLayer.getSu()     << ", rho = " << theLayer.getRho()     << ", h = " << theLayer.getMat_h() << ", m = " << theLayer.getMat_m()
+				<< ", ho = " << theLayer.getMat_h0() << ", chi = " << theLayer.getMat_chi() << endln;
 		}
 	}
 
@@ -287,10 +291,12 @@ SiteResponseModel::runTotalStressModel3D()
 		theParameter->update(0.0);
 	}
 
-
 	// FE mesh - create analysis objects - I use static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
-	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"), program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
+	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"), 
+		                                               program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"), 
+		                                               program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
+	
 	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
 	StaticIntegrator* theIntegrator    = new LoadControl(0.05, 1, 0.05, 1.0);
 	//TransientIntegrator* theIntegrator = new Newmark(0.5, 0.25);
@@ -298,11 +304,21 @@ SiteResponseModel::runTotalStressModel3D()
 	ConstraintHandler* theHandler = new TransformationConstraintHandler();
 	RCM* theRCM = new RCM();
 	DOF_Numberer* theNumberer = new DOF_Numberer(*theRCM);
-	BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
-	LinearSOE* theSOE = new BandGenLinSOE(*theSolver);
 
-
-
+	LinearSOE* theSOE = 0;
+	if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "BandGeneral") {
+		BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
+		theSOE = new BandGenLinSOE(*theSolver);
+	}
+	else if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "UmfPack") {
+		UmfpackGenLinSolver *theSolver = new UmfpackGenLinSolver();
+		// theSOE = new UmfpackGenLinSOE(*theSolver, factLVALUE, factorOnce, printTime);      
+		theSOE = new UmfpackGenLinSOE(*theSolver);
+	}
+	else {
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "unknown Solver = " << endln;
+	}
 	//DirectIntegrationAnalysis* theAnalysis;
 	//theAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator, theTest);
 
@@ -414,7 +430,7 @@ SiteResponseModel::runTotalStressModel3D()
 		// check if rigid base
 		if (program_config->getBooleanProperty("Analysis|RigidBase"))
 		{
-			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, -program_config->getFloatProperty("Units|g"));
+			LoadPattern* theLP = new UniformExcitation(*(theMotionX->getGroundMotion()), 0, 13, 0.0, program_config->getFloatProperty("Units|g"));
 			theDomain->addLoadPattern(theLP);
 		} else {
 			LoadPattern* theLP = new LoadPattern(1, vis_C);
@@ -443,7 +459,7 @@ SiteResponseModel::runTotalStressModel3D()
 		// check if rigid base
 		if (program_config->getBooleanProperty("Analysis|RigidBase"))
 		{
-			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, -program_config->getFloatProperty("Units|g"));
+			LoadPattern* theLP = new UniformExcitation(*(theMotionZ->getGroundMotion()), 2, 14, 0.0, program_config->getFloatProperty("Units|g"));
 			theDomain->addLoadPattern(theLP);
 		} else {
 			LoadPattern* theLP = new LoadPattern(2, vis_C);
@@ -471,15 +487,28 @@ SiteResponseModel::runTotalStressModel3D()
 	delete theIntegrator;
 	delete theAnalysis;
 
+	
+	TransientIntegrator* theTransientIntegrator = 0;
+	if (program_config->getStringProperty("Analysis|Dynamic|Integrator") == "Newmark") {
+		theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
+	}
+	else if (program_config->getStringProperty("Analysis|Dynamic|Integrator") == "HHT") {
+		theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
+	}
+	else {
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "unknown Integrator = " << endln;
+	}
+
 	//Newmark Integrator
 	//TransientIntegrator* theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
 	//Checking HHT Integrator
-	TransientIntegrator* theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
+	//TransientIntegrator* theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
 
 	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
 
-	// DirectIntegrationAnalysis* theTransientAnalysis;
-	// theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	//DirectIntegrationAnalysis* theTransientAnalysis;
+	//theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
 	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
 	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
@@ -597,7 +626,7 @@ SiteResponseModel::runTotalStressModel3D()
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
 		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
-		// int converged = theTransientAnalysis->analyze(1, stepDT);
+		//int converged = theTransientAnalysis->analyze(1, stepDT);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 
@@ -1256,7 +1285,6 @@ SiteResponseModel::runTestModel()
 	DOF_Numberer* theNumberer = new DOF_Numberer(*theRCM);
 	BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
 	LinearSOE* theSOE = new BandGenLinSOE(*theSolver);
-
 
 
 	//DirectIntegrationAnalysis* theAnalysis;
