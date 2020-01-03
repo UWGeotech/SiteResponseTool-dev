@@ -27,15 +27,17 @@
         },
         "Dynamic":
         {
+            "Solver":"UmfPack",
+            "Integrator":"HHT",
+            "HHT_Alpha":"0.90",
+            "Newmark_Beta":"0.25",
+            "Newmark_Gamma":"0.50",
             "ConvergenceTest":
             {
                 "Tolerance":"1.0e-5",
                 "MaxNumIterations":"30",
                 "PrintTag":"1"
-            },
-            "Newmark_Beta":"0.25",
-            "Newmark_Gamma":"0.50",
-            "HHT_Alpha":"0.90"
+            }
         },
         "RigidBase":"True",
         "Damping":

@@ -21,7 +21,7 @@ def plot_motionData():
     PlotResults('DHB17','17_Clay17.acc','y')
     PlotResults('DHB17','17_Clay17.acc','z')
 
-    accUP = np.loadtxt(open("", 'r').readlines()[:-1], skiprows=skip)
+    #accUP = np.loadtxt(open("", 'r').readlines()[:-1], skiprows=skip)
 
 def PlotResults (RecFName, SimFName, Dir):
 
@@ -59,6 +59,7 @@ def PlotResults (RecFName, SimFName, Dir):
     #baseAcc = Sim[:,0] + 9.81 * baseTimeInterp(SimTime).reshape(len(SimTime), 1)
     TotalAcc = Sim + 9.81 * baseTimeInterp(SimTime)
 
+
     # Create Plot comparing recorded and simulated data
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
@@ -74,24 +75,40 @@ def PlotResults (RecFName, SimFName, Dir):
     plt.savefig(RecFName+"-"+rID+".png")
     plt.show(block = False)
 
+    #baseAccData2NS = np.loadtxt(open('DHB47NS.txt', 'r'))
+    #motionSteps = np.size(baseAccData2NS)
+    #motionTotalTime = motionSteps * 0.02
+    #baseTimeData2NS = np.linspace(0.0, motionTotalTime, motionSteps)
+
+    #baseAccData2EW = np.loadtxt(open('DHB47EW.txt', 'r'))
+    #motionSteps = np.size(baseAccData2EW)
+    #motionTotalTime = motionSteps * 0.02
+    #baseTimeData2EW = np.linspace(0.0, motionTotalTime, motionSteps)
+
+    #baseAccData2UP = np.loadtxt(open('DHB47UP.txt', 'r'))
+    #motionSteps = np.size(baseAccData2UP)
+    #motionTotalTime = motionSteps * 0.02
+    #baseimeData2UP = np.linspace(0.0, motionTotalTime, motionSteps)
+
     # Plots for checking accel components
     #fig2 = plt.figure()
     #ax2 = fig2.add_subplot(111)
     #ax2.plot(baseTimeData, baseAccData)
-    #ax2.plot(SimTime, Sim)
+    #ax2.plot(baseTimeData2NS, baseAccData2EW)
     #ax2.plot(SimTime, TotalAcc)
     #plt.show()
-
-
 
 def readLotung(filename, dT, DS, skip):
     motionDT = dT*DS
     mdata = np.loadtxt(open(filename, 'r').readlines()[:-1], skiprows=skip)
     aa = mdata.reshape(-1)
     aa_resample = sg.decimate(aa,DS)
+
     motionSteps = np.size(aa_resample)
     motionTotalTime = motionSteps * motionDT
+    #time = np.linspace(0.0, motionTotalTime, motionSteps)
     time = np.linspace(0.0, motionTotalTime, motionSteps)
+
 
     return aa_resample, time
 
