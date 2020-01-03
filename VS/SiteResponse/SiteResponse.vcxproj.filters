@@ -387,6 +387,84 @@
     <ClCompile Include="..\..\Utilities\JsonConfig.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\FEM\ElasticIsotropicPlaneStrain2D.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\ErrorHandler.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\PM4Sand.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\PM4Silt.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\SSPbrickUP.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\SSPquad.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\SSPquadUP.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\FileReader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\GeneralUtilities.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Utilities\JsonReader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\HHT.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\UmfpackGenLinSOE.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\UmfpackGenLinSolver.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_1.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_2.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_aat.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_control.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_defaults.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_dump.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_global.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_info.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_order.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_post_tree.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_postorder.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_preprocess.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\FEM\AMD\amd_valid.c">
+      <Filter>FEM\amd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\FEM\Analysis.h">
@@ -885,6 +963,42 @@
     <ClInclude Include="..\..\Utilities\JsonConfig.h">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\FEM\ElasticIsotropicPlaneStrain2D.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\ErrorHandler.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\PM4Sand.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\PM4Silt.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\SSPbrickUP.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\SSPquad.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\SSPquadUP.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\FileReader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Utilities\JsonReader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\HHT.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\UmfpackGenLinSOE.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\FEM\UmfpackGenLinSolver.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="FEM">
@@ -892,6 +1006,9 @@
     </Filter>
     <Filter Include="Utilities">
       <UniqueIdentifier>{0e0fdfd9-20d9-4594-ab5c-1178b2f404e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FEM\amd">
+      <UniqueIdentifier>{2f39d5b0-1d58-4cdf-b2c0-51c007ce12de}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
