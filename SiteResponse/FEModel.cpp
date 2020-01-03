@@ -283,7 +283,8 @@ SiteResponseModel::runTotalStressModel3D()
 	if (program_config->getBooleanProperty("General|PrintDebug"))
 		opserr << "Total number of elements = " << nElem << endln;
 
-
+	// Gravity Analysis
+	// ----------------
 	// FE mesh - update material stage
 	ParameterIter& theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
@@ -291,7 +292,7 @@ SiteResponseModel::runTotalStressModel3D()
 		theParameter->update(0.0);
 	}
 
-	// FE mesh - create analysis objects - I use static analysis for gravity
+	// FE mesh - create analysis objects - static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
 	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"), 
 		                                               program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"), 
@@ -306,11 +307,11 @@ SiteResponseModel::runTotalStressModel3D()
 	DOF_Numberer* theNumberer = new DOF_Numberer(*theRCM);
 
 	LinearSOE* theSOE = 0;
-	if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "BandGeneral") {
+	if (program_config->getStringProperty("Analysis|Gravity|Solver") == "BandGeneral") {
 		BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
 		theSOE = new BandGenLinSOE(*theSolver);
 	}
-	else if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "UmfPack") {
+	else if (program_config->getStringProperty("Analysis|Gravity|Solver") == "UmfPack") {
 		UmfpackGenLinSolver *theSolver = new UmfpackGenLinSolver();
 		// theSOE = new UmfpackGenLinSOE(*theSolver, factLVALUE, factorOnce, printTime);      
 		theSOE = new UmfpackGenLinSOE(*theSolver);
@@ -352,6 +353,8 @@ SiteResponseModel::runTotalStressModel3D()
 		}
 	}
 
+	// Dynamic Analysis
+	// ----------------
 	// FE mesh - add the compliant base - use the last layer properties
 	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
 	UniaxialMaterial* theViscousMats[2];
@@ -487,7 +490,22 @@ SiteResponseModel::runTotalStressModel3D()
 	delete theIntegrator;
 	delete theAnalysis;
 
-	
+	// Define Dynamic Solver
+	if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "BandGeneral") {
+		BandGenLinSolver* theSolver = new BandGenLinLapackSolver();
+		theSOE = new BandGenLinSOE(*theSolver);
+	}
+	else if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "UmfPack") {
+		UmfpackGenLinSolver *theSolver = new UmfpackGenLinSolver();
+		// theSOE = new UmfpackGenLinSOE(*theSolver, factLVALUE, factorOnce, printTime);      
+		theSOE = new UmfpackGenLinSOE(*theSolver);
+	}
+	else {
+		if (program_config->getBooleanProperty("General|PrintDebug"))
+			opserr << "unknown Dynamic Solver = " << endln;
+	}
+
+	//Define Dynamic Integrator
 	TransientIntegrator* theTransientIntegrator = 0;
 	if (program_config->getStringProperty("Analysis|Dynamic|Integrator") == "Newmark") {
 		theTransientIntegrator = new Newmark(program_config->getFloatProperty("Analysis|Dynamic|Newmark_Gamma"), program_config->getFloatProperty("Analysis|Dynamic|Newmark_Beta"));
@@ -497,7 +515,7 @@ SiteResponseModel::runTotalStressModel3D()
 	}
 	else {
 		if (program_config->getBooleanProperty("General|PrintDebug"))
-			opserr << "unknown Integrator = " << endln;
+			opserr << "unknown Dynamic Integrator = " << endln;
 	}
 
 	//Newmark Integrator
