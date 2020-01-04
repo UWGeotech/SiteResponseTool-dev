@@ -266,7 +266,7 @@ SiteResponseModel::runTotalStressModel3D()
 			int node1Tag = 4 * (nElem + elemCount);
 			
 			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
-				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, - program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
+				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
 			theDomain->addElement(theEle);
 
 			theParameter = new Parameter(nElem + elemCount + 1, 0, 0, 0);
@@ -355,6 +355,7 @@ SiteResponseModel::runTotalStressModel3D()
 
 	// Dynamic Analysis
 	// ----------------
+	
 	// FE mesh - add the compliant base - use the last layer properties
 	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
 	UniaxialMaterial* theViscousMats[2];
@@ -365,6 +366,16 @@ SiteResponseModel::runTotalStressModel3D()
 
 	if (! program_config->getBooleanProperty("Analysis|RigidBase"))
 	{
+		/*
+		// FE mesh - add the compliant base - use the last layer properties
+		double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
+		UniaxialMaterial* theViscousMats[2];
+		theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
+		theViscousMats[1] = new ViscousMaterial(numLayers + 20, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
+		ID directions(2);
+		directions(0) = 0; directions(1) = 2;
+		*/
+
 		// FE mesh - create dashpot nodes and apply proper fixities
 		theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 		theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
@@ -415,7 +426,7 @@ SiteResponseModel::runTotalStressModel3D()
 	if (theMotionY->isInitialized())
 	{
 		// using uniform excitation to apply vertical motion
-		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, -program_config->getFloatProperty("Units|g"));
+		LoadPattern* theLP = new UniformExcitation(*(theMotionY->getGroundMotion()), 1, 12, 0.0, program_config->getFloatProperty("Units|g"));
 		theDomain->addLoadPattern(theLP);
 
 		// update the number of steps as well as the dt vector
@@ -643,6 +654,7 @@ SiteResponseModel::runTotalStressModel3D()
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
+
 		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
 		//int converged = theTransientAnalysis->analyze(1, stepDT);
 		if (!converged) {
