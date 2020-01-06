@@ -330,6 +330,7 @@ SiteResponseModel::runTotalStressModel3D()
 	theAnalysis = new StaticAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator);
 	theAnalysis->setConvergenceTest(*theTest);
 
+	/*
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		int converged = theAnalysis->analyze(10);
@@ -337,14 +338,14 @@ SiteResponseModel::runTotalStressModel3D()
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
 	}
-
+	*/
 	// FE mesh - update material response to plastic
 	theParamIter = theDomain->getParameters();
 	while ((theParameter = theParamIter()) != 0)
 	{
 		theParameter->update(1.0);
 	}
-
+	/*
 	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		int converged = theAnalysis->analyze(10);
@@ -352,7 +353,7 @@ SiteResponseModel::runTotalStressModel3D()
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 		}
 	}
-
+	*/
 	// Dynamic Analysis
 	// ----------------
 	
@@ -523,6 +524,8 @@ SiteResponseModel::runTotalStressModel3D()
 	}
 	else if (program_config->getStringProperty("Analysis|Dynamic|Integrator") == "HHT") {
 		theTransientIntegrator = new HHT(program_config->getFloatProperty("Analysis|Dynamic|HHT_Alpha"));
+		//theTransientIntegrator = new HHT(0.9);
+
 	}
 	else {
 		if (program_config->getBooleanProperty("General|PrintDebug"))

@@ -81,7 +81,8 @@ def PlotResults (RecFName, SimFName, Dir):
     # interpolate base acceleraion with recorded time
     baseTimeInterp = interp1d(baseTimeData, baseAccData, kind='linear', fill_value='extrapolate')
     #baseAcc = Sim[:,0] + 9.81 * baseTimeInterp(SimTime).reshape(len(SimTime), 1)
-    TotalAcc = Sim + 9.81 * baseTimeInterp(SimTime)
+    #TotalAcc = Sim + 9.81 * baseTimeInterp(SimTime)
+    TotalAcc = Sim
 
     # Create Plot comparing recorded and simulated data
     fig1 = plt.figure()
@@ -95,7 +96,7 @@ def PlotResults (RecFName, SimFName, Dir):
     ax1.set_ylim(-0.2, 0.2)
     plt.grid(color='k', linestyle='--', linewidth=0.5)
     plt.legend(('Recorded', 'Simulation'), loc = 0 )
-    plt.savefig(RecFName+"-"+rID+".png")
+    #plt.savefig(RecFName+"-"+rID+".png")
     plt.show(block = False)
 
     #baseAccData2NS = np.loadtxt(open('DHB47NS.txt', 'r'))
@@ -126,10 +127,11 @@ def PlotResults (RecFName, SimFName, Dir):
     fig2 = plt.figure()
     ax2 = fig2.add_subplot(111)
     #ax2.plot(baseTimeData, baseAccData)
-    ax2.plot(time, RecData / 980, color='k', linewidth=0.8)
+    #ax2.plot(time, RecData / 980, color='k', linewidth=0.8)
     ax2.plot(FaridData[:,0], FaridData[:,1]/9.81,  color='r', linewidth=0.8)
     ax2.plot(SimTime, TotalAcc/9.81,  color='b', linewidth=0.8)
-    plt.legend(('Recorded', 'OpenSees', 'SiteResponse'), loc = 0 )
+    #plt.legend(('Recorded', 'OpenSees', 'SiteResponse'), loc = 0 )
+    plt.legend(('OpenSees', 'SiteResponse'), loc = 0 )
     ax2.set_ylabel('acc (g)')
     ax2.set_xlabel('time $(s)$')
     ax2.set_xlim(0, 20)
