@@ -4,7 +4,7 @@ include ./Makefile.in
 
 siteResponse: ./SiteResponse/Main.cpp $(FEMlib)
 	make libs
-	@$(CXX) $(CXXOPTFLAG) $(LINCLUDE) $(MINCLUDE) ./SiteResponse/Main.cpp $(UTILlib) $(SRTlib) $(FEMlib) $(NUMLIBS) -o $(source)/bin/siteresponse
+	@$(CXX) $(CXXOPTFLAG) $(THIRDPARTY_INCLUDE) $(LINCLUDE) $(MINCLUDE) ./SiteResponse/Main.cpp $(UTILlib) $(SRTlib) $(FEMlib) $(THIRDPARTY_LIB) $(NUMLIBS) -o $(source)/bin/siteresponse
 	
 fem:
 	make tidy

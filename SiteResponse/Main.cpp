@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	{
 		opserr << ">>> SiteResponseTool: Not enough arguments. <<<" << endln;
 		std::getchar();
-		return -1;
+		exit(-1);
 	}
 
 	// read the layering file
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 		if (argc > 3)
 		{
 			std::string motionZFN(argv[3]);
-			motionZ.setMotion(motionXFN.c_str());
+			motionZ.setMotion(motionZFN.c_str());
 			if (argc > 4)
 			{
 				std::string motionYFN(argv[4]);

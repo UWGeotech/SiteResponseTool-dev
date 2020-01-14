@@ -11,16 +11,29 @@ CCOPTFLAG  = -Wall -Wno-reorder -O2
 LINCLUDE = -I$(source) \
 	   -I$(source)/FEM \
 	   -I$(source)/SiteResponse \
-	   -I$(source)/Utilities
-
-NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
+	   -I$(source)/Utilities \
+           -I$(source)/ThirdParty/AMD \
+	   -I$(source)/ThirdParty/UMFPACK
 
 MINCLUDE = -I/usr/include 
+
+THIRDPARTY_INCLUDE = -I$(source)/ThirdParty/AMD \
+		     -I$(source)/ThirdParty/UMFPACK
+
+THIRDPARTY_INCLUDE = 
+
+NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
 
 FEMlib  = $(source)/lib/libFEM.a
 SRTlib  = $(source)/lib/libSRT.a
 UTILlib = $(source)/lib/libUtil.a
 
+AMDlib  = $(source)/lib/libAMD.a
+UMFPACKlib = $(source)/lib/libUMFPACK.a
+
+THIRDPARTY_LIB = \
+		 $(UMFPACKlib) \
+                 $(AMDlib) 
 .f.o:
 	$(FF) -c $(FFOPTFLAG) $(LINCLUDE) $<
 
