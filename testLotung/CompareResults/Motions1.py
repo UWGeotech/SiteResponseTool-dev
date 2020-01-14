@@ -5,9 +5,9 @@ from scipy.interpolate import interp1d
 
 def plot_motionData():
 
-    PlotResults('FA1-5','1_Clay1.acc','x')
-    PlotResults('FA1-5','1_Clay1.acc','y')
-    PlotResults('FA1-5','1_Clay1.acc','z')
+    PlotResults('FA1-5','surface.acc','x')
+    PlotResults('FA1-5','surface.acc','y')
+    PlotResults('FA1-5','surface.acc','z')
 
     PlotResults('DHB6','6_Clay6.acc','x')
     PlotResults('DHB6','6_Clay6.acc','y')
