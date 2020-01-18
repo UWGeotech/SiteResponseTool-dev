@@ -2,14 +2,14 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)					 **
-**					Pedro Arduino  (parduino@uw.edu)					 **
+**   Developed by: UW Computational Geomechanics Group                   **
+**                 Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 Pedro Arduino (parduino@uw.edu)                       **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
 
 #include <vector>
 #include <iostream>
@@ -83,7 +83,6 @@
 #include "SingleDomParamIter.h"
 
 #include "Information.h"
-
 #include "SRT_Globals.h"
 
 // empty constructor
@@ -284,8 +283,7 @@ SiteResponseModel::runTotalStressModel3DLotung()
 	// FE mesh - apply the motion
 	int numSteps = 0;
 	std::vector<double> dt;
-
-	/*
+	
 	if (theMotionY->isInitialized())
 	{
 		// using uniform excitation to apply vertical motion
@@ -300,7 +298,7 @@ SiteResponseModel::runTotalStressModel3DLotung()
 			dt = theMotionY->getDTvector();
 		}
 	}
-	*/
+	
 
 	// FE mesh - using a stress input with the dashpot
 	if (theMotionX->isInitialized())
@@ -321,8 +319,7 @@ SiteResponseModel::runTotalStressModel3DLotung()
 			dt = theMotionX->getDTvector();
 		}
 	}
-
-	/*
+	
 	if (theMotionZ->isInitialized()) 
 	{
 		// check if rigid base
@@ -340,7 +337,7 @@ SiteResponseModel::runTotalStressModel3DLotung()
 			dt = theMotionZ->getDTvector();
 		}
 	}
-	*/
+	
 
 	// Define Analysis
 	// ---------------
