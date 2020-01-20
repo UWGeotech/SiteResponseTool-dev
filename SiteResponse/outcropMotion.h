@@ -12,9 +12,6 @@
 ** ********************************************************************* */
 
 
-
-
-
 #include <vector>
 #include "PathSeries.h"
 #include "PathTimeSeries.h"
