@@ -29,7 +29,7 @@
         "Dynamic":
         {
             "Solver":"BandGeneral",
-            "Integrator":"Newmark",
+            "Integrator":"HHT",
             "HHT_Alpha":"0.90",
             "Newmark_Beta":"0.25",
             "Newmark_Gamma":"0.50",

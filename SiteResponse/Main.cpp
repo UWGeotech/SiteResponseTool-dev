@@ -2,14 +2,14 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**   Developed by: UW Computational Geomechanics Group                   **
+**                 Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 Pedro Arduino (parduino@uw.edu)                       **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
-
 
 #include <iostream>
 #include "FEModel.h"
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
 		if (argc > 3)
 		{
 			std::string motionZFN(argv[3]);
-			motionZ.setMotion(motionXFN.c_str());
+			motionZ.setMotion(motionZFN.c_str());
 			if (argc > 4)
 			{
 				std::string motionYFN(argv[4]);
