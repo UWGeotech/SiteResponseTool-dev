@@ -18,6 +18,8 @@ DefaultConfig::DefaultConfig()
     config_data[std::string("Analysis|Dynamic|ConvergenceTest|Tolerance")] = std::string("1.0e-7");
     config_data[std::string("Analysis|Dynamic|ConvergenceTest|MaxNumIterations")] = std::string("30");
     config_data[std::string("Analysis|Dynamic|ConvergenceTest|PrintTag")] = std::string("1");
+	config_data[std::string("Analysis|Dynamic|Solver")] = std::string("BandGeneral");
+	config_data[std::string("Analysis|Dynamic|Integrator")] = std::string("Newmark");
     config_data[std::string("Analysis|Dynamic|Newmark_Beta")] = std::string("0.25");
     config_data[std::string("Analysis|Dynamic|Newmark_Gamma")] = std::string("0.50");
     config_data[std::string("Analysis|RigidBase")] = std::string("False");
