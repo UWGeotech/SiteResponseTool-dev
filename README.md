@@ -1,15 +1,16 @@
-SITE RESPONSE TOOL
+# SITE RESPONSE TOOL
 
-How to run:
+### How to run:
 
-a) When used as independent tool
-SiteResponse.exe siteLayering.loc MotionX MotionZ MotionY OUT LOG
+a) When used as independent tool: 
+...
 
-siteLayering.loc: Soil data for layered system
-
-MotionX: Acceleration time history in X direction \n
-MotionZ: Optional - Acceleration timehistory in Z direction \n
-MotionY: Optional - Acceleration timehistory in Y direction \n
+SiteResponse.exe siteLayering.loc MotionX MotionZ MotionY OUT LOG 
+siteLayering.loc: Soil data for layered system 
+MotionX: Acceleration time history in X direction 
+MotionZ: Optional - Acceleration timehistory in Z direction 
+MotionY: Optional - Acceleration timehistory in Y direction 
+...
 
 Program searches for MotionI.acc and MotionI.time
 
