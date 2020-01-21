@@ -7,9 +7,9 @@ SiteResponse.exe siteLayering.loc MotionX MotionZ MotionY OUT LOG
 
 siteLayering.loc: Soil data for layered system
 
-MotionX: Acceleration time history in X direction
-MotionZ: Optional - Acceleration timehistory in Z direction
-MotionY: Optional - Acceleration timehistory in Y direction
+MotionX: Acceleration time history in X direction \n
+MotionZ: Optional - Acceleration timehistory in Z direction \n
+MotionY: Optional - Acceleration timehistory in Y direction \n
 
 Program searches for MotionI.acc and MotionI.time
 
