@@ -4,7 +4,7 @@
 
 **a) When used as independent tool:** 
 ~~~
-SiteResponse.exe siteLayering.loc MotionX MotionZ MotionY OUT LOG 
+*SiteResponse.exe siteLayering.loc MotionX MotionZ MotionY OUT LOG* 
 
 siteLayering.loc: Soil data for layered system 
 MotionX: Acceleration time history in X direction 
