@@ -30,37 +30,37 @@ def PlotResults (RecFName, SimFName, Dir):
         rID = '7N'
         sID = 1
         if RecFName == 'FA1-5':
-            FaridFname = 'O1.out'
-        elif RecFName == 'DHB6':
-            FaridFname = 'O2.out'
-        elif RecFName == 'DHB11':
-            FaridFname = 'O3.out'
-        elif RecFName == 'DHB17':
             FaridFname = 'O4.out'
+        elif RecFName == 'DHB6':
+            FaridFname = 'O3.out'
+        elif RecFName == 'DHB11':
+            FaridFname = 'O2.out'
+        elif RecFName == 'DHB17':
+            FaridFname = 'O1.out'
     elif Dir == 'Y' or Dir == 'y':
         bID = 'U'
         rID = '7U'
         sID = 2
         if RecFName == 'FA1-5':
-            FaridFname = 'O5.out'
-        elif RecFName == 'DHB6':
-            FaridFname = 'O6.out'
-        elif RecFName == 'DHB11':
-            FaridFname = 'O7.out'
-        elif RecFName == 'DHB17':
             FaridFname = 'O8.out'
+        elif RecFName == 'DHB6':
+            FaridFname = 'O7.out'
+        elif RecFName == 'DHB11':
+            FaridFname = 'O6.out'
+        elif RecFName == 'DHB17':
+            FaridFname = 'O5.out'
     elif Dir == 'Z' or Dir == 'z':
         bID = 'E'
         rID = '7E'
         sID = 3
         if RecFName == 'FA1-5':
-            FaridFname = 'O9.out'
-        elif RecFName == 'DHB6':
-            FaridFname = 'O10.out'
-        elif RecFName == 'DHB11':
-            FaridFname = 'O11.out'
-        elif RecFName == 'DHB17':
             FaridFname = 'O12.out'
+        elif RecFName == 'DHB6':
+            FaridFname = 'O11.out'
+        elif RecFName == 'DHB11':
+            FaridFname = 'O10.out'
+        elif RecFName == 'DHB17':
+            FaridFname = 'O9.out'
     else:
         print("Wrong Dir")
 
@@ -81,22 +81,22 @@ def PlotResults (RecFName, SimFName, Dir):
     # interpolate base acceleraion with recorded time
     baseTimeInterp = interp1d(baseTimeData, baseAccData, kind='linear', fill_value='extrapolate')
     #baseAcc = Sim[:,0] + 9.81 * baseTimeInterp(SimTime).reshape(len(SimTime), 1)
-    #TotalAcc = Sim + 9.81 * baseTimeInterp(SimTime)
-    TotalAcc = Sim
+    TotalAcc = Sim + 9.81 * baseTimeInterp(SimTime)
+    #TotalAcc = Sim
 
     # Create Plot comparing recorded and simulated data
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
-    ax1.plot(time, RecData/980)
+    ax1.plot(time, RecData/980, color='b', linewidth=0.8)
     #ax1.plot(SimTime, Sim/9.81, 'r')
-    ax1.plot(SimTime, TotalAcc/9.81, 'r')
+    ax1.plot(SimTime, TotalAcc/9.81, color='r', linewidth=0.8)
     ax1.set_ylabel('acc (g)')
     ax1.set_xlabel('time $(s)$')
-    ax1.set_xlim(5, 20)
+    ax1.set_xlim(0, 20)
     ax1.set_ylim(-0.2, 0.2)
     plt.grid(color='k', linestyle='--', linewidth=0.5)
-    plt.legend(('Recorded', 'Simulation'), loc = 0 )
-    #plt.savefig(RecFName+"-"+rID+".png")
+    plt.legend(('Recorded', 'SiteResponse'), loc = 0 )
+    plt.savefig(RecFName+"-"+rID+".png")
     plt.show(block = False)
 
     #baseAccData2NS = np.loadtxt(open('DHB47NS.txt', 'r'))
@@ -122,6 +122,7 @@ def PlotResults (RecFName, SimFName, Dir):
     #ax2.plot(SimTime, TotalAcc)
     #plt.show()
 
+    ## Plots Comparing with Farid
     FaridData = np.loadtxt(open(FaridFname, 'r'))
     # Plots for checking accel components
     fig2 = plt.figure()

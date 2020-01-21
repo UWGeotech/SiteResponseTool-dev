@@ -609,10 +609,12 @@ SiteResponseModel::runTotalStressModel3D()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		//theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		//theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
-		//theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
-		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0 + theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
+		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0 + theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 3.845521e+08, 0.48, 1850.0);
+		
 		OPS_addNDMaterial(theMat);
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
@@ -677,8 +679,8 @@ SiteResponseModel::runTotalStressModel3D()
 	// FE mesh - create analysis objects - static analysis for gravity
 	AnalysisModel* theModel = new AnalysisModel();
 	CTestNormDispIncr* theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Gravity|ConvergenceTest|Tolerance"),
-		program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"),
-		program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
+		                                               program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|MaxNumIterations"),
+		                                               program_config->getIntProperty("Analysis|Gravity|ConvergenceTest|PrintTag"));
 
 	EquiSolnAlgo* theSolnAlgo = new NewtonRaphson(*theTest);
 	StaticIntegrator* theIntegrator = new LoadControl(0.05, 1, 0.05, 1.0);
@@ -904,11 +906,11 @@ SiteResponseModel::runTotalStressModel3D()
 
 	theTest->setTolerance(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"));
 
-	DirectIntegrationAnalysis* theTransientAnalysis;
-	theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	//DirectIntegrationAnalysis* theTransientAnalysis;
+	//theTransientAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
-	//VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
-	//theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
+	VariableTimeStepDirectIntegrationAnalysis* theTransientAnalysis;
+	theTransientAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theTransientIntegrator, theTest);
 
 	// FE mesh - reset time in the domain
 	theDomain->setCurrentTime(0.0);
@@ -972,7 +974,7 @@ SiteResponseModel::runTotalStressModel3D()
 	theDomain->addRecorder(*theRecorder);
 
 
-	// recorder for bottom of layers
+	// recorder for bottom of layers if IOStr = true
 	nCount = 0;
 	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
 	{
@@ -1025,11 +1027,11 @@ SiteResponseModel::runTotalStressModel3D()
 	std::stringstream progressBar;
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		//double stepDT = dt[analysisCount];
-		double stepDT = 0.02;
+		double stepDT = dt[analysisCount];
+		//double stepDT = 0.02;
 
-		//int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
-		int converged = theTransientAnalysis->analyze(1, stepDT);
+		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
+		//int converged = theTransientAnalysis->analyze(1, stepDT);
 		if (!converged) {
 			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
 
@@ -1091,7 +1093,7 @@ SiteResponseModel::runTotalStressModel3D()
 	return 0;
 }
 
-// run a total stress site response analysis
+// run an effective stress site response analysis
 int
 SiteResponseModel::runEffectiveStressModel2D()
 {
