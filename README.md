@@ -10,8 +10,8 @@ siteLayering.loc: Soil data for layered system
 MotionX: Acceleration time history in X direction 
 MotionZ: Optional - Acceleration timehistory in Z direction 
 MotionY: Optional - Acceleration timehistory in Y direction 
-
 Program searches for MotionI.acc and MotionI.time
+
 OUT & LOG: internal files
 
 Folder must also include 
