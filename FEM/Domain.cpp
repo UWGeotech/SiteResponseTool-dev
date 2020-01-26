@@ -2205,6 +2205,9 @@ Domain::Print(OPS_Stream &s, int flag)
   s << "\nPARAMETERS: numParameters: ";
   s << theParameters->getNumComponents() << "\n\n";
   theParameters->Print(s, flag);
+
+  for (int i=0; i<numRecorders; i++) 
+    theRecorders[i]->Print(s, flag);
 }
 
 

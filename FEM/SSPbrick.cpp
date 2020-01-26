@@ -1054,14 +1054,16 @@ SSPbrick::displaySelf(Renderer &theViewer, int displayMode, float fact, const ch
 void
 SSPbrick::Print(OPS_Stream &s, int flag)
 {
-  /*
+  
 	opserr << "SSPbrick, element id:  " << this->getTag() << endln;
 	opserr << "   Connected external nodes:  ";
 	for (int i = 0; i < SSPB_NUM_NODE; i++) {
 		opserr << mExternalNodes(i) << " ";
 	}
+	opserr << endln << "   ";
+	this->theMaterial->Print(s, flag);
 	opserr << endln;
-  */
+
 
 	return;
 }
