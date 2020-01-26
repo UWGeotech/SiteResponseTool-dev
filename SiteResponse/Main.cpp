@@ -2,14 +2,14 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**   Developed by: UW Computational Geomechanics Group                   **
+**                 Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 Pedro Arduino (parduino@uw.edu)                       **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
-
 
 #include <iostream>
 #include "FEModel.h"
@@ -97,7 +97,7 @@ int main(int argc, char** argv)
 	model.setOutputDir(bbpOName);
 	//model.runEffectiveStressModel2D();
 	model.runTotalStressModel3D();
+	//model.runTotalStressModel3DLotung();
 
-	
 	return 0;
 }

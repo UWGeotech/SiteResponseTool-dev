@@ -15,7 +15,6 @@ public:
     JSONConfig(const char* json_file);
     ~JSONConfig();
 
-
     virtual std::string getStringProperty(std::string key);
     virtual int getIntProperty(std::string key);
     virtual double getFloatProperty(std::string key);
