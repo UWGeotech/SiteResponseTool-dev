@@ -18,7 +18,8 @@
     {
         "Gravity":
         {
-            "Solver":"BandGeneral",
+		    "Solver":"UmfPack",
+            "PerformGravity":"Fale",
             "ConvergenceTest":
             {
                 "Tolerance":"1.0e-7",
@@ -28,8 +29,8 @@
         },
         "Dynamic":
         {
-            "Solver":"UmfPack",
-            "Integrator":"HHT",
+            "Solver":"BandGeneral",
+            "Integrator":"Newmark",
             "HHT_Alpha":"0.90",
             "Newmark_Beta":"0.25",
             "Newmark_Gamma":"0.50",

@@ -36,7 +36,7 @@
 #define UmfpackGenLinSolver_h
 
 #include <LinearSOESolver.h>
-#include "./UMFPACK/umfpack.h"
+#include "umfpack.h"
 
 class UmfpackGenLinSOE;
 

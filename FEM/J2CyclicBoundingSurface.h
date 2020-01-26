@@ -15,8 +15,8 @@
 
 // Written: Diego Turello(*), Alborz Ghofrani and Pedro Arduino
 //			Sep 2017, University of Washington
-//          (*) Universidad Nacional de Córdoba, FCEFyN. Depto Estructuras.
-//              Universidad Tecnológica Nacional, GIMNI.
+//          (*) Universidad Nacional de Cï¿½rdoba, FCEFyN. Depto Estructuras.
+//              Universidad Tecnolï¿½gica Nacional, GIMNI.
 //              CONICET
 // 
 // Description: This file contains the implementation for the Borja material class.

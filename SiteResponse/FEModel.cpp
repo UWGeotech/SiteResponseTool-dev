@@ -535,7 +535,7 @@ SiteResponseModel::runTotalStressModel3D()
 
 		// add up number of elements and nodes
 		numElems += thisLayerNumEle;
-		numNodes += 4 * (thisLayerNumEle + (layerCount == numLayers - 2));
+		numNodes += 4 * (thisLayerNumEle + (layerCount == 0));
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
 			opserr << "Layer " << SRM_layering.getLayer(layerCount).getName().c_str() << " : Num Elements = " << thisLayerNumEle
@@ -578,18 +578,18 @@ SiteResponseModel::runTotalStressModel3D()
 	// FE mesh - apply fixities
 	SP_Constraint* theSP;
 	ID theSPtoRemove(8); // these fixities should be removed later on if compliant base is used
-	theSP = new SP_Constraint(1, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
+	theSP = new SP_Constraint(1, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(0) = theSP->getTag();
 	theSP = new SP_Constraint(1, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(1, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
-	theSP = new SP_Constraint(2, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
+	theSP = new SP_Constraint(1, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(1) = theSP->getTag();
+	theSP = new SP_Constraint(2, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(2) = theSP->getTag();
 	theSP = new SP_Constraint(2, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(2, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
-	theSP = new SP_Constraint(3, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
+	theSP = new SP_Constraint(2, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(3) = theSP->getTag();
+	theSP = new SP_Constraint(3, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(4) = theSP->getTag();
 	theSP = new SP_Constraint(3, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(3, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
-	theSP = new SP_Constraint(4, 0, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
+	theSP = new SP_Constraint(3, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(5) = theSP->getTag();
+	theSP = new SP_Constraint(4, 0, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(6) = theSP->getTag();
 	theSP = new SP_Constraint(4, 1, 0.0, true); theDomain->addSP_Constraint(theSP);
-	theSP = new SP_Constraint(4, 2, 0.0, true);  theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
+	theSP = new SP_Constraint(4, 2, 0.0, true); theDomain->addSP_Constraint(theSP); theSPtoRemove(7) = theSP->getTag();
 
 	// FE mesh - apply equalDOF
 	MP_Constraint* theMP;
@@ -609,6 +609,7 @@ SiteResponseModel::runTotalStressModel3D()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
+
 		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
 		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
 		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
@@ -645,8 +646,10 @@ SiteResponseModel::runTotalStressModel3D()
 		{
 			int node1Tag = 4 * (nElem + elemCount);
 
-			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5,
-				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
+			
+			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
+				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -program_config->getFloatProperty("Units|g") * theMat->getRho(), 0.0);
+
 			theDomain->addElement(theEle);
 
 			//theEle = new Brick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5,
@@ -659,7 +662,7 @@ SiteResponseModel::runTotalStressModel3D()
 			theDomain->addParameter(theParameter);
 
 			if (program_config->getBooleanProperty("General|PrintDebug"))
-				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << endln;
+				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << ", Gamma = " << -program_config->getFloatProperty("Units|g") * theMat->getRho() << endln;
 		}
 		nElem += layerNumElems[numLayers - layerCount - 2];
 	}
@@ -714,41 +717,50 @@ SiteResponseModel::runTotalStressModel3D()
 	theAnalysis = new StaticAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator);
 	theAnalysis->setConvergenceTest(*theTest);
 
-	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
-	//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-	int converged = theAnalysis->analyze(10);
-		if (!converged) {
-			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+	if (program_config->getBooleanProperty("Analysis|Gravity|PerformGravity")) {
+		for (int analysisCount = 0; analysisCount < 10; ++analysisCount) {
+			//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
+			int converged = theAnalysis->analyze(1);
+			if (!converged) {
+				opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+			}
 		}
-	}
-	// FE mesh - update material response to plastic
-	theParamIter = theDomain->getParameters();
-	while ((theParameter = theParamIter()) != 0)
-	{
-		theParameter->update(1.0);
+		
+		// FE mesh - update material response to plastic
+		theParamIter = theDomain->getParameters();
+		while ((theParameter = theParamIter()) != 0)
+		{
+			theParameter->update(1.0);
+		}
+		
+		for (int analysisCount = 0; analysisCount < 10; ++analysisCount) {
+			//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
+			int converged = theAnalysis->analyze(1);
+			if (!converged) {
+				opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
+			}
+		}
 	}
 	
-	for (int analysisCount = 0; analysisCount < 2; ++analysisCount) {
-		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
-		int converged = theAnalysis->analyze(10);
-		if (!converged) {
-			opserr << "Converged at time " << theDomain->getCurrentTime() << endln;
-		}
-	}
+	// theAnalysis->clearAll();
+	// delete theAnalysis;
+	// theAnalysis = 0;
 
 	// Dynamic Analysis
 	// ----------------
-
-	// FE mesh - add the compliant base - use the last layer properties
-	double vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
-	UniaxialMaterial* theViscousMats[2];
-	theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
-	theViscousMats[1] = new ViscousMaterial(numLayers + 20, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
-	ID directions(2);
-	directions(0) = 0; directions(1) = 2;
-
-	if (!program_config->getBooleanProperty("Analysis|RigidBase"))
+	
+	double vis_C;
+	if (! program_config->getBooleanProperty("Analysis|RigidBase"))
 	{
+		
+		// FE mesh - add the compliant base - use the last layer properties
+		vis_C = SRM_layering.getLayer(numLayers - 1).getShearVelocity() * SRM_layering.getLayer(numLayers - 1).getRho();
+		UniaxialMaterial* theViscousMats[2];
+		theViscousMats[0] = new ViscousMaterial(numLayers + 10, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[0]);
+		theViscousMats[1] = new ViscousMaterial(numLayers + 20, vis_C, 1.0); OPS_addUniaxialMaterial(theViscousMats[1]);
+		ID directions(2);
+		directions(0) = 0; directions(1) = 2;
+		
 		// FE mesh - create dashpot nodes and apply proper fixities
 		theNode = new Node(numNodes + 1, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
 		theNode = new Node(numNodes + 2, 3, 0.0, 0.0, 0.0, NULL); theDomain->addNode(theNode);
@@ -873,8 +885,23 @@ SiteResponseModel::runTotalStressModel3D()
 
 	// I have to change to a transient analysis
 	// FE mesh - remove the static analysis and create new transient objects
-	delete theIntegrator;
-	delete theAnalysis;
+	// theModel = new AnalysisModel();
+	// theTest = new CTestNormDispIncr(program_config->getFloatProperty("Analysis|Dynamic|ConvergenceTest|Tolerance"), 
+	// 	                                               program_config->getIntProperty("Analysis|Dynamic|ConvergenceTest|MaxNumIterations"), 
+	// 	                                               program_config->getIntProperty("Analysis|Dynamic|ConvergenceTest|PrintTag"));
+	// theSolnAlgo = new NewtonRaphson(*theTest);
+	//TransientIntegrator* theIntegrator = new Newmark(0.5, 0.25);
+	//ConstraintHandler* theHandler = new PenaltyConstraintHandler(1.0e14, 1.0e14);
+	// theHandler = new TransformationConstraintHandler();
+	// theRCM = new RCM();
+	// theNumberer = new DOF_Numberer(*theRCM);
+
+	//DirectIntegrationAnalysis* theAnalysis;
+	//theAnalysis = new DirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator, theTest);
+
+	//VariableTimeStepDirectIntegrationAnalysis* theAnalysis;
+	//theAnalysis = new VariableTimeStepDirectIntegrationAnalysis(*theDomain, *theHandler, *theNumberer, *theModel, *theSolnAlgo, *theSOE, *theIntegrator, theTest);
+
 
 	// Define Dynamic Solver
 	if (program_config->getStringProperty("Analysis|Dynamic|Solver") == "BandGeneral") {
@@ -1025,9 +1052,11 @@ SiteResponseModel::runTotalStressModel3D()
 	// FE mesh - perform analysis
 	opserr << "Analysis started:" << endln;
 	std::stringstream progressBar;
+	numSteps = 1777;
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];
+
 		//double stepDT = 0.02;
 
 		int converged = theTransientAnalysis->analyze(1, stepDT, stepDT / 2.0, stepDT * 2.0, 1);
@@ -1061,6 +1090,9 @@ SiteResponseModel::runTotalStressModel3D()
 	opsout << progressBar.str().c_str();
 	opsout.flush();
 	opsout << endln;
+
+
+	opserr << *theDomain << endln;
 
 	//if (program_config->getBooleanProperty("General|PrintDebug"))
 	//{
@@ -1538,7 +1570,6 @@ SiteResponseModel::runEffectiveStressModel2D()
 	opsout << progressBar.str().c_str();
 	opsout.flush();
 	opsout << endln;
-
 	//if (program_config->getBooleanProperty("General|PrintDebug"))
 	//{
 	//	Information info;

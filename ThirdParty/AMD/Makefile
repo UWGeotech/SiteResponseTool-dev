@@ -1,6 +1,6 @@
-include ../../Makefile.def
+include ../../Makefile.in
 
-all: $(AMD_LIBRARY)
+all: $(AMDlib)
 
 C = $(CC) -O3 -fexceptions -fPIC -I.
 
@@ -30,10 +30,10 @@ amd_i_%.o: amd_%.c $(INC)
 # amd_l_%.o: amd_%.c $(INC)
 # 	$(C) -DDLONG -c $< -o $@
 
-$(AMD_LIBRARY): $(AMDI) SuiteSparse_config.o
-	@$(RM) $(RMFLAGS) $(AMD_LIBRARY)
-	@$(AR) $(ARFLAGS) $(AMD_LIBRARY) $(AMDI) SuiteSparse_config.o
-	@$(RANLIB) $(AMD_LIBRARY)
+$(AMDlib): $(AMDI) SuiteSparse_config.o
+	@$(RM) $(RMFLAGS) $(AMDlib)
+	@$(AR) $(ARFLAGS) $(AMDlib) $(AMDI) SuiteSparse_config.o
+	@$(RANLIB) $(AMDlib)
 
 clean:
 	@$(RM) $(RMFLAGS) *.o

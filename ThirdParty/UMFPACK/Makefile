@@ -1,4 +1,4 @@
-include ../../Makefile.def
+include ../../Makefile.in
 
 I = -I. -I../AMD
 C = $(CC) -O3 -fexceptions -fPIC -DNCHOLMOD $(I)
@@ -139,9 +139,9 @@ umfpack_gn_%.o: umfpack_%.c $(INC)
 #-------------------------------------------------------------------------------
 
 umfpack: $(UMFPACK_OBJ)
-	@$(RM) $(RMFLAGS) $(UMFPACK_LIBRARY)
-	@$(AR) $(ARFLAGS) $(UMFPACK_LIBRARY) $(UMFPACK_OBJ)
-	@$(RANLIB) $(UMFPACK_LIBRARY)
+	@$(RM) $(RMFLAGS) $(UMFPACKlib)
+	@$(AR) $(ARFLAGS) $(UMFPACKlib) $(UMFPACK_OBJ)
+	@$(RANLIB) $(UMFPACKlib)
 
 clean:
 	@$(RM) $(RMFLAGS) *.o

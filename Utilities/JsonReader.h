@@ -16,9 +16,12 @@ public:
 
     virtual std::map<std::string, std::string> getDataAsMap();
     virtual int setDataFile(const char* file);
+    virtual std::string getValueFromKey(std::string key);
+
+    nlohmann::json getJsonObject();
 
 private:
-    nlohmann::json config_json;
+    nlohmann::json data_json;
     std::map <std::string, std::string> data_map;
 };
 

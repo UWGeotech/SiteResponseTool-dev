@@ -68,6 +68,8 @@ class NodeRecorder: public Recorder
     int sendSelf(int commitTag, Channel &theChannel);  
     int recvSelf(int commitTag, Channel &theChannel, 
 		 FEM_ObjectBroker &theBroker);
+     
+    virtual void Print(OPS_Stream &s, int flag); 
 
   protected:
 
