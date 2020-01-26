@@ -2,16 +2,14 @@
 **                 Site Response Analysis Tool                           **
 **   -----------------------------------------------------------------   **
 **                                                                       **
-**   Developed by: Alborz Ghofrani (alborzgh@uw.edu)                     **
+**   Developed by: UW Computational Geomechanics Group                   **
+**                 Alborz Ghofrani (alborzgh@uw.edu)                     **
+**                 Pedro Arduino (parduino@uw.edu)                       **
 **                 University of Washington                              **
 **                                                                       **
 **   Date: October 2018                                                  **
 **                                                                       **
 ** ********************************************************************* */
-
-
-
-
 
 #ifndef FEMODEL_H
 #define FEMODEL_H
@@ -34,6 +32,7 @@ public:
 	~SiteResponseModel();
 
 	int   runTestModel();
+	int   runTotalStressModel3DLotung();
 	int   runTotalStressModel3D();
 	int   runEffectiveStressModel2D();
 	void  setOutputDir(std::string outDir) { theOutputDir = outDir; };
