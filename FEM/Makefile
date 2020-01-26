@@ -143,6 +143,8 @@ OBJS = \
        TransientIntegrator.o \
        TrapezoidalTimeSeriesIntegrator.o \
        TzSimple1.o \
+       UmfpackGenLinSOE.o \
+       UmfpackGenLinSolver.o \
        UniaxialMaterial.o \
        UniformExcitation.o \
        VariableTimeStepDirectIntegrationAnalysis.o \

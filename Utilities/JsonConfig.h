@@ -1,6 +1,7 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include "FileReader.h"
 #include "ConfigIO.h"
 #include "json.hpp"
 
@@ -19,8 +20,10 @@ public:
     virtual double getFloatProperty(std::string key);
     virtual bool getBooleanProperty(std::string key);
 
+
+    FileReader* theReader;
+
 private:
-    nlohmann::json config_json;
     std::map <std::string, std::string> config_data;
     std::string getValueFromKey(std::string key);
 };

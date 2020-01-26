@@ -12,6 +12,7 @@ DefaultConfig::DefaultConfig()
     config_data[std::string("General|PrintDebug")] = std::string("False");
     config_data[std::string("Units|g")] = std::string("9.81");
     config_data[std::string("Units|Patm")] = std::string("101.3");
+    config_data[std::string("Analysis|Gravity|PerformGravity")] = std::string("True");
     config_data[std::string("Analysis|Gravity|ConvergenceTest|Tolerance")] = std::string("1.0e-7");
     config_data[std::string("Analysis|Gravity|ConvergenceTest|MaxNumIterations")] = std::string("30");
     config_data[std::string("Analysis|Gravity|ConvergenceTest|PrintTag")] = std::string("1");
@@ -22,6 +23,7 @@ DefaultConfig::DefaultConfig()
 	config_data[std::string("Analysis|Dynamic|Integrator")] = std::string("Newmark");
     config_data[std::string("Analysis|Dynamic|Newmark_Beta")] = std::string("0.25");
     config_data[std::string("Analysis|Dynamic|Newmark_Gamma")] = std::string("0.50");
+    config_data[std::string("Analysis|Dynamic|HHT_Alpha")] = std::string("1.0");
     config_data[std::string("Analysis|RigidBase")] = std::string("False");
     config_data[std::string("Analysis|Damping|Ratio")] = std::string("0.01");
     config_data[std::string("Analysis|Damping|Frequency1")] = std::string("0.1");

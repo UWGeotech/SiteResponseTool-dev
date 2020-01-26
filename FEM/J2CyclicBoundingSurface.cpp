@@ -15,8 +15,8 @@
 
 // Written: Diego Turello(*), Alborz Ghofrani and Pedro Arduino
 //			Sep 2017, University of Washington
-//          (*) Universidad Nacional de Córdoba, FCEFyN. Depto Estructuras.
-//              Universidad Tecnológica Nacional, GIMNI.
+//          (*) Universidad Nacional de Cï¿½rdoba, FCEFyN. Depto Estructuras.
+//              Universidad Tecnolï¿½gica Nacional, GIMNI.
 //              CONICET
 // 
 // Description: This file contains the implementation for the Borja material class.
@@ -498,6 +498,8 @@ double J2CyclicBoundingSurface::H(double kappa)
 
 void J2CyclicBoundingSurface::Print(OPS_Stream & s, int flag)
 {
+	s << "Material Tag: " << this->getTag() << ", Type: " << this->getClassType() << endln;
+	s << "  Parameters: G = " << this->m_shear << ", K = " << this->m_bulk << ", su = " << this->m_su << ", h = " << m_h_par << ", h0 = " << this->m_h0_par << ", m = " << this->m_m_par << ", chi = " << this->m_chi << endln;
 }
 
 NDMaterial*

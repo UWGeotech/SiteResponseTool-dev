@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	{
 		opserr << ">>> SiteResponseTool: Not enough arguments. <<<" << endln;
 		std::getchar();
-		return -1;
+		exit(-1);
 	}
 
 	// read the layering file

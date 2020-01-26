@@ -1235,3 +1235,18 @@ NodeRecorder::initialize(void)
 
   return 0;
 }
+
+ void 
+ NodeRecorder::Print(OPS_Stream &s, int flag)
+{
+  s << "Node Recorder: tag = " << this->getTag();
+  for (int i=0; i<numValidNodes; i++) {
+    s << " , Node = " << theNodes[i]->getTag() << ", flag = " << dataFlag;
+    for (int j=0; j<theDofs->Size(); j++) {
+      if (j == 0) 
+        s << ", dofs = ";
+      s << (*theDofs)[j] << " ";
+    }
+  }
+  s << endln;
+}
