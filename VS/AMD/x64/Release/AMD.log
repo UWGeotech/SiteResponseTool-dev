@@ -1,0 +1,18 @@
+﻿  amd_1.c
+  amd_2.c
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\ThirdParty\AMD\amd_2.c(603,36): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  amd_aat.c
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\ThirdParty\AMD\amd_aat.c(180,34): warning C4244: '=': conversion from 'size_t' to 'double', possible loss of data
+  amd_control.c
+  amd_defaults.c
+  amd_dump.c
+  amd_global.c
+  amd_info.c
+  amd_order.c
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\ThirdParty\AMD\amd_order.c(186,41): warning C4267: 'function': conversion from 'size_t' to 'int', possible loss of data
+  amd_postorder.c
+  amd_post_tree.c
+  amd_preprocess.c
+  amd_valid.c
+  SuiteSparse_config.c
+  AMD.vcxproj -> C:\Users\Alborz\Desktop\Projects\siteresponsetool\VS\x64\Release\AMD.lib
