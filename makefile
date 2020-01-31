@@ -2,9 +2,9 @@ include ./Makefile.in
 
 # -------------------------
 
-siteResponse: ./SiteResponse/Main.cpp $(FEMlib)
+siteResponse: ./src/SiteResponse/Main.cpp $(FEMlib)
 	make libs
-	@$(CXX) $(CXXOPTFLAG) $(THIRDPARTY_INCLUDE) $(LINCLUDE) $(MINCLUDE) ./SiteResponse/Main.cpp $(UTILlib) $(SRTlib) $(FEMlib) $(THIRDPARTY_LIB) $(NUMLIBS) -o $(source)/bin/siteresponse
+	@$(CXX) $(CXXOPTFLAG) $(THIRDPARTY_INCLUDE) $(LINCLUDE) $(MINCLUDE) ./src/SiteResponse/Main.cpp $(UTILlib) $(SRTlib) $(FEMlib) $(THIRDPARTY_LIB) $(NUMLIBS) -o $(source)/bin/siteresponse
 	
 fem:
 	make tidy
@@ -19,14 +19,14 @@ archive: $(OBJS)
 libs:
 	(mkdir -p bin)
 	(mkdir -p lib)
-	(cd FEM; make archive)
-	(cd SiteResponse; make archive)
-	(cd Utilities; make archive)
+	(cd src/FEM; make archive)
+	(cd src/SiteResponse; make archive)
+	(cd src/Utilities; make archive)
 
 clean:
-	(cd FEM; make clean)
-	(cd SiteResponse; make clean)
-	(cd Utilities; make clean)
+	(cd src/FEM; make clean)
+	(cd src/SiteResponse; make clean)
+	(cd src/Utilities; make clean)
 	
 tidy:
 	rm -f $(source)/bin/siteresponse
