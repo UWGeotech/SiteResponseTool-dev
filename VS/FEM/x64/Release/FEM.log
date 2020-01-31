@@ -1,0 +1,180 @@
+﻿  Analysis.cpp
+  AnalysisModel.cpp
+  ArrayOfTaggedObjects.cpp
+  ArrayOfTaggedObjectsIter.cpp
+  BandGenLinLapackSolver.cpp
+  BandGenLinSOE.cpp
+  BandGenLinSolver.cpp
+  BeamIntegration.cpp
+  Brick.cpp
+  Channel.cpp
+  CompositeResponse.cpp
+  ConstraintHandler.cpp
+  ConvergenceTest.cpp
+  CrdTransf.cpp
+  CTestNormDispIncr.cpp
+  DataFileStream.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DataFileStream.cpp(636,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  DataFileStreamAdd.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DataFileStreamAdd.cpp(680,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  DirectIntegrationAnalysis.cpp
+  DOF_Group.cpp
+  DOF_GrpIter.cpp
+  Compiling...
+  DOF_Numberer.cpp
+  Domain.cpp
+  DomainComponent.cpp
+  DummyElementAPI.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DummyElementAPI.cpp(87,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DummyElementAPI.cpp(297,9): warning C4101: 'libHandle': unreferenced local variable
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DummyElementAPI.cpp(296,12): warning C4101: 'eleFunctPtr': unreferenced local variable
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DummyElementAPI.cpp(323,12): warning C4101: 'matFunctPtr': unreferenced local variable
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\DummyElementAPI.cpp(324,9): warning C4101: 'libHandle': unreferenced local variable
+  DummyStream.cpp
+  EarthquakePattern.cpp
+  ElasticIsotropicMaterial.cpp
+  ElasticIsotropicPlaneStrain2D.cpp
+  ElasticIsotropicThreeDimensional.cpp
+  ElasticMaterial.cpp
+  ElasticSection3d.cpp
+  Element.cpp
+  ElementalLoadIter.cpp
+  ElementRecorder.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ElementRecorder.cpp(479,43): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ElementRecorder.cpp(695,41): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  ElementResponse.cpp
+  ElementStateParameter.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ElementStateParameter.cpp(45,35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ElementStateParameter.cpp(171,36): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  EquiSolnAlgo.cpp
+  ErrorHandler.cpp
+  FE_EleIter.cpp
+  FE_Element.cpp
+  Compiling...
+  FileStream.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\FileStream.cpp(145,42): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\FileStream.cpp(526,38): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Graph.cpp
+  GraphNumberer.cpp
+  GroundMotion.cpp
+  HHT.cpp
+  ID.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ID.cpp(280,25): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  ImposedMotionSP.cpp
+  IncrementalIntegrator.cpp
+  Information.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\Information.cpp(170,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\Information.cpp(173,38): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Integrator.cpp
+  J2CyclicBoundingSurface.cpp
+  LegendreBeamIntegration.cpp
+  LinearCrdTransf3d.cpp
+  LinearSeries.cpp
+  LinearSOE.cpp
+  LinearSOESolver.cpp
+  Load.cpp
+  LoadControl.cpp
+  LoadPattern.cpp
+  LoadPatternIter.cpp
+  Compiling...
+  MapOfTaggedObjects.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\MapOfTaggedObjects.cpp(64,36): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\MapOfTaggedObjects.cpp(118,28): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\MapOfTaggedObjects.cpp(133,25): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+  MapOfTaggedObjectsIter.cpp
+  Material.cpp
+  MaterialResponse.cpp
+  Matrix.cpp
+  MatrixUtil.cpp
+  Message.cpp
+  MovableObject.cpp
+  MP_Constraint.cpp
+  MultiSupportPattern.cpp
+  NDMaterial.cpp
+  Newmark.cpp
+  NewtonRaphson.cpp
+  NodalLoad.cpp
+  NodalLoadIter.cpp
+  Node.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\Node.cpp(1786,67): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  NodeRecorder.cpp
+  OPS_Stream.cpp
+  Parameter.cpp
+  PathSeries.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathSeries.cpp(354,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathSeries.cpp(474,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathSeries.cpp(475,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathSeries.cpp(476,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Compiling...
+  PathTimeSeries.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathTimeSeries.cpp(477,12): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathTimeSeries.cpp(478,27): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathTimeSeries.cpp(487,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PathTimeSeries.cpp(488,18): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  PenaltyConstraintHandler.cpp
+  PenaltyMP_FE.cpp
+  PenaltySP_FE.cpp
+  PlainNumberer.cpp
+  PM4Sand.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Sand.cpp(669,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Sand.cpp(670,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Sand.cpp(674,16): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Sand.cpp(675,18): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Sand.cpp(679,13): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+  PM4Silt.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Silt.cpp(657,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Silt.cpp(658,20): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Silt.cpp(662,16): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Silt.cpp(663,18): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\PM4Silt.cpp(666,13): warning C4244: '=': conversion from 'double' to 'unsigned char', possible loss of data
+  PySimple1.cpp
+  QzSimple1.cpp
+  RCM.cpp
+  Recorder.cpp
+  Response.cpp
+  SectionForceDeformation.cpp
+  shp3d.cpp
+  SimpsonTimeSeriesIntegrator.cpp
+  SingleDomAllSP_Iter.cpp
+  SingleDomEleIter.cpp
+  SingleDomMP_Iter.cpp
+  SingleDomNodIter.cpp
+  SingleDomParamIter.cpp
+  Compiling...
+  SingleDomPC_Iter.cpp
+  SingleDomSP_Iter.cpp
+  SolutionAlgorithm.cpp
+  SP_Constraint.cpp
+  SSPbrick.cpp
+  SSPbrickUP.cpp
+  SSPquad.cpp
+  SSPquadUP.cpp
+  StandardStream.cpp
+  StaticAnalysis.cpp
+  StaticIntegrator.cpp
+  Subdomain.cpp
+  SubdomainNodIter.cpp
+  TaggedObject.cpp
+  TimeSeries.cpp
+  TimeSeriesIntegrator.cpp
+  TransformationConstraintHandler.cpp
+  TransformationDOF_Group.cpp
+  TransformationFE.cpp
+  TransientAnalysis.cpp
+  Compiling...
+  TransientIntegrator.cpp
+  TrapezoidalTimeSeriesIntegrator.cpp
+  TzSimple1.cpp
+  UmfpackGenLinSOE.cpp
+  UmfpackGenLinSolver.cpp
+  UniaxialMaterial.cpp
+  UniformExcitation.cpp
+  VariableTimeStepDirectIntegrationAnalysis.cpp
+  Vector.cpp
+  Vertex.cpp
+  VertexIter.cpp
+  ViscousMaterial.cpp
+  ZeroLength.cpp
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ZeroLength.cpp(1156,34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\Alborz\Desktop\Projects\siteresponsetool\FEM\ZeroLength.cpp(1158,34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  FEM.vcxproj -> C:\Users\Alborz\Desktop\Projects\siteresponsetool\VS\x64\Release\FEM.lib
