@@ -3,24 +3,26 @@ source = $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 FF  = gfortran
 CC  = gcc
 CXX = g++
+AR  = ar
+RANLIB = ranlib
+RM  = rm
 
 CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3 -ffloat-store -std=c++11
 FFNOPTFLAG = -Wall -O
 CCOPTFLAG  = -Wall -Wno-reorder -O2
+ARFLAGS = rv
+RANLIBFLAGS = 
+RMFLAGS = -fr
 
 LINCLUDE = -I$(source) \
 	   -I$(source)/FEM \
 	   -I$(source)/SiteResponse \
-	   -I$(source)/Utilities \
-           -I$(source)/ThirdParty/AMD \
-	   -I$(source)/ThirdParty/UMFPACK
+	   -I$(source)/Utilities
 
 MINCLUDE = -I/usr/include 
 
 THIRDPARTY_INCLUDE = -I$(source)/ThirdParty/AMD \
 		     -I$(source)/ThirdParty/UMFPACK
-
-THIRDPARTY_INCLUDE = 
 
 NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
 
@@ -35,11 +37,11 @@ THIRDPARTY_LIB = \
 		 $(UMFPACKlib) \
                  $(AMDlib) 
 .f.o:
-	$(FF) -c $(FFOPTFLAG) $(LINCLUDE) $<
+	$(FF) -c $(FFOPTFLAG) $(LINCLUDE) $(MINCLUDE) $(THIRDPARTY_INCLUDE) $<
 
 .c.o:
-	$(CC) -c $(CCOPTFLAG) $(LINCLUDE) $<
+	$(CC) -c $(CCOPTFLAG) $(LINCLUDE) $(MINCLUDE) $(THIRDPARTY_INCLUDE) $<
 
 .cpp.o:
-	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $<
+	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $(MINCLUDE) $(THIRDPARTY_INCLUDE) $<
 

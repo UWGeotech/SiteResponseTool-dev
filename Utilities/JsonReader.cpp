@@ -5,6 +5,11 @@
 extern void split_string(const std::string& str, std::vector<std::string>& container, char delimiter='|');
 
 
+JSONReader::JSONReader()
+{
+
+}
+
 JSONReader::JSONReader(const char* json_file_name)
 {
     std::ifstream json_file(json_file_name);
