@@ -10,13 +10,14 @@
 class JSONReader: public FileReader
 {
 public:
-    JSONReader(){};
+    JSONReader();
     JSONReader(const char* json_file);
     ~JSONReader();
 
-    virtual std::map<std::string, std::string> getDataAsMap();
-    virtual int setDataFile(const char* file);
-    virtual std::string getValueFromKey(std::string key);
+    std::map<std::string, std::string> getDataAsMap();
+    int setDataFile(const char* file);
+    std::string getValueFromKey(std::string key);
+    
 
     nlohmann::json getJsonObject();
 
