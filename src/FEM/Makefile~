@@ -157,9 +157,9 @@ OBJS = \
 
 
 archive: $(OBJS)
-	ar rv $(FEMlib) $(OBJS)
+	$(AR) $(ARFLAGS) $(FEMlib) $(OBJS)
 
 clean:
-	rm -f $(OBJS)
-	rm -f *.a
+	$(RM) $(RMFLAGS) $(OBJS)
+	$(RM) $(RMFLAGS) *.a
 
