@@ -9,9 +9,9 @@ FFNOPTFLAG = -Wall -O
 CCOPTFLAG  = -Wall -Wno-reorder -O2
 
 LINCLUDE = -I$(source) \
-	   -I$(source)/FEM \
-	   -I$(source)/SiteResponse \
-	   -I$(source)/Utilities \
+	   -I$(source)/src/FEM \
+	   -I$(source)/src/SiteResponse \
+	   -I$(source)/src/Utilities \
            -I$(source)/ThirdParty/AMD \
 	   -I$(source)/ThirdParty/UMFPACK
 
@@ -22,7 +22,7 @@ THIRDPARTY_INCLUDE = -I$(source)/ThirdParty/AMD \
 
 THIRDPARTY_INCLUDE = 
 
-NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
+NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -lm -ldl -lgfortran
 
 FEMlib  = $(source)/lib/libFEM.a
 SRTlib  = $(source)/lib/libSRT.a
@@ -42,4 +42,3 @@ THIRDPARTY_LIB = \
 
 .cpp.o:
 	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $<
-
