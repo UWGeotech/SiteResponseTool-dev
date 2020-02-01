@@ -15,30 +15,19 @@ RANLIBFLAGS =
 RMFLAGS = -fr
 
 LINCLUDE = -I$(source) \
-<<<<<<< HEAD
 	   -I$(source)/src/FEM \
 	   -I$(source)/src/SiteResponse \
 	   -I$(source)/src/Utilities \
            -I$(source)/ThirdParty/AMD \
 	   -I$(source)/ThirdParty/UMFPACK
-=======
-	   -I$(source)/FEM \
-	   -I$(source)/SiteResponse \
-	   -I$(source)/Utilities
->>>>>>> 09d41d910c2b32907b7a7ab5cf0b118e6235a6a1
 
 MINCLUDE = -I/usr/include 
 
 THIRDPARTY_INCLUDE = -I$(source)/ThirdParty/AMD \
 		     -I$(source)/ThirdParty/UMFPACK
 
-<<<<<<< HEAD
-THIRDPARTY_INCLUDE = 
 
 NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -lm -ldl -lgfortran
-=======
-NUMLIBS = -L/usr/lib -L/usr/bin/gfortran -lblas -llapack -llapacke -lm -ldl -lgfortran
->>>>>>> 09d41d910c2b32907b7a7ab5cf0b118e6235a6a1
 
 FEMlib  = $(source)/lib/libFEM.a
 SRTlib  = $(source)/lib/libSRT.a
@@ -57,9 +46,4 @@ THIRDPARTY_LIB = \
 	$(CC) -c $(CCOPTFLAG) $(LINCLUDE) $(MINCLUDE) $(THIRDPARTY_INCLUDE) $<
 
 .cpp.o:
-<<<<<<< HEAD
-	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $<
-=======
 	$(CXX) -c $(CXXOPTFLAG) $(LINCLUDE) $(MINCLUDE) $(THIRDPARTY_INCLUDE) $<
-
->>>>>>> 09d41d910c2b32907b7a7ab5cf0b118e6235a6a1
