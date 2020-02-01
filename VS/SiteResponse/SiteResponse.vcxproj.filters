@@ -1,54 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\SiteResponse\siteLayering.cpp" />
-    <ClCompile Include="..\..\SiteResponse\soillayer.cpp" />
-    <ClCompile Include="..\..\SiteResponse\Main.cpp" />
-    <ClCompile Include="..\..\SiteResponse\FEModel.cpp" />
-    <ClCompile Include="..\..\SiteResponse\outcropMotion.cpp" />
-    <ClCompile Include="..\..\Utilities\ConfigIO.cpp">
+    <ClCompile Include="..\..\src\SiteResponse\siteLayering.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\soillayer.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\Main.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\FEModel.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\outcropMotion.cpp" />
+    <ClCompile Include="..\..\src\Utilities\ConfigIO.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Utilities\ConfigManager.cpp">
+    <ClCompile Include="..\..\src\Utilities\ConfigManager.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Utilities\DefaultConfig.cpp">
+    <ClCompile Include="..\..\src\Utilities\DefaultConfig.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Utilities\JsonConfig.cpp">
+    <ClCompile Include="..\..\src\Utilities\JsonConfig.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Utilities\FileReader.cpp">
+    <ClCompile Include="..\..\src\Utilities\GeneralUtilities.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Utilities\GeneralUtilities.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Utilities\JsonReader.cpp">
+    <ClCompile Include="..\..\src\Utilities\JsonReader.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\SiteResponse\soillayer.h" />
-    <ClInclude Include="..\..\SiteResponse\siteLayering.h" />
-    <ClInclude Include="..\..\SiteResponse\FEModel.h" />
-    <ClInclude Include="..\..\SiteResponse\outcropMotion.h" />
-    <ClInclude Include="..\..\Utilities\ConfigIO.h">
+    <ClInclude Include="..\..\src\SiteResponse\soillayer.h" />
+    <ClInclude Include="..\..\src\SiteResponse\siteLayering.h" />
+    <ClInclude Include="..\..\src\SiteResponse\FEModel.h" />
+    <ClInclude Include="..\..\src\SiteResponse\outcropMotion.h" />
+    <ClInclude Include="..\..\src\Utilities\ConfigIO.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Utilities\ConfigManager.h">
+    <ClInclude Include="..\..\src\Utilities\ConfigManager.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Utilities\DefaultConfig.h">
+    <ClInclude Include="..\..\src\Utilities\DefaultConfig.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Utilities\JsonConfig.h">
+    <ClInclude Include="..\..\src\Utilities\JsonConfig.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Utilities\FileReader.h">
+    <ClInclude Include="..\..\src\Utilities\FileReader.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Utilities\JsonReader.h">
+    <ClInclude Include="..\..\src\Utilities\JsonReader.h">
       <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
