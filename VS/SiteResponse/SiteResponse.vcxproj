@@ -27,30 +27,29 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\SiteResponse\FEModel.cpp" />
-    <ClCompile Include="..\..\SiteResponse\Main.cpp" />
-    <ClCompile Include="..\..\SiteResponse\outcropMotion.cpp" />
-    <ClCompile Include="..\..\SiteResponse\siteLayering.cpp" />
-    <ClCompile Include="..\..\SiteResponse\soillayer.cpp" />
-    <ClCompile Include="..\..\Utilities\ConfigIO.cpp" />
-    <ClCompile Include="..\..\Utilities\ConfigManager.cpp" />
-    <ClCompile Include="..\..\Utilities\DefaultConfig.cpp" />
-    <ClCompile Include="..\..\Utilities\FileReader.cpp" />
-    <ClCompile Include="..\..\Utilities\GeneralUtilities.cpp" />
-    <ClCompile Include="..\..\Utilities\JsonConfig.cpp" />
-    <ClCompile Include="..\..\Utilities\JsonReader.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\FEModel.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\Main.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\outcropMotion.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\siteLayering.cpp" />
+    <ClCompile Include="..\..\src\SiteResponse\soillayer.cpp" />
+    <ClCompile Include="..\..\src\Utilities\ConfigIO.cpp" />
+    <ClCompile Include="..\..\src\Utilities\ConfigManager.cpp" />
+    <ClCompile Include="..\..\src\Utilities\DefaultConfig.cpp" />
+    <ClCompile Include="..\..\src\Utilities\GeneralUtilities.cpp" />
+    <ClCompile Include="..\..\src\Utilities\JsonConfig.cpp" />
+    <ClCompile Include="..\..\src\Utilities\JsonReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\SiteResponse\FEModel.h" />
-    <ClInclude Include="..\..\SiteResponse\outcropMotion.h" />
-    <ClInclude Include="..\..\SiteResponse\siteLayering.h" />
-    <ClInclude Include="..\..\SiteResponse\soillayer.h" />
-    <ClInclude Include="..\..\Utilities\ConfigIO.h" />
-    <ClInclude Include="..\..\Utilities\ConfigManager.h" />
-    <ClInclude Include="..\..\Utilities\DefaultConfig.h" />
-    <ClInclude Include="..\..\Utilities\FileReader.h" />
-    <ClInclude Include="..\..\Utilities\JsonConfig.h" />
-    <ClInclude Include="..\..\Utilities\JsonReader.h" />
+    <ClInclude Include="..\..\src\SiteResponse\FEModel.h" />
+    <ClInclude Include="..\..\src\SiteResponse\outcropMotion.h" />
+    <ClInclude Include="..\..\src\SiteResponse\siteLayering.h" />
+    <ClInclude Include="..\..\src\SiteResponse\soillayer.h" />
+    <ClInclude Include="..\..\src\Utilities\ConfigIO.h" />
+    <ClInclude Include="..\..\src\Utilities\ConfigManager.h" />
+    <ClInclude Include="..\..\src\Utilities\DefaultConfig.h" />
+    <ClInclude Include="..\..\src\Utilities\FileReader.h" />
+    <ClInclude Include="..\..\src\Utilities\JsonConfig.h" />
+    <ClInclude Include="..\..\src\Utilities\JsonReader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -130,7 +129,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Src\SiteResponse;$(SolutionDir)\Src\FEM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\src\SiteResponse;$(SolutionDir)\..\src\FEM;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;_bool_h;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -202,7 +201,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;$(SolutionDir)\..\Utilities;$(SolutionDir)\..\ThirdParty\AMD;$(SolutionDir)\..\ThirdParty\UMFPACK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\src\SiteResponse;$(SolutionDir)\..\src\FEM;$(SolutionDir)\..\src\Utilities;$(SolutionDir)\..\ThirdParty\AMD;$(SolutionDir)\..\ThirdParty\UMFPACK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;_bool_h;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>

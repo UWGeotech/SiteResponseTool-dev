@@ -6,915 +6,915 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\FEM\Analysis.cpp">
+    <ClCompile Include="..\..\src\FEM\Analysis.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\AnalysisModel.cpp">
+    <ClCompile Include="..\..\src\FEM\AnalysisModel.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ArrayOfTaggedObjects.cpp">
+    <ClCompile Include="..\..\src\FEM\ArrayOfTaggedObjects.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ArrayOfTaggedObjectsIter.cpp">
+    <ClCompile Include="..\..\src\FEM\ArrayOfTaggedObjectsIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\BandGenLinLapackSolver.cpp">
+    <ClCompile Include="..\..\src\FEM\BandGenLinLapackSolver.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\BandGenLinSOE.cpp">
+    <ClCompile Include="..\..\src\FEM\BandGenLinSOE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\BandGenLinSolver.cpp">
+    <ClCompile Include="..\..\src\FEM\BandGenLinSolver.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\BeamIntegration.cpp">
+    <ClCompile Include="..\..\src\FEM\BeamIntegration.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Brick.cpp">
+    <ClCompile Include="..\..\src\FEM\Brick.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Channel.cpp">
+    <ClCompile Include="..\..\src\FEM\Channel.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\CompositeResponse.cpp">
+    <ClCompile Include="..\..\src\FEM\CompositeResponse.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ConstraintHandler.cpp">
+    <ClCompile Include="..\..\src\FEM\ConstraintHandler.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ConvergenceTest.cpp">
+    <ClCompile Include="..\..\src\FEM\ConvergenceTest.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\CrdTransf.cpp">
+    <ClCompile Include="..\..\src\FEM\CrdTransf.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\CTestNormDispIncr.cpp">
+    <ClCompile Include="..\..\src\FEM\CTestNormDispIncr.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DataFileStream.cpp">
+    <ClCompile Include="..\..\src\FEM\DataFileStream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DataFileStreamAdd.cpp">
+    <ClCompile Include="..\..\src\FEM\DataFileStreamAdd.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DirectIntegrationAnalysis.cpp">
+    <ClCompile Include="..\..\src\FEM\DirectIntegrationAnalysis.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DOF_Group.cpp">
+    <ClCompile Include="..\..\src\FEM\DOF_Group.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DOF_GrpIter.cpp">
+    <ClCompile Include="..\..\src\FEM\DOF_GrpIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DOF_Numberer.cpp">
+    <ClCompile Include="..\..\src\FEM\DOF_Numberer.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Domain.cpp">
+    <ClCompile Include="..\..\src\FEM\Domain.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DomainComponent.cpp">
+    <ClCompile Include="..\..\src\FEM\DomainComponent.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DummyElementAPI.cpp">
+    <ClCompile Include="..\..\src\FEM\DummyElementAPI.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\DummyStream.cpp">
+    <ClCompile Include="..\..\src\FEM\DummyStream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\EarthquakePattern.cpp">
+    <ClCompile Include="..\..\src\FEM\EarthquakePattern.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElasticIsotropicMaterial.cpp">
+    <ClCompile Include="..\..\src\FEM\ElasticIsotropicMaterial.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElasticIsotropicPlaneStrain2D.cpp">
+    <ClCompile Include="..\..\src\FEM\ElasticIsotropicPlaneStrain2D.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElasticIsotropicThreeDimensional.cpp">
+    <ClCompile Include="..\..\src\FEM\ElasticIsotropicThreeDimensional.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElasticMaterial.cpp">
+    <ClCompile Include="..\..\src\FEM\ElasticMaterial.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElasticSection3d.cpp">
+    <ClCompile Include="..\..\src\FEM\ElasticSection3d.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Element.cpp">
+    <ClCompile Include="..\..\src\FEM\Element.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElementalLoadIter.cpp">
+    <ClCompile Include="..\..\src\FEM\ElementalLoadIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElementRecorder.cpp">
+    <ClCompile Include="..\..\src\FEM\ElementRecorder.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElementResponse.cpp">
+    <ClCompile Include="..\..\src\FEM\ElementResponse.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ElementStateParameter.cpp">
+    <ClCompile Include="..\..\src\FEM\ElementStateParameter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\EquiSolnAlgo.cpp">
+    <ClCompile Include="..\..\src\FEM\EquiSolnAlgo.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ErrorHandler.cpp">
+    <ClCompile Include="..\..\src\FEM\ErrorHandler.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\FE_EleIter.cpp">
+    <ClCompile Include="..\..\src\FEM\FE_EleIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\FE_Element.cpp">
+    <ClCompile Include="..\..\src\FEM\FE_Element.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\FileStream.cpp">
+    <ClCompile Include="..\..\src\FEM\FileStream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Graph.cpp">
+    <ClCompile Include="..\..\src\FEM\Graph.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\GraphNumberer.cpp">
+    <ClCompile Include="..\..\src\FEM\GraphNumberer.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\GroundMotion.cpp">
+    <ClCompile Include="..\..\src\FEM\GroundMotion.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\HHT.cpp">
+    <ClCompile Include="..\..\src\FEM\HHT.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ID.cpp">
+    <ClCompile Include="..\..\src\FEM\ID.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ImposedMotionSP.cpp">
+    <ClCompile Include="..\..\src\FEM\ImposedMotionSP.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\IncrementalIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\IncrementalIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Information.cpp">
+    <ClCompile Include="..\..\src\FEM\Information.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Integrator.cpp">
+    <ClCompile Include="..\..\src\FEM\Integrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\J2CyclicBoundingSurface.cpp">
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LegendreBeamIntegration.cpp">
+    <ClCompile Include="..\..\src\FEM\LegendreBeamIntegration.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LinearCrdTransf3d.cpp">
+    <ClCompile Include="..\..\src\FEM\LinearCrdTransf3d.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LinearSeries.cpp">
+    <ClCompile Include="..\..\src\FEM\LinearSeries.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LinearSOE.cpp">
+    <ClCompile Include="..\..\src\FEM\LinearSOE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LinearSOESolver.cpp">
+    <ClCompile Include="..\..\src\FEM\LinearSOESolver.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Load.cpp">
+    <ClCompile Include="..\..\src\FEM\Load.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LoadControl.cpp">
+    <ClCompile Include="..\..\src\FEM\LoadControl.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LoadPattern.cpp">
+    <ClCompile Include="..\..\src\FEM\LoadPattern.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\LoadPatternIter.cpp">
+    <ClCompile Include="..\..\src\FEM\LoadPatternIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MapOfTaggedObjects.cpp">
+    <ClCompile Include="..\..\src\FEM\MapOfTaggedObjects.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MapOfTaggedObjectsIter.cpp">
+    <ClCompile Include="..\..\src\FEM\MapOfTaggedObjectsIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Material.cpp">
+    <ClCompile Include="..\..\src\FEM\Material.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MaterialResponse.cpp">
+    <ClCompile Include="..\..\src\FEM\MaterialResponse.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Matrix.cpp">
+    <ClCompile Include="..\..\src\FEM\Matrix.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MatrixUtil.cpp">
+    <ClCompile Include="..\..\src\FEM\MatrixUtil.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Message.cpp">
+    <ClCompile Include="..\..\src\FEM\Message.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MovableObject.cpp">
+    <ClCompile Include="..\..\src\FEM\MovableObject.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MP_Constraint.cpp">
+    <ClCompile Include="..\..\src\FEM\MP_Constraint.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\MultiSupportPattern.cpp">
+    <ClCompile Include="..\..\src\FEM\MultiSupportPattern.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\NDMaterial.cpp">
+    <ClCompile Include="..\..\src\FEM\NDMaterial.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Newmark.cpp">
+    <ClCompile Include="..\..\src\FEM\Newmark.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\NewtonRaphson.cpp">
+    <ClCompile Include="..\..\src\FEM\NewtonRaphson.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\NodalLoad.cpp">
+    <ClCompile Include="..\..\src\FEM\NodalLoadIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\NodalLoadIter.cpp">
+    <ClCompile Include="..\..\src\FEM\Node.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Node.cpp">
+    <ClCompile Include="..\..\src\FEM\NodeRecorder.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\NodeRecorder.cpp">
+    <ClCompile Include="..\..\src\FEM\OPS_Stream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\OPS_Stream.cpp">
+    <ClCompile Include="..\..\src\FEM\Parameter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Parameter.cpp">
+    <ClCompile Include="..\..\src\FEM\PathSeries.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PathSeries.cpp">
+    <ClCompile Include="..\..\src\FEM\PathTimeSeries.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PathTimeSeries.cpp">
+    <ClCompile Include="..\..\src\FEM\PenaltyConstraintHandler.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PenaltyConstraintHandler.cpp">
+    <ClCompile Include="..\..\src\FEM\PenaltyMP_FE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PenaltyMP_FE.cpp">
+    <ClCompile Include="..\..\src\FEM\PenaltySP_FE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PenaltySP_FE.cpp">
+    <ClCompile Include="..\..\src\FEM\PlainNumberer.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PlainNumberer.cpp">
+    <ClCompile Include="..\..\src\FEM\PM4Sand.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PM4Sand.cpp">
+    <ClCompile Include="..\..\src\FEM\PM4Silt.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PM4Silt.cpp">
+    <ClCompile Include="..\..\src\FEM\PySimple1.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\PySimple1.cpp">
+    <ClCompile Include="..\..\src\FEM\QzSimple1.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\QzSimple1.cpp">
+    <ClCompile Include="..\..\src\FEM\RCM.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\RCM.cpp">
+    <ClCompile Include="..\..\src\FEM\Recorder.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Recorder.cpp">
+    <ClCompile Include="..\..\src\FEM\Response.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Response.cpp">
+    <ClCompile Include="..\..\src\FEM\SectionForceDeformation.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SectionForceDeformation.cpp">
+    <ClCompile Include="..\..\src\FEM\shp3d.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\shp3d.cpp">
+    <ClCompile Include="..\..\src\FEM\SimpsonTimeSeriesIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SimpsonTimeSeriesIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomAllSP_Iter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomAllSP_Iter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomEleIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomEleIter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomMP_Iter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomMP_Iter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomNodIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomNodIter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomParamIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomParamIter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomPC_Iter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomPC_Iter.cpp">
+    <ClCompile Include="..\..\src\FEM\SingleDomSP_Iter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SingleDomSP_Iter.cpp">
+    <ClCompile Include="..\..\src\FEM\SolutionAlgorithm.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SolutionAlgorithm.cpp">
+    <ClCompile Include="..\..\src\FEM\SP_Constraint.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SP_Constraint.cpp">
+    <ClCompile Include="..\..\src\FEM\SSPbrick.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SSPbrick.cpp">
+    <ClCompile Include="..\..\src\FEM\SSPbrickUP.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SSPbrickUP.cpp">
+    <ClCompile Include="..\..\src\FEM\SSPquad.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SSPquad.cpp">
+    <ClCompile Include="..\..\src\FEM\SSPquadUP.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SSPquadUP.cpp">
+    <ClCompile Include="..\..\src\FEM\StandardStream.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\StandardStream.cpp">
+    <ClCompile Include="..\..\src\FEM\StaticAnalysis.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\StaticAnalysis.cpp">
+    <ClCompile Include="..\..\src\FEM\StaticIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\StaticIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\Subdomain.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Subdomain.cpp">
+    <ClCompile Include="..\..\src\FEM\SubdomainNodIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\SubdomainNodIter.cpp">
+    <ClCompile Include="..\..\src\FEM\TaggedObject.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TaggedObject.cpp">
+    <ClCompile Include="..\..\src\FEM\TimeSeries.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TimeSeries.cpp">
+    <ClCompile Include="..\..\src\FEM\TimeSeriesIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TimeSeriesIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\TransformationConstraintHandler.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TransformationConstraintHandler.cpp">
+    <ClCompile Include="..\..\src\FEM\TransformationDOF_Group.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TransformationDOF_Group.cpp">
+    <ClCompile Include="..\..\src\FEM\TransformationFE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TransformationFE.cpp">
+    <ClCompile Include="..\..\src\FEM\TransientAnalysis.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TransientAnalysis.cpp">
+    <ClCompile Include="..\..\src\FEM\TransientIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TransientIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\TrapezoidalTimeSeriesIntegrator.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TrapezoidalTimeSeriesIntegrator.cpp">
+    <ClCompile Include="..\..\src\FEM\TzSimple1.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\TzSimple1.cpp">
+    <ClCompile Include="..\..\src\FEM\UmfpackGenLinSOE.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\UmfpackGenLinSOE.cpp">
+    <ClCompile Include="..\..\src\FEM\UmfpackGenLinSolver.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\UmfpackGenLinSolver.cpp">
+    <ClCompile Include="..\..\src\FEM\UniaxialMaterial.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\UniaxialMaterial.cpp">
+    <ClCompile Include="..\..\src\FEM\UniformExcitation.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\UniformExcitation.cpp">
+    <ClCompile Include="..\..\src\FEM\VariableTimeStepDirectIntegrationAnalysis.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\VariableTimeStepDirectIntegrationAnalysis.cpp">
+    <ClCompile Include="..\..\src\FEM\Vector.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Vector.cpp">
+    <ClCompile Include="..\..\src\FEM\Vertex.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\Vertex.cpp">
+    <ClCompile Include="..\..\src\FEM\VertexIter.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\VertexIter.cpp">
+    <ClCompile Include="..\..\src\FEM\ViscousMaterial.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ViscousMaterial.cpp">
+    <ClCompile Include="..\..\src\FEM\ZeroLength.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\FEM\ZeroLength.cpp">
+    <ClCompile Include="..\..\src\FEM\NodalLoad.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\FEM\Analysis.h">
+    <ClInclude Include="..\..\src\FEM\Analysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\AnalysisModel.h">
+    <ClInclude Include="..\..\src\FEM\AnalysisModel.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ArrayOfTaggedObjects.h">
+    <ClInclude Include="..\..\src\FEM\ArrayOfTaggedObjects.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ArrayOfTaggedObjectsIter.h">
+    <ClInclude Include="..\..\src\FEM\ArrayOfTaggedObjectsIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BandGenLinLapackSolver.h">
+    <ClInclude Include="..\..\src\FEM\BandGenLinLapackSolver.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BandGenLinSOE.h">
+    <ClInclude Include="..\..\src\FEM\BandGenLinSOE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BandGenLinSolver.h">
+    <ClInclude Include="..\..\src\FEM\BandGenLinSolver.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BeamFiberMaterial.h">
+    <ClInclude Include="..\..\src\FEM\BeamFiberMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BeamFiberMaterial2d.h">
+    <ClInclude Include="..\..\src\FEM\BeamFiberMaterial2d.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\BeamIntegration.h">
+    <ClInclude Include="..\..\src\FEM\BeamIntegration.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Brick.h">
+    <ClInclude Include="..\..\src\FEM\Brick.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Channel.h">
+    <ClInclude Include="..\..\src\FEM\Channel.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\classTags.h">
+    <ClInclude Include="..\..\src\FEM\classTags.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ColorMap.h">
+    <ClInclude Include="..\..\src\FEM\ColorMap.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\CompositeResponse.h">
+    <ClInclude Include="..\..\src\FEM\CompositeResponse.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ConstraintHandler.h">
+    <ClInclude Include="..\..\src\FEM\ConstraintHandler.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ConvergenceTest.h">
+    <ClInclude Include="..\..\src\FEM\ConvergenceTest.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\CrdTransf.h">
+    <ClInclude Include="..\..\src\FEM\CrdTransf.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\CTestNormDispIncr.h">
+    <ClInclude Include="..\..\src\FEM\CTestNormDispIncr.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DataFileStream.h">
+    <ClInclude Include="..\..\src\FEM\DataFileStream.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DataFileStreamAdd.h">
+    <ClInclude Include="..\..\src\FEM\DataFileStreamAdd.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DirectIntegrationAnalysis.h">
+    <ClInclude Include="..\..\src\FEM\DirectIntegrationAnalysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DispBeamColumn3d.h">
+    <ClInclude Include="..\..\src\FEM\DispBeamColumn3d.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DispBeamColumn3dWithSensitivity.h">
+    <ClInclude Include="..\..\src\FEM\DispBeamColumn3dWithSensitivity.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DOF_Group.h">
+    <ClInclude Include="..\..\src\FEM\DOF_Group.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DOF_GrpIter.h">
+    <ClInclude Include="..\..\src\FEM\DOF_GrpIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DOF_Numberer.h">
+    <ClInclude Include="..\..\src\FEM\DOF_Numberer.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Domain.h">
+    <ClInclude Include="..\..\src\FEM\Domain.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DomainComponent.h">
+    <ClInclude Include="..\..\src\FEM\DomainComponent.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DomainDecompositionAnalysis.h">
+    <ClInclude Include="..\..\src\FEM\DomainDecompositionAnalysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\DummyStream.h">
+    <ClInclude Include="..\..\src\FEM\DummyStream.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\EarthquakePattern.h">
+    <ClInclude Include="..\..\src\FEM\EarthquakePattern.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\EigenSOE.h">
+    <ClInclude Include="..\..\src\FEM\EigenSOE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElasticIsotropicMaterial.h">
+    <ClInclude Include="..\..\src\FEM\ElasticIsotropicMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElasticIsotropicPlaneStrain2D.h">
+    <ClInclude Include="..\..\src\FEM\ElasticIsotropicPlaneStrain2D.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElasticIsotropicThreeDimensional.h">
+    <ClInclude Include="..\..\src\FEM\ElasticIsotropicThreeDimensional.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElasticMaterial.h">
+    <ClInclude Include="..\..\src\FEM\ElasticMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElasticSection3d.h">
+    <ClInclude Include="..\..\src\FEM\ElasticSection3d.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Element.h">
+    <ClInclude Include="..\..\src\FEM\Element.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementalLoad.h">
+    <ClInclude Include="..\..\src\FEM\ElementalLoad.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementalLoadIter.h">
+    <ClInclude Include="..\..\src\FEM\ElementalLoadIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\elementAPI.h">
+    <ClInclude Include="..\..\src\FEM\elementAPI.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementIter.h">
+    <ClInclude Include="..\..\src\FEM\ElementIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementRecorder.h">
+    <ClInclude Include="..\..\src\FEM\ElementRecorder.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementResponse.h">
+    <ClInclude Include="..\..\src\FEM\ElementResponse.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ElementStateParameter.h">
+    <ClInclude Include="..\..\src\FEM\ElementStateParameter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\EquiSolnAlgo.h">
+    <ClInclude Include="..\..\src\FEM\EquiSolnAlgo.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ErrorHandler.h">
+    <ClInclude Include="..\..\src\FEM\ErrorHandler.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FEM_ObjectBroker.h">
+    <ClInclude Include="..\..\src\FEM\FEM_ObjectBroker.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FE_Datastore.h">
+    <ClInclude Include="..\..\src\FEM\FE_Datastore.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FE_EleIter.h">
+    <ClInclude Include="..\..\src\FEM\FE_EleIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FE_Element.h">
+    <ClInclude Include="..\..\src\FEM\FE_Element.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Fiber.h">
+    <ClInclude Include="..\..\src\FEM\Fiber.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FiberResponse.h">
+    <ClInclude Include="..\..\src\FEM\FiberResponse.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\File.h">
+    <ClInclude Include="..\..\src\FEM\File.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FileIter.h">
+    <ClInclude Include="..\..\src\FEM\FileIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FileStream.h">
+    <ClInclude Include="..\..\src\FEM\FileStream.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FrictionModel.h">
+    <ClInclude Include="..\..\src\FEM\FrictionModel.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\FrictionResponse.h">
+    <ClInclude Include="..\..\src\FEM\FrictionResponse.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\G3Globals.h">
+    <ClInclude Include="..\..\src\FEM\G3Globals.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Graph.h">
+    <ClInclude Include="..\..\src\FEM\Graph.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\GraphNumberer.h">
+    <ClInclude Include="..\..\src\FEM\GraphNumberer.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\GroundMotion.h">
+    <ClInclude Include="..\..\src\FEM\GroundMotion.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\HHT.h">
+    <ClInclude Include="..\..\src\FEM\HHT.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ID.h">
+    <ClInclude Include="..\..\src\FEM\ID.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ImposedMotionSP.h">
+    <ClInclude Include="..\..\src\FEM\ImposedMotionSP.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\IncrementalIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\IncrementalIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Information.h">
+    <ClInclude Include="..\..\src\FEM\Information.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Integrator.h">
+    <ClInclude Include="..\..\src\FEM\Integrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\J2CyclicBoundingSurface.h">
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LegendreBeamIntegration.h">
+    <ClInclude Include="..\..\src\FEM\LegendreBeamIntegration.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LinearCrdTransf3d.h">
+    <ClInclude Include="..\..\src\FEM\LinearCrdTransf3d.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LinearSeries.h">
+    <ClInclude Include="..\..\src\FEM\LinearSeries.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LinearSOE.h">
+    <ClInclude Include="..\..\src\FEM\LinearSOE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LinearSOESolver.h">
+    <ClInclude Include="..\..\src\FEM\LinearSOESolver.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Load.h">
+    <ClInclude Include="..\..\src\FEM\Load.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LoadControl.h">
+    <ClInclude Include="..\..\src\FEM\LoadControl.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LoadPattern.h">
+    <ClInclude Include="..\..\src\FEM\LoadPattern.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\LoadPatternIter.h">
+    <ClInclude Include="..\..\src\FEM\LoadPatternIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MapOfTaggedObjects.h">
+    <ClInclude Include="..\..\src\FEM\MapOfTaggedObjects.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MapOfTaggedObjectsIter.h">
+    <ClInclude Include="..\..\src\FEM\MapOfTaggedObjectsIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Material.h">
+    <ClInclude Include="..\..\src\FEM\Material.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MaterialResponse.h">
+    <ClInclude Include="..\..\src\FEM\MaterialResponse.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Matrix.h">
+    <ClInclude Include="..\..\src\FEM\Matrix.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MatrixUtil.h">
+    <ClInclude Include="..\..\src\FEM\MatrixUtil.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MeshRegion.h">
+    <ClInclude Include="..\..\src\FEM\MeshRegion.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Message.h">
+    <ClInclude Include="..\..\src\FEM\Message.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MovableObject.h">
+    <ClInclude Include="..\..\src\FEM\MovableObject.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MP_Constraint.h">
+    <ClInclude Include="..\..\src\FEM\MP_Constraint.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MP_ConstraintIter.h">
+    <ClInclude Include="..\..\src\FEM\MP_ConstraintIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\MultiSupportPattern.h">
+    <ClInclude Include="..\..\src\FEM\MultiSupportPattern.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NDMaterial.h">
+    <ClInclude Include="..\..\src\FEM\NDMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Newmark.h">
+    <ClInclude Include="..\..\src\FEM\Newmark.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NewtonRaphson.h">
+    <ClInclude Include="..\..\src\FEM\NewtonRaphson.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NodalLoad.h">
+    <ClInclude Include="..\..\src\FEM\NodalLoad.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NodalLoadIter.h">
+    <ClInclude Include="..\..\src\FEM\NodalLoadIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Node.h">
+    <ClInclude Include="..\..\src\FEM\Node.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NodeIter.h">
+    <ClInclude Include="..\..\src\FEM\NodeIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\NodeRecorder.h">
+    <ClInclude Include="..\..\src\FEM\NodeRecorder.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ObjectBroker.h">
+    <ClInclude Include="..\..\src\FEM\ObjectBroker.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\OPS_Globals.h">
+    <ClInclude Include="..\..\src\FEM\OPS_Globals.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\OPS_Stream.h">
+    <ClInclude Include="..\..\src\FEM\OPS_Stream.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Parameter.h">
+    <ClInclude Include="..\..\src\FEM\Parameter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ParameterIter.h">
+    <ClInclude Include="..\..\src\FEM\ParameterIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PathSeries.h">
+    <ClInclude Include="..\..\src\FEM\PathSeries.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PathTimeSeries.h">
+    <ClInclude Include="..\..\src\FEM\PathTimeSeries.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PenaltyConstraintHandler.h">
+    <ClInclude Include="..\..\src\FEM\PenaltyConstraintHandler.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PenaltyMP_FE.h">
+    <ClInclude Include="..\..\src\FEM\PenaltyMP_FE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PenaltySP_FE.h">
+    <ClInclude Include="..\..\src\FEM\PenaltySP_FE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PlainMap.h">
+    <ClInclude Include="..\..\src\FEM\PlainMap.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PlainNumberer.h">
+    <ClInclude Include="..\..\src\FEM\PlainNumberer.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PlaneStrainMaterial.h">
+    <ClInclude Include="..\..\src\FEM\PlaneStrainMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PlaneStressMaterial.h">
+    <ClInclude Include="..\..\src\FEM\PlaneStressMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PlateFiberMaterial.h">
+    <ClInclude Include="..\..\src\FEM\PlateFiberMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PM4Sand.h">
+    <ClInclude Include="..\..\src\FEM\PM4Sand.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PM4Silt.h">
+    <ClInclude Include="..\..\src\FEM\PM4Silt.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Pressure_Constraint.h">
+    <ClInclude Include="..\..\src\FEM\Pressure_Constraint.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Pressure_ConstraintIter.h">
+    <ClInclude Include="..\..\src\FEM\Pressure_ConstraintIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\PySimple1.h">
+    <ClInclude Include="..\..\src\FEM\PySimple1.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\QzSimple1.h">
+    <ClInclude Include="..\..\src\FEM\QzSimple1.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\RCM.h">
+    <ClInclude Include="..\..\src\FEM\RCM.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Recorder.h">
+    <ClInclude Include="..\..\src\FEM\Recorder.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Renderer.h">
+    <ClInclude Include="..\..\src\FEM\Renderer.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Response.h">
+    <ClInclude Include="..\..\src\FEM\Response.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SectionForceDeformation.h">
+    <ClInclude Include="..\..\src\FEM\SectionForceDeformation.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\shp3d.h">
+    <ClInclude Include="..\..\src\FEM\shp3d.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SimpsonTimeSeriesIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\SimpsonTimeSeriesIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SimulationInformation.h">
+    <ClInclude Include="..\..\src\FEM\SimulationInformation.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomAllSP_Iter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomAllSP_Iter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomEleIter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomEleIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomMP_Iter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomMP_Iter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomNodIter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomNodIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomParamIter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomParamIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomPC_Iter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomPC_Iter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SingleDomSP_Iter.h">
+    <ClInclude Include="..\..\src\FEM\SingleDomSP_Iter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SolutionAlgorithm.h">
+    <ClInclude Include="..\..\src\FEM\SolutionAlgorithm.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SP_Constraint.h">
+    <ClInclude Include="..\..\src\FEM\SP_Constraint.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SP_ConstraintIter.h">
+    <ClInclude Include="..\..\src\FEM\SP_ConstraintIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SSPbrick.h">
+    <ClInclude Include="..\..\src\FEM\SSPbrick.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SSPbrickUP.h">
+    <ClInclude Include="..\..\src\FEM\SSPbrickUP.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SSPquad.h">
+    <ClInclude Include="..\..\src\FEM\SSPquad.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SSPquadUP.h">
+    <ClInclude Include="..\..\src\FEM\SSPquadUP.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\StandardStream.h">
+    <ClInclude Include="..\..\src\FEM\StandardStream.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\StaticAnalysis.h">
+    <ClInclude Include="..\..\src\FEM\StaticAnalysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\StaticIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\StaticIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\StringContainer.h">
+    <ClInclude Include="..\..\src\FEM\StringContainer.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Subdomain.h">
+    <ClInclude Include="..\..\src\FEM\Subdomain.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\SubdomainNodIter.h">
+    <ClInclude Include="..\..\src\FEM\SubdomainNodIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TaggedObject.h">
+    <ClInclude Include="..\..\src\FEM\TaggedObject.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TaggedObjectIter.h">
+    <ClInclude Include="..\..\src\FEM\TaggedObjectIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TaggedObjectStorage.h">
+    <ClInclude Include="..\..\src\FEM\TaggedObjectStorage.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TimeSeries.h">
+    <ClInclude Include="..\..\src\FEM\TimeSeries.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TimeSeriesIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\TimeSeriesIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TransformationConstraintHandler.h">
+    <ClInclude Include="..\..\src\FEM\TransformationConstraintHandler.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TransformationDOF_Group.h">
+    <ClInclude Include="..\..\src\FEM\TransformationDOF_Group.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TransformationFE.h">
+    <ClInclude Include="..\..\src\FEM\TransformationFE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TransientAnalysis.h">
+    <ClInclude Include="..\..\src\FEM\TransientAnalysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TransientIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\TransientIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TrapezoidalTimeSeriesIntegrator.h">
+    <ClInclude Include="..\..\src\FEM\TrapezoidalTimeSeriesIntegrator.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\TzSimple1.h">
+    <ClInclude Include="..\..\src\FEM\TzSimple1.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\UmfpackGenLinSOE.h">
+    <ClInclude Include="..\..\src\FEM\UmfpackGenLinSOE.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\UmfpackGenLinSolver.h">
+    <ClInclude Include="..\..\src\FEM\UmfpackGenLinSolver.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\UniaxialMaterial.h">
+    <ClInclude Include="..\..\src\FEM\UniaxialMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\UniformExcitation.h">
+    <ClInclude Include="..\..\src\FEM\UniformExcitation.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\VariableTimeStepDirectIntegrationAnalysis.h">
+    <ClInclude Include="..\..\src\FEM\VariableTimeStepDirectIntegrationAnalysis.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Vector.h">
+    <ClInclude Include="..\..\src\FEM\Vector.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\Vertex.h">
+    <ClInclude Include="..\..\src\FEM\Vertex.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\VertexIter.h">
+    <ClInclude Include="..\..\src\FEM\VertexIter.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ViscousMaterial.h">
+    <ClInclude Include="..\..\src\FEM\ViscousMaterial.h">
       <Filter>FEM</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\FEM\ZeroLength.h">
+    <ClInclude Include="..\..\src\FEM\ZeroLength.h">
       <Filter>FEM</Filter>
     </ClInclude>
   </ItemGroup>
