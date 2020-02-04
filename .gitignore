@@ -19,3 +19,10 @@ VS/.vs
 *.obj
 *.idb
 SiteResponse.log
+VS/lib/release/ifconsol.lib
+VS/lib/release/libdecimal.lib
+VS/lib/release/libifcoremt.lib
+VS/lib/release/libifport.lib
+VS/lib/release/libirc.lib
+VS/lib/release/libmmt.lib
+VS/lib/release/svml_dispmt.lib

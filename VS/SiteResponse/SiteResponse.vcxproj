@@ -32,7 +32,6 @@
     <ClCompile Include="..\..\src\SiteResponse\outcropMotion.cpp" />
     <ClCompile Include="..\..\src\SiteResponse\siteLayering.cpp" />
     <ClCompile Include="..\..\src\SiteResponse\soillayer.cpp" />
-    <ClCompile Include="..\..\src\Utilities\ConfigIO.cpp" />
     <ClCompile Include="..\..\src\Utilities\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Utilities\DefaultConfig.cpp" />
     <ClCompile Include="..\..\src\Utilities\GeneralUtilities.cpp" />
