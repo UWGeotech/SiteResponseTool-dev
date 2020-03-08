@@ -57,6 +57,15 @@ SoilLayer::getMatPoissonRatio()
 }
 
 double
+SoilLayer::getMatElasticModulus()
+{
+	double G = getMatShearModulus();
+	double K = getMatBulkModulus();
+
+	return (9*K*G)/(3*K+G);
+}
+
+double
 SoilLayer::getNaturalPeriod()
 {
 	return 4.0 * sl_thickness / sl_vs;

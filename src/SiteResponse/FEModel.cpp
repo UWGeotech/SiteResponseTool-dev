@@ -224,11 +224,11 @@ SiteResponseModel::runTotalStressModel3DLotung()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		//theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		//theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
-		//theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
+		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
+		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
 		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
-		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 3.845521e+08, 0.48, 1850.0);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 3.845521e+08, 0.48, 1850.0);
 
 		OPS_addNDMaterial(theMat);
 
@@ -609,12 +609,16 @@ SiteResponseModel::runTotalStressModel3D()
 	{
 		// get properties for this layer 
 		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
+		
+		// TEMPORARY - J2CyclicBoundingModel Example 
+		//theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
+		//theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
+		//theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
 
-		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
-		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
-		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0 + theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		// TEMPORARY - Elastic Example
 		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 3.845521e+08, 0.48, 1850.0);
+		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0 + theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
+		theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, theLayer.getMatElasticModulus(), theLayer.getMatPoissonRatio(), theLayer.getRho());
 		
 		OPS_addNDMaterial(theMat);
 
@@ -646,12 +650,12 @@ SiteResponseModel::runTotalStressModel3D()
 		{
 			int node1Tag = 4 * (nElem + elemCount);
 
-			
+			// SSPBrick Element
 			theEle = new SSPbrick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5, 
 				node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -program_config->getFloatProperty("Units|g") * theMat->getRho(), 0.0);
-
 			theDomain->addElement(theEle);
 
+			// Brick Element
 			//theEle = new Brick(nElem + elemCount + 1, node1Tag + 1, node1Tag + 2, node1Tag + 3, node1Tag + 4, node1Tag + 5,
 			//	node1Tag + 6, node1Tag + 7, node1Tag + 8, *theMat, 0.0, -program_config->getFloatProperty("Units|g") * theMat->getRho()*1.0, 0.0);
 			//theDomain->addElement(theEle);
@@ -1052,7 +1056,6 @@ SiteResponseModel::runTotalStressModel3D()
 	// FE mesh - perform analysis
 	opserr << "Analysis started:" << endln;
 	std::stringstream progressBar;
-	numSteps = 1777;
 	for (int analysisCount = 0; analysisCount < numSteps; ++analysisCount) {
 		//int converged = theAnalysis->analyze(1, 0.01, 0.005, 0.02, 1);
 		double stepDT = dt[analysisCount];

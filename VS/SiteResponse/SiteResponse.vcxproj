@@ -207,7 +207,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;..\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;..\lib\release;C:\Program Files %28x86%29\IntelSWTools\compilers_and_libraries_2018.2.185\windows\compiler\lib\intel64_win;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>arpack.lib;blas.lib;cblas.lib;cssparse.lib;ifconsol.lib;lapack.lib;libifcoremt.lib;libmmt.lib;sdmuc.lib;superLU.lib;umfpackC.lib;wsock32.lib;libSeq_c.lib;libseq_fortran.lib;pord_c.lib;AMD.lib;FEM.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ShowProgress>NotSet</ShowProgress>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>

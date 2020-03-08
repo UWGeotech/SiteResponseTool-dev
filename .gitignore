@@ -16,6 +16,7 @@ VS/.vs
 *.pdb
 *.user
 *.tlog
+*.log
 *.obj
 *.idb
 SiteResponse.log
