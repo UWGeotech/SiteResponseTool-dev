@@ -32,7 +32,6 @@
     <ClCompile Include="..\..\src\SiteResponse\outcropMotion.cpp" />
     <ClCompile Include="..\..\src\SiteResponse\siteLayering.cpp" />
     <ClCompile Include="..\..\src\SiteResponse\soillayer.cpp" />
-    <ClCompile Include="..\..\src\Utilities\ConfigIO.cpp" />
     <ClCompile Include="..\..\src\Utilities\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Utilities\DefaultConfig.cpp" />
     <ClCompile Include="..\..\src\Utilities\GeneralUtilities.cpp" />
@@ -143,13 +142,13 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)\..\SiteResponse;$(SolutionDir)\..\FEM;$(SolutionDir)\..\Utilities;$(SolutionDir)\..\ThirdParty\AMD;$(SolutionDir)\..\ThirdParty\UMFPACK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\src\SiteResponse;$(SolutionDir)\..\src\FEM;$(SolutionDir)\..\src\Utilities;$(SolutionDir)\..\ThirdParty\AMD;$(SolutionDir)\..\ThirdParty\UMFPACK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;_CRT_SECURE_NO_WARNINGS;_bool_h;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Progra~2\IntelSWTools\compilers_and_libraries\windows\mkl\lib\intel64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>mkl_intel_lp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_lapack95_lp64.lib;mkl_blas95_lp64.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OutDir);C:\Progra~2\IntelSWTools\compilers_and_libraries\windows\mkl\lib\intel64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FEM.lib;AMD.lib;UmfPackF.lib;UmfPackC.lib;mkl_intel_lp64.lib;mkl_sequential.lib;mkl_core.lib;mkl_lapack95_lp64.lib;mkl_blas95_lp64.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
     </Link>
     <CustomBuildStep>
