@@ -7,9 +7,9 @@ AR  = ar
 RANLIB = ranlib
 RM  = rm
 
-CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3 -ffloat-store -std=c++11
-FFNOPTFLAG = -Wall -O
-CCOPTFLAG  = -Wall -Wno-reorder -O2
+CXXOPTFLAG = -Wall -D_LINUX -D_UNIX -Wno-reorder -O3  -ffloat-store -std=c++11
+FFNOPTFLAG = -Wall -O3
+CCOPTFLAG  = -Wall -Wno-reorder -O3
 ARFLAGS = rv
 RANLIBFLAGS = 
 RMFLAGS = -fr
@@ -18,7 +18,7 @@ LINCLUDE = -I$(source) \
 	   -I$(source)/src/FEM \
 	   -I$(source)/src/SiteResponse \
 	   -I$(source)/src/Utilities \
-           -I$(source)/ThirdParty/AMD \
+	   -I$(source)/ThirdParty/AMD \
 	   -I$(source)/ThirdParty/UMFPACK
 
 MINCLUDE = -I/usr/include 

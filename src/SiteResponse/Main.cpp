@@ -23,6 +23,8 @@
 #include "ConfigManager.h"
 #include "SRT_Globals.h"
 
+#include "SiteGeometry.h"
+
 StandardStream sserr;
 FileStream ferr("log");
 OPS_Stream *opserrPtr = &ferr;
@@ -45,6 +47,16 @@ SiteLayering setupDummyLayers()
 
 int main(int argc, char** argv)
 {
+
+	SiteGeometry gm("test.json");
+
+	int num_layers = gm.getNumLayers();
+	for (int ii = 0; ii < num_layers; ii++)
+	{
+		GeometryLayer temp = gm.getLayer(ii);
+		std::cout << "This layer is " << temp.get_tag() << " which is " << temp.get_thickess() << " ft thick and is modeled with " << temp.get_material_tag() << std::endl;
+	}
+
 
 	if (argc < 3)
 	{
