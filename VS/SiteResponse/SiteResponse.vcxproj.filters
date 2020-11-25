@@ -21,6 +21,43 @@
     <ClCompile Include="..\..\src\Utilities\JsonReader.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\GeometryBase.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\GeometryFile_Reader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\GeometryLayer.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\GeometryLayer_Library.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\JsonMaterialFile_Reader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\JsonSiteGeometryFile_Reader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\LayerMaterial.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\LayerMaterialLibrary.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\MaterialFile_Reader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\MaterialManager.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\SiteGeometry.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\SiteGeometryFile_Reader.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Utilities\NDMaterialFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SiteResponse\soillayer.h" />
@@ -45,6 +82,46 @@
     <ClInclude Include="..\..\src\Utilities\JsonReader.h">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\GeometryBase.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\GeometryFile_Reader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\GeometryLayer.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\GeometryLayer_Library.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\json.hpp">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\JsonMaterialFile_Reader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\JsonSiteGeometryFile_Reader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\LayerMaterial.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\LayerMaterialLibrary.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\MaterialFile_Reader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\MaterialManager.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\SiteGeometry.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\SiteGeometryFile_Reader.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Utilities\NDMaterialFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utilities">

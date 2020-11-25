@@ -35,8 +35,21 @@
     <ClCompile Include="..\..\src\Utilities\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Utilities\DefaultConfig.cpp" />
     <ClCompile Include="..\..\src\Utilities\GeneralUtilities.cpp" />
+    <ClCompile Include="..\..\src\Utilities\GeometryBase.cpp" />
+    <ClCompile Include="..\..\src\Utilities\GeometryFile_Reader.cpp" />
+    <ClCompile Include="..\..\src\Utilities\GeometryLayer.cpp" />
+    <ClCompile Include="..\..\src\Utilities\GeometryLayer_Library.cpp" />
     <ClCompile Include="..\..\src\Utilities\JsonConfig.cpp" />
+    <ClCompile Include="..\..\src\Utilities\JsonMaterialFile_Reader.cpp" />
     <ClCompile Include="..\..\src\Utilities\JsonReader.cpp" />
+    <ClCompile Include="..\..\src\Utilities\JsonSiteGeometryFile_Reader.cpp" />
+    <ClCompile Include="..\..\src\Utilities\LayerMaterial.cpp" />
+    <ClCompile Include="..\..\src\Utilities\LayerMaterialLibrary.cpp" />
+    <ClCompile Include="..\..\src\Utilities\MaterialFile_Reader.cpp" />
+    <ClCompile Include="..\..\src\Utilities\MaterialManager.cpp" />
+    <ClCompile Include="..\..\src\Utilities\NDMaterialFactory.cpp" />
+    <ClCompile Include="..\..\src\Utilities\SiteGeometry.cpp" />
+    <ClCompile Include="..\..\src\Utilities\SiteGeometryFile_Reader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SiteResponse\FEModel.h" />
@@ -47,8 +60,22 @@
     <ClInclude Include="..\..\src\Utilities\ConfigManager.h" />
     <ClInclude Include="..\..\src\Utilities\DefaultConfig.h" />
     <ClInclude Include="..\..\src\Utilities\FileReader.h" />
+    <ClInclude Include="..\..\src\Utilities\GeometryBase.h" />
+    <ClInclude Include="..\..\src\Utilities\GeometryFile_Reader.h" />
+    <ClInclude Include="..\..\src\Utilities\GeometryLayer.h" />
+    <ClInclude Include="..\..\src\Utilities\GeometryLayer_Library.h" />
+    <ClInclude Include="..\..\src\Utilities\json.hpp" />
     <ClInclude Include="..\..\src\Utilities\JsonConfig.h" />
+    <ClInclude Include="..\..\src\Utilities\JsonMaterialFile_Reader.h" />
     <ClInclude Include="..\..\src\Utilities\JsonReader.h" />
+    <ClInclude Include="..\..\src\Utilities\JsonSiteGeometryFile_Reader.h" />
+    <ClInclude Include="..\..\src\Utilities\LayerMaterial.h" />
+    <ClInclude Include="..\..\src\Utilities\LayerMaterialLibrary.h" />
+    <ClInclude Include="..\..\src\Utilities\MaterialFile_Reader.h" />
+    <ClInclude Include="..\..\src\Utilities\MaterialManager.h" />
+    <ClInclude Include="..\..\src\Utilities\NDMaterialFactory.h" />
+    <ClInclude Include="..\..\src\Utilities\SiteGeometry.h" />
+    <ClInclude Include="..\..\src\Utilities\SiteGeometryFile_Reader.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

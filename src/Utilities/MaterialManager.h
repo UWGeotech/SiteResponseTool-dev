@@ -2,8 +2,10 @@
 #define MATERIALMANAGER_H
 
 #include <string> 
+#include <iostream>
 
 #include "LayerMaterialLibrary.h"
+#include "NDMaterialFactory.h"
 #include "NDMaterial.h"
 
 class MaterialManager
@@ -15,11 +17,13 @@ public:
 	~MaterialManager();
 
 	LayerMaterial get_material_from_library(std::string tag) { return _material_lib.get_material(tag); };
-	NDMaterial get_layer_material(std::string tag);
+	NDMaterial* get_layer_material(std::string tag);
 
 private:
 	LayerMaterialLibrary _material_lib;
-	std::map<std::string, NDMaterial> _ndmaterial_store;
+	std::map<std::string, NDMaterial*> _ndmaterial_store;
+	NDMaterial* create_NDMaterial(LayerMaterial layer_mat);
+	NDMaterialFactory mat_factory;
 };
 
 #endif // !defien MATERIALMANAGER_H
