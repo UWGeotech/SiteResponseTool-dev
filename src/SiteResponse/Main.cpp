@@ -12,6 +12,7 @@
 ** ********************************************************************* */
 
 #include <iostream>
+#include <experimental/filesystem>
 #include "FEModel.h"
 #include "siteLayering.h"
 #include "soillayer.h"
@@ -23,7 +24,6 @@
 #include "ConfigManager.h"
 #include "SRT_Globals.h"
 
-#include "SiteGeometry.h"
 
 StandardStream sserr;
 FileStream ferr("log");
@@ -31,6 +31,8 @@ OPS_Stream *opserrPtr = &ferr;
 OPS_Stream *opsoutPtr = &sserr;
 
 ConfigManager* program_config;
+SiteGeometry* site_geometry;
+MaterialManager* material_manager;
 
 SiteLayering setupDummyLayers()
 {
@@ -48,20 +50,9 @@ SiteLayering setupDummyLayers()
 int main(int argc, char** argv)
 {
 
-	SiteGeometry gm("test.json");
-
-	int num_layers = gm.getNumLayers();
-	for (int ii = 0; ii < num_layers; ii++)
-	{
-		GeometryLayer temp = gm.getLayer(ii);
-		std::cout << "This layer is " << temp.get_tag() << " which is " << temp.get_thickess() << " ft thick and is modeled with " << temp.get_material_tag() << std::endl;
-	}
-
-
 	if (argc < 3)
 	{
 		opserr << ">>> SiteResponseTool: Not enough arguments. <<<" << endln;
-		std::getchar();
 		exit(-1);
 	}
 
@@ -105,10 +96,21 @@ int main(int argc, char** argv)
 
 	program_config = ConfigManager::get_Instance();
 
+	site_geometry = new SiteGeometry(program_config->getStringProperty("Input|SiteGeometry"));
+	material_manager = new MaterialManager(program_config->getStringProperty("Input|MaterialLibrary"));
+
+	int num_layers = site_geometry->getNumLayers();
+	for (int ii = 0; ii < num_layers; ii++)
+	{
+		GeometryLayer temp = site_geometry->getLayer(ii);
+		std::cout << "This layer is " << temp.get_tag() << " which is " << temp.get_thickess() << " ft thick and is modeled with " << temp.get_material_tag() << std::endl;
+	}
+
+
 	SiteResponseModel model(siteLayers, &motionX, &motionY, &motionZ);
 	model.setOutputDir(bbpOName);
-	//model.runEffectiveStressModel2D();
-	model.runTotalStressModel3D();
+	model.runEffectiveStressModel2D();
+	//model.runTotalStressModel3D();
 	//model.runTotalStressModel3DLotung();
 
 	return 0;

@@ -3,17 +3,20 @@
 
 LayerMaterialLibrary::LayerMaterialLibrary()
 {
+	_num_mat = 0;
 	material_file = NULL;
 }
 
 LayerMaterialLibrary::LayerMaterialLibrary(std::string materialLib_fn)
 {
 	read_material_file(materialLib_fn);
+	_num_mat = material_library.size();
 }
 
 LayerMaterialLibrary::LayerMaterialLibrary(std::string materialLib_fn, std::string filetype)
 {
 	read_material_file(materialLib_fn, filetype);
+	_num_mat = material_library.size();
 }
 
 LayerMaterialLibrary::~LayerMaterialLibrary()

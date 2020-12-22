@@ -510,14 +510,14 @@ SiteResponseModel::runTotalStressModel3D()
 	std::vector<double> layerElemSize;
 
 	// setup the geometry and mesh parameters
-	int numLayers = SRM_layering.getNumLayers();
+	int numLayers = site_geometry->getNumLayers();
 	int numElems = 0;
 	int numNodes = 0;
 
 	// loop over the layers and setup the mesh
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
-		double thisLayerThick = SRM_layering.getLayer(layerCount).getThickness();
+		double thisLayerThick = site_geometry->getLayer(layerCount).get_thickess();
 		double thisLayerVS = SRM_layering.getLayer(layerCount).getShearVelocity();
 		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
 
@@ -538,7 +538,7 @@ SiteResponseModel::runTotalStressModel3D()
 		numNodes += 4 * (thisLayerNumEle + (layerCount == 0));
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
-			opserr << "Layer " << SRM_layering.getLayer(layerCount).getName().c_str() << " : Num Elements = " << thisLayerNumEle
+			opserr << "Layer " << site_geometry->getLayer(layerCount).get_tag().c_str() << " : Num Elements = " << thisLayerNumEle
 			<< "(" << thisLayerThick / thisLayerNumEle << "), "
 			<< ", Num Nodes = " << 4 * (thisLayerNumEle + (layerCount == 0)) << endln;
 	}
@@ -548,10 +548,10 @@ SiteResponseModel::runTotalStressModel3D()
 
 	double yCoord = 0.0;
 	int nCount = 0;
-	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	for (int layerCount = numLayers - 1; layerCount > -1; --layerCount)
 	{
 		if (program_config->getBooleanProperty("General|PrintDebug"))
-			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+			opserr << "layer : " << site_geometry->getLayer(layerCount).get_tag().c_str() << " - Number of Elements = "
 			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 			<< " - Element Thickness = " << layerElemSize[layerCount] << endln;
 
@@ -604,27 +604,23 @@ SiteResponseModel::runTotalStressModel3D()
 
 	// FE mesh - create the materials
 	NDMaterial* theMat;
-	SoilLayer theLayer;
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	GeometryLayer theLayer;
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
 		// get properties for this layer 
-		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-
-		theMat = new J2CyclicBoundingSurface(numLayers - layerCount - 1, theLayer.getMatShearModulus(), theLayer.getMatBulkModulus(),
-		theLayer.getSu(), theLayer.getRho(), theLayer.getMat_h()*theLayer.getMatShearModulus(), theLayer.getMat_m(),
-		theLayer.getMat_h0()*theLayer.getMatShearModulus(), theLayer.getMat_chi(), 0.5);
-		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0 + theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
-		//theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 3.845521e+08, 0.48, 1850.0);
+		theLayer = site_geometry->getLayer(numLayers - layerCount - 1);
+		theMat = material_manager->get_layer_material(theLayer.get_material_tag(), numLayers - layerCount - 1);
 		
 		OPS_addNDMaterial(theMat);
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
 		{
-			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
+			LayerMaterial layer_mat = material_manager->get_material_from_library(theLayer.get_material_tag());
+			opserr << "Material " << theLayer.get_material_tag().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
 			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
-			opserr << "ID =" << numLayers - layerCount - 1 << ", Go = " << theLayer.getMatShearModulus() << ", K = " << theLayer.getMatBulkModulus()
-				<< ", Su = " << theLayer.getSu() << ", rho = " << theLayer.getRho() << ", h = " << theLayer.getMat_h() << ", m = " << theLayer.getMat_m()
-				<< ", ho = " << theLayer.getMat_h0() << ", chi = " << theLayer.getMat_chi() << endln;
+			opserr << "ID =" << numLayers - layerCount - 1 << ", Go = " << layer_mat.get_prperty("G").c_str() << ", K = " << layer_mat.get_prperty("K").c_str()
+				<< ", Su = " << layer_mat.get_prperty("su").c_str() << ", rho = " << layer_mat.get_prperty("rho").c_str() << ", h = " << layer_mat.get_prperty("h").c_str() << ", m = " << layer_mat.get_prperty("m").c_str()
+				<< ", ho = " << layer_mat.get_prperty("h0").c_str() << ", chi = " << layer_mat.get_prperty("chi").c_str() << endln;
 		}
 	}
 
@@ -639,10 +635,10 @@ SiteResponseModel::runTotalStressModel3D()
 
 	int nElem = 0;
 
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
 		theMat = OPS_getNDMaterial(numLayers - layerCount - 1);
-		for (int elemCount = 0; elemCount < layerNumElems[numLayers - layerCount - 2]; ++elemCount)
+		for (int elemCount = 0; elemCount < layerNumElems[numLayers - layerCount - 1]; ++elemCount)
 		{
 			int node1Tag = 4 * (nElem + elemCount);
 
@@ -664,7 +660,7 @@ SiteResponseModel::runTotalStressModel3D()
 			if (program_config->getBooleanProperty("General|PrintDebug"))
 				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << ", Gamma = " << -program_config->getFloatProperty("Units|g") * theMat->getRho() << endln;
 		}
-		nElem += layerNumElems[numLayers - layerCount - 2];
+		nElem += layerNumElems[numLayers - layerCount - 1];
 	}
 
 	if (program_config->getBooleanProperty("General|PrintDebug"))
@@ -1003,7 +999,7 @@ SiteResponseModel::runTotalStressModel3D()
 
 	// recorder for bottom of layers if IOStr = true
 	nCount = 0;
-	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	for (int layerCount = numLayers - 1; layerCount > -1; --layerCount)
 	{
 		opserr << "layer_IO : " << SRM_layering.getLayer(layerCount).get_IO() << endln;
 		nodesToRecord(0) = nCount + 1;
@@ -1011,21 +1007,21 @@ SiteResponseModel::runTotalStressModel3D()
 		{
 			//nodesToRecord(0) = nCount + 1;
 
-			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+			opserr << "layer : " << site_geometry->getLayer(layerCount).get_tag().c_str() << " - Number of Elements = "
 				<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 				<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
 
-			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".acc";
 			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
 			theDomain->addRecorder(*theRecorder);
 
-			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".vel";
 			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
 			theDomain->addRecorder(*theRecorder);
 
-			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+			outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".disp";
 			theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 			theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
 			theDomain->addRecorder(*theRecorder);
@@ -1137,14 +1133,14 @@ SiteResponseModel::runEffectiveStressModel2D()
 	std::vector<double> layerElemSize;
 
 	// setup the geometry and mesh parameters
-	int numLayers = SRM_layering.getNumLayers();
+	int numLayers = site_geometry->getNumLayers();
 	int numElems = 0;
 	int numNodes = 0;
 
 	// loop over the layers and setup the mesh
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
-		double thisLayerThick = SRM_layering.getLayer(layerCount).getThickness();
+		double thisLayerThick = site_geometry->getLayer(layerCount).get_thickess();
 		double thisLayerVS = SRM_layering.getLayer(layerCount).getShearVelocity();
 		double thisLayerMinWL = thisLayerVS / program_config->getFloatProperty("Meshing|MaxFrequency");
 
@@ -1161,10 +1157,10 @@ SiteResponseModel::runEffectiveStressModel2D()
 
 		// add up number of elements and nodes
 		numElems += thisLayerNumEle;
-		numNodes += 2 * (thisLayerNumEle + (layerCount == numLayers - 2));
+		numNodes += 2 * (thisLayerNumEle + (layerCount == 0));
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
-			opserr << "Layer " << SRM_layering.getLayer(layerCount).getName().c_str() << " : Num Elements = " << thisLayerNumEle
+			opserr << "Layer " << site_geometry->getLayer(layerCount).get_tag().c_str() << " : Num Elements = " << thisLayerNumEle
 			   << "(" << thisLayerThick / thisLayerNumEle << "), "
 			   << ", Num Nodes = " << 2 * (thisLayerNumEle + (layerCount == 0)) << endln;
 	}
@@ -1174,10 +1170,10 @@ SiteResponseModel::runEffectiveStressModel2D()
 
 	double yCoord = 0.0;
 	int nCount = 0;
-	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	for (int layerCount = numLayers - 1; layerCount > -1; --layerCount)
 	{
 		if (program_config->getBooleanProperty("General|PrintDebug"))
-			opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+			opserr << "layer : " << site_geometry->getLayer(layerCount).get_tag().c_str() << " - Number of Elements = "
 			<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 			<< " - Element Thickness = " << layerElemSize[layerCount] << endln;
 		
@@ -1221,19 +1217,22 @@ SiteResponseModel::runEffectiveStressModel2D()
 
 	// FE mesh - create the materials
 	NDMaterial* theMat;
-	SoilLayer theLayer;
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	GeometryLayer theLayer;
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
 		// get properties for this layer 
-		theLayer = (SRM_layering.getLayer(numLayers - layerCount - 2));
-		// theMat = new ElasticIsotropicMaterial(numLayers - layerCount - 1, 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()), theLayer.getMatPoissonRatio(), theLayer.getRho());
-		theMat = new PM4Sand(numLayers - layerCount - 1, 0.7, 200.0, 1.5, theLayer.getRho());
+		theLayer = site_geometry->getLayer(numLayers - layerCount - 1);
+		theMat = material_manager->get_layer_material(theLayer.get_material_tag(), numLayers - layerCount - 1);
 		OPS_addNDMaterial(theMat);
 
 		if (program_config->getBooleanProperty("General|PrintDebug"))
 		{
-			opserr << "Material " << theLayer.getName().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
-			opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			LayerMaterial layer_mat = material_manager->get_material_from_library(theLayer.get_material_tag());
+			opserr << "Material " << theLayer.get_material_tag().c_str() << " tag = " << numLayers - layerCount - 1 << endln;
+			//opserr << "        nu = " << theLayer.getMatPoissonRatio() << ", E = " << 2.0 * theLayer.getMatShearModulus()*(1.0+theLayer.getMatPoissonRatio()) << endln;
+			opserr << "ID =" << numLayers - layerCount - 1 << ", Go = " << layer_mat.get_prperty("G").c_str() << ", K = " << layer_mat.get_prperty("K").c_str()
+				<< ", Su = " << layer_mat.get_prperty("su").c_str() << ", rho = " << layer_mat.get_prperty("rho").c_str() << ", h = " << layer_mat.get_prperty("h").c_str() << ", m = " << layer_mat.get_prperty("m").c_str()
+				<< ", ho = " << layer_mat.get_prperty("h0").c_str() << ", chi = " << layer_mat.get_prperty("chi").c_str() << endln;
 		}
 	}
 
@@ -1248,10 +1247,10 @@ SiteResponseModel::runEffectiveStressModel2D()
 
 	int nElem = 0;
 
-	for (int layerCount = 0; layerCount < numLayers - 1; ++layerCount)
+	for (int layerCount = 0; layerCount < numLayers; ++layerCount)
 	{
 		theMat = OPS_getNDMaterial(numLayers - layerCount - 1);
-		for (int elemCount = 0; elemCount < layerNumElems[numLayers - layerCount - 2]; ++elemCount)
+		for (int elemCount = 0; elemCount < layerNumElems[numLayers - layerCount - 1]; ++elemCount)
 		{
 			int node1Tag = 2 * (nElem + elemCount);
 			
@@ -1267,7 +1266,7 @@ SiteResponseModel::runEffectiveStressModel2D()
 			if (program_config->getBooleanProperty("General|PrintDebug"))
 				opserr << "Element " << nElem + elemCount + 1 << ": Nodes = " << node1Tag + 1 << " to " << node1Tag + 8 << "  - Mat tag = " << numLayers - layerCount - 1 << endln;
 		}
-		nElem += layerNumElems[numLayers - layerCount - 2];
+		nElem += layerNumElems[numLayers - layerCount - 1];
 	}
 
 	if (program_config->getBooleanProperty("General|PrintDebug"))
@@ -1489,26 +1488,26 @@ SiteResponseModel::runEffectiveStressModel2D()
 
 	// recorder for bottom of layers
 	nCount = 0;
-	for (int layerCount = numLayers - 2; layerCount > -1; --layerCount)
+	for (int layerCount = numLayers - 1; layerCount > -1; --layerCount)
 	{		
 		nodesToRecord(0) = nCount + 1;
 
 		
-		opserr << "layer : " << SRM_layering.getLayer(layerCount).getName().c_str() << " - Number of Elements = "
+		opserr << "layer : " << site_geometry->getLayer(layerCount).get_tag().c_str() << " - Number of Elements = "
 		<< layerNumElems[layerCount] << " - Number of Nodes = " << layerNumNodes[layerCount]
 		<< " - Element Thickness = " << layerElemSize[layerCount] << ", nodes being recorded: " << nodesToRecord << endln;
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".acc";
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".acc";
 		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "accel", *theDomain, *theOutputStream, 0.0, true, NULL);
 		theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".vel";
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".vel";
 		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "vel", *theDomain, *theOutputStream, 0.0, true, NULL);
 		theDomain->addRecorder(*theRecorder);
 
-		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + SRM_layering.getLayer(layerCount).getName().c_str() + ".disp";
+		outFile = theOutputDir + PATH_SEPARATOR + std::to_string(layerCount + 1) + "_" + site_geometry->getLayer(layerCount).get_tag().c_str() + ".disp";
 		theOutputStream = new DataFileStream(outFile.c_str(), OVERWRITE, 2, 0, false, 6, false);
 		theRecorder = new NodeRecorder(dofToRecord, &nodesToRecord, 0, "disp", *theDomain, *theOutputStream, 0.0, true, NULL);
 		theDomain->addRecorder(*theRecorder);

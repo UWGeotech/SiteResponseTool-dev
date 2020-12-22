@@ -57,7 +57,9 @@
     <ClCompile Include="..\..\src\Utilities\SiteGeometryFile_Reader.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Utilities\NDMaterialFactory.cpp" />
+    <ClCompile Include="..\..\src\Utilities\NDMaterialFactory.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SiteResponse\soillayer.h" />
@@ -121,7 +123,10 @@
     <ClInclude Include="..\..\src\Utilities\SiteGeometryFile_Reader.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Utilities\NDMaterialFactory.h" />
+    <ClInclude Include="..\..\src\SiteResponse\SRT_Globals.h" />
+    <ClInclude Include="..\..\src\Utilities\NDMaterialFactory.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Utilities">

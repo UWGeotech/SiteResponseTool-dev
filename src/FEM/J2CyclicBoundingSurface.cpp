@@ -26,11 +26,10 @@
 //            
 
 #include <J2CyclicBoundingSurface.h>
-
-
+#include <J2CyclicBoundingSurface3D.h>
+#include <J2CyclicBoundingSurfacePlaneStrain.h>
 #include <Information.h>
 #include <Parameter.h>
-
 #include <string.h>
 #include <Channel.h>
 #include <FEM_ObjectBroker.h>
@@ -101,6 +100,53 @@ J2CyclicBoundingSurface::J2CyclicBoundingSurface(int  tag,
 	double beta)
 	:
 	NDMaterial(tag, ND_TAG_J2CyclicBoundingSurface),
+	m_sigma0_n(6), m_sigma0_np1(6), m_stress_n(6), m_stress_np1(6), m_strain_np1(6), 
+	m_strain_n(6), m_strainRate_n(6), m_strainRate_n1(6), m_Cep(6, 6), m_Ce(6, 6), 
+	m_D(6, 6), m_stress_vis_n(6), m_stress_vis_n1(6), m_stress_t_n1(6)
+{
+	double m_poiss = (3.*K - 2.*G) / 2. / (3. * K + G);
+
+	if (m_poiss > 0.5) {
+		opserr << "\n ERROR! J2CyclicBoundingSurface Poiss can not be grater than 0.50!" << endln;
+		exit(-1);
+		return;
+	}
+
+	m_su = su;
+	m_bulk = K; // E / 3 / (1-2*nu)
+	m_shear = G;  // E / 2 / (1 + nu);
+	m_R = sqrt(8. / 3.)*su;
+	m_density = rho;
+	m_kappa_inf = 1.0e10;
+	m_h_par = h;
+	m_m_par = m;
+	m_h0_par = h0;
+	m_beta = beta;
+	m_kappa_n = m_kappa_inf;
+	m_kappa_np1 = m_kappa_inf;
+	m_psi_n = 2.*m_shear;
+	m_chi = chi;
+
+	m_isElast2Plast = false;
+	debugFlag = false;
+	small = 1.0e-10;
+
+	calcInitialTangent();
+}
+
+//full constructor
+J2CyclicBoundingSurface::J2CyclicBoundingSurface(int  tag, int classTag,
+	double G,
+	double K,
+	double su,
+	double rho,
+	double h,
+	double m,
+	double h0,
+	double chi,
+	double beta)
+	:
+	NDMaterial(tag, classTag),
 	m_sigma0_n(6), m_sigma0_np1(6), m_stress_n(6), m_stress_np1(6), m_strain_np1(6), 
 	m_strain_n(6), m_strainRate_n(6), m_strainRate_n1(6), m_Cep(6, 6), m_Ce(6, 6), 
 	m_D(6, 6), m_stress_vis_n(6), m_stress_vis_n1(6), m_stress_t_n1(6)
@@ -498,8 +544,6 @@ double J2CyclicBoundingSurface::H(double kappa)
 
 void J2CyclicBoundingSurface::Print(OPS_Stream & s, int flag)
 {
-	s << "Material Tag: " << this->getTag() << ", Type: " << this->getClassType() << endln;
-	s << "  Parameters: G = " << this->m_shear << ", K = " << this->m_bulk << ", su = " << this->m_su << ", h = " << m_h_par << ", h0 = " << this->m_h0_par << ", m = " << this->m_m_par << ", chi = " << this->m_chi << endln;
 }
 
 NDMaterial*
@@ -513,8 +557,18 @@ J2CyclicBoundingSurface::getCopy(void)
 const char*
 J2CyclicBoundingSurface::getType(void) const
 {
-	return "ThreeDimensional";
+	opserr << "J2CyclicBoundingSurface::getCopy -- subclass responsibilitynot implemented.\n";
+	exit(-1);
+	return 0;
 }
+
+//const Matrix&
+//J2CyclicBoundingSurface::getTangent()
+//{
+//	opserr << "J2CyclicBoundingSurface::getTangent -- subclass responsibilitynot implemented.\n";
+//	exit(-1);
+//	return Matrix(6,6);
+//}
 
 int
 J2CyclicBoundingSurface::getOrder(void) const
@@ -529,8 +583,13 @@ NDMaterial * J2CyclicBoundingSurface::getCopy(const char * type)
 {
 
 	if (strcmp(type, "ThreeDimensional") == 0 || strcmp(type, "3D") == 0) {
-		J2CyclicBoundingSurface *clone;
-		clone = new J2CyclicBoundingSurface(this->getTag(), m_shear, m_bulk, m_su, m_density, m_h_par, m_m_par, m_h0_par, m_chi, m_beta);
+		J2CyclicBoundingSurface3D *clone;
+		clone = new J2CyclicBoundingSurface3D(this->getTag(), m_shear, m_bulk, m_su, m_density, m_h_par, m_m_par, m_h0_par, m_chi, m_beta);
+		return clone;
+	}
+	else if (strcmp(type, "PlaneStrain") == 0 || strcmp(type, "2D") == 0) {
+		J2CyclicBoundingSurfacePlaneStrain* clone;
+		clone = new J2CyclicBoundingSurfacePlaneStrain(this->getTag(), m_shear, m_bulk, m_su, m_density, m_h_par, m_m_par, m_h0_par, m_chi, m_beta);
 		return clone;
 	}
 	else {
@@ -635,45 +694,45 @@ J2CyclicBoundingSurface::recvSelf(int commitTag, Channel &theChannel,
 }
 
 // get the strain and integrate plasticity equations
-int
-J2CyclicBoundingSurface::setTrialStrain(const Vector &strain_from_element)
-{
-	m_strain_np1 = strain_from_element;
-	this->integrate();
-
-	return 0;
-}
+//int
+//J2CyclicBoundingSurface::setTrialStrain(const Vector &strain_from_element)
+//{
+//	m_strain_np1 = strain_from_element;
+//	this->integrate();
+//
+//	return 0;
+//}
 
 // unused trial strain functions
-int
-J2CyclicBoundingSurface::setTrialStrain(const Vector &v, const Vector &r)
-{
-	m_strainRate_n1 = r;
-	m_strain_np1 = v;
-	this->integrate();
-
-	return 0;
-}
+//int
+//J2CyclicBoundingSurface::setTrialStrain(const Vector &v, const Vector &r)
+//{
+//	m_strainRate_n1 = r;
+//	m_strain_np1 = v;
+//	this->integrate();
+//
+//	return 0;
+//}
 
 // send back the strain
-const Vector&
-J2CyclicBoundingSurface::getStrain()
-{
-	return m_strain_np1;
-}
+//const Vector&
+//J2CyclicBoundingSurface::getStrain()
+//{
+//	return m_strain_np1;
+//}
 
 // send back the stress 
-const Vector&
-J2CyclicBoundingSurface::getStress()
-{
-	//return m_stress_np1;
-	return m_stress_t_n1;
-}
+//const Vector&
+//J2CyclicBoundingSurface::getStress()
+//{
+//	//return m_stress_np1;
+//	return m_stress_t_n1;
+//}
 
 
 // send back the tangent 
 const Matrix&
-J2CyclicBoundingSurface::getTangent()
+J2CyclicBoundingSurface::calcTangent()
 {
 	// Force elastic response
 	if (m_ElastFlag == 0) {
@@ -717,8 +776,8 @@ J2CyclicBoundingSurface::getTangent()
 }
 
 // send back the tangent 
-const Matrix&
-J2CyclicBoundingSurface::getInitialTangent()
-{
-	return m_Ce;
-}
+//const Matrix&
+//J2CyclicBoundingSurface::getInitialTangent()
+//{
+//	return m_Ce;
+//}

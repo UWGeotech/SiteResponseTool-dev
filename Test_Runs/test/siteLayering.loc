@@ -1,4 +1,4 @@
-# LayerName    Thickness    VS         VP        Rho   Su        hG    m   h0
-ElasticLayer   5.0          100.0      200.0    2.0   200.0     1.0   1.0  0.005
-Soft_Clay      5.0          100.0      200.0    2.0   200.0     1.0   1.0  0.005
-Rock           0.0          2000.0     4000.0   2.5   0.0       0.0   0.0  0.005
+# LayerName    Thickness    VS         VP        Rho   Su        hG    m   h0   	chi		IO
+ElasticLayer   10.0         100.0      200.0    2.0   200.0     1.0   1.0  0.005	0.0		true
+Soft_Clay      5.0          100.0      200.0    2.0   200.0     1.0   1.0  0.005	0.0		true
+Rock           0.0          2000.0     4000.0   2.5   0.0       0.0   0.0  0.005	0.0		true

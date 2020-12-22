@@ -193,6 +193,8 @@
     <ClCompile Include="..\..\src\FEM\Information.cpp" />
     <ClCompile Include="..\..\src\FEM\Integrator.cpp" />
     <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface.cpp" />
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface3D.cpp" />
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.cpp" />
     <ClCompile Include="..\..\src\FEM\LegendreBeamIntegration.cpp" />
     <ClCompile Include="..\..\src\FEM\LinearCrdTransf3d.cpp" />
     <ClCompile Include="..\..\src\FEM\LinearSeries.cpp" />
@@ -347,6 +349,8 @@
     <ClInclude Include="..\..\src\FEM\Information.h" />
     <ClInclude Include="..\..\src\FEM\Integrator.h" />
     <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface.h" />
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface3D.h" />
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.h" />
     <ClInclude Include="..\..\src\FEM\LegendreBeamIntegration.h" />
     <ClInclude Include="..\..\src\FEM\LinearCrdTransf3d.h" />
     <ClInclude Include="..\..\src\FEM\LinearSeries.h" />

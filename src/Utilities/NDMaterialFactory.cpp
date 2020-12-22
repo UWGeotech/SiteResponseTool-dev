@@ -14,10 +14,9 @@ NDMaterialFactory::~NDMaterialFactory()
 }
 
 NDMaterial*
-NDMaterialFactory::create_elastic_material(LayerMaterial layer_mat)
+NDMaterialFactory::create_elastic_material(LayerMaterial layer_mat, int tag)
 {
     NDMaterial* theMat;
-    int tag = 1;
     double E = std::stod( layer_mat.get_prperty("E") );
     double nu = std::stod( layer_mat.get_prperty("nu") );
     double rho = std::stod( layer_mat.get_prperty("rho") );
@@ -28,10 +27,9 @@ NDMaterialFactory::create_elastic_material(LayerMaterial layer_mat)
 }
 
 NDMaterial* 
-NDMaterialFactory::create_J2Cyclic_material(LayerMaterial layer_mat)
+NDMaterialFactory::create_J2Cyclic_material(LayerMaterial layer_mat, int tag)
 {
     NDMaterial* theMat;
-    int tag = 1;
 
     double G = std::stod(layer_mat.get_prperty("G"));
     double K = std::stod(layer_mat.get_prperty("K"));

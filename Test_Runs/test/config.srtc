@@ -1,4 +1,9 @@
 {
+	"Input":
+	{
+		"MaterialLibrary":"test.json",
+		"SiteGeometry":"test.json"
+	}
     "Meshing":
     {
         "Manual":"False",
@@ -23,7 +28,8 @@
                 "Tolerance":"1.0e-7",
                 "MaxNumIterations":"30",
                 "PrintTag":"1"
-            }
+            },
+			"Solver":"SparseGeneral"
         },
         "Dynamic":
         {
