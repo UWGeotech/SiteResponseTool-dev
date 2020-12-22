@@ -16,7 +16,10 @@ OBJS =  \
        LayerMaterial.o       \
        MaterialFile_Reader.o \
        JsonMaterialFile_Reader.o \
-       MaterialManager.o
+       MaterialManager.o \
+       LayerMaterial.o \
+       LayerMaterialLibrary.o \
+       NDMaterialFactory.o
 	   
 
 archive: $(OBJS)
