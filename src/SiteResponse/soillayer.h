@@ -38,6 +38,7 @@ public:
 
 	double      getMatShearModulus();
 	double      getMatBulkModulus();
+	double      getMatElasticModulus();
 	double      getMatPoissonRatio();
 	double      getNaturalPeriod();
 
