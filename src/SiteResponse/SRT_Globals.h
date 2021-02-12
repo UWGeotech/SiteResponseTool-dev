@@ -1,8 +1,11 @@
 #include "OPS_Globals.h"
 #include "ConfigManager.h"
+#include "SiteGeometry.h"
 
 
 extern ConfigManager* program_config;
+extern SiteGeometry* site_geometry;
+extern MaterialManager*  material_manager;
 
 #define PI 3.14159265359
 

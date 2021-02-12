@@ -63,6 +63,8 @@ OBJS = \
        Information.o \
        Integrator.o \
        J2CyclicBoundingSurface.o \
+       J2CyclicBoundingSurface3D.o \
+       J2CyclicBoundingSurfacePlaneStrain.o \
        LegendreBeamIntegration.o \
        LinearCrdTransf3d.o \
        LinearSeries.o \

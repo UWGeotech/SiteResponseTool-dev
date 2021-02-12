@@ -405,6 +405,12 @@
     <ClCompile Include="..\..\src\FEM\NodalLoad.cpp">
       <Filter>FEM</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface3D.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.cpp">
+      <Filter>FEM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\FEM\Analysis.h">
@@ -915,6 +921,12 @@
       <Filter>FEM</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\FEM\ZeroLength.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface3D.h">
+      <Filter>FEM</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.h">
       <Filter>FEM</Filter>
     </ClInclude>
   </ItemGroup>

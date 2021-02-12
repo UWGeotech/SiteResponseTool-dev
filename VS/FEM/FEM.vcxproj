@@ -39,7 +39,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -115,8 +115,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)\..\ThirdParty\UMFPACK;$(SolutionDir)\..\src\FEM</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -191,6 +193,8 @@
     <ClCompile Include="..\..\src\FEM\Information.cpp" />
     <ClCompile Include="..\..\src\FEM\Integrator.cpp" />
     <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface.cpp" />
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurface3D.cpp" />
+    <ClCompile Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.cpp" />
     <ClCompile Include="..\..\src\FEM\LegendreBeamIntegration.cpp" />
     <ClCompile Include="..\..\src\FEM\LinearCrdTransf3d.cpp" />
     <ClCompile Include="..\..\src\FEM\LinearSeries.cpp" />
@@ -345,6 +349,8 @@
     <ClInclude Include="..\..\src\FEM\Information.h" />
     <ClInclude Include="..\..\src\FEM\Integrator.h" />
     <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface.h" />
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurface3D.h" />
+    <ClInclude Include="..\..\src\FEM\J2CyclicBoundingSurfacePlaneStrain.h" />
     <ClInclude Include="..\..\src\FEM\LegendreBeamIntegration.h" />
     <ClInclude Include="..\..\src\FEM\LinearCrdTransf3d.h" />
     <ClInclude Include="..\..\src\FEM\LinearSeries.h" />

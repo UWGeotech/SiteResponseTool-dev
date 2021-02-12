@@ -1,0 +1,117 @@
+{
+"Site_Geometry":
+{
+	"Layers":
+	{
+		"ElasticLayer" :
+		{
+			"Material" : "ElasticLayer",
+			"Thickness": 10.0
+		},
+		"Soft_Clay" :
+		{
+			"Material" : "Soft_Clay",
+			"Thickness": 5.0
+		}
+	},
+	"Layers_Order":
+	[
+		"ElasticLayer", "Soft_Clay"
+	],
+	"Groundwater_Depth": 1000.0,
+	"Base_Layer": 
+	{
+		"Name": "Rock",
+		"Type": "Compliant",
+		"Material": "Granite_mat"
+	}
+},
+"Material_Library":
+{
+	"ElasticLayer":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "20000.00",
+			"K": "53333.33",
+			"su": "200.0",
+			"rho": "2.0",
+			"h": "1.0",
+			"m": "1.0",
+			"h0": "0.005",
+			"chi": "0.0",
+			"beta": "0.5",
+			"min_damp": "0.02"
+		}
+	},
+	"Soft_Clay":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "20000.00",
+			"K": "53333.33",
+			"su": "200.0",
+			"rho": "2.0",
+			"h": "1.0",
+			"m": "1.0",
+			"h0": "0.005",
+			"chi": "0.0",
+			"beta": "0.5",
+			"min_damp": "0.02"
+		}
+	},
+	"Clay1_mat":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "1000.0",
+			"K": "2000.0",
+			"min_damp": "0.02"
+		}
+	},
+	"Clay2_mat":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "1000.0",
+			"K": "2000.0",
+			"min_damp": "0.02"
+		}
+	},
+	"Clay3_mat":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "1000.0",
+			"K": "2000.0",
+			"min_damp": "0.02"
+		}
+	},
+	"Clay4_mat":
+	{
+		"Material_Type": "J2CyclicBoundingSurface",
+		"Material_Properties":
+		{
+			"G": "1000.0",
+			"K": "2000.0",
+			"min_damp": "0.02"
+		}
+	},
+	"Granite_mat":
+	{
+		"Material_Type": "ElasticRock",
+		"Material_Properties":
+		{
+			"VS" : "2000.0",
+			"VP" : "4000.0",
+			"rho": "2.5",
+			"min_damp": "0.02"
+		}
+	}
+}
+}

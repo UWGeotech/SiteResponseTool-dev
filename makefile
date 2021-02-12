@@ -2,7 +2,7 @@ include ./Makefile.in
 
 # -------------------------
 
-siteResponse: ./src/SiteResponse/Main.cpp $(FEMlib)
+siteResponse: ./src/SiteResponse/Main.cpp $(FEMlib) $(UTILlib) $(SRTlib) $(THIRDPARTY_LIB)
 	make libs
 	@$(CXX) $(CXXOPTFLAG) $(THIRDPARTY_INCLUDE) $(LINCLUDE) $(MINCLUDE) ./src/SiteResponse/Main.cpp $(UTILlib) $(SRTlib) $(FEMlib) $(THIRDPARTY_LIB) $(NUMLIBS) -o $(source)/bin/siteresponse
 	
