@@ -94,6 +94,7 @@ int main(int argc, char** argv)
 		}
 	}
 
+
 	program_config = ConfigManager::get_Instance();
 
 	site_geometry = new SiteGeometry(program_config->getStringProperty("Input|SiteGeometry"));
