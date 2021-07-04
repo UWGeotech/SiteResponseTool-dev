@@ -39,7 +39,7 @@ MaterialManager::create_NDMaterial(LayerMaterial layer_mat, int OS_tag)
 	NDMaterial* theMat = NULL;
 	if (layer_mat.get_type() == "ElasticIsotropic")
 		theMat = mat_factory.create_elastic_material(layer_mat, OS_tag);
-	else if (layer_mat.get_type() == "J2BoundingCyclic")
+	else if ((layer_mat.get_type() == "J2BoundingCyclic") || (layer_mat.get_type() == "J2CyclicBoundingSurface"))
 		theMat = mat_factory.create_J2Cyclic_material(layer_mat, OS_tag);
 	else
 	{

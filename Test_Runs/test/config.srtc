@@ -3,7 +3,7 @@
 	{
 		"MaterialLibrary":"test.json",
 		"SiteGeometry":"test.json"
-	}
+	},
     "Meshing":
     {
         "Manual":"False",
@@ -23,16 +23,18 @@
     {
         "Gravity":
         {
+			"PerformGravity":"True",
             "ConvergenceTest":
             {
                 "Tolerance":"1.0e-7",
                 "MaxNumIterations":"30",
                 "PrintTag":"1"
             },
-			"Solver":"SparseGeneral"
+			"Solver":"BandGeneral"
         },
         "Dynamic":
         {
+			"Integrator":"Newmark",
             "ConvergenceTest":
             {
                 "Tolerance":"1.0e-5",
@@ -40,7 +42,8 @@
                 "PrintTag":"1"
             },
             "Newmark_Beta":"0.25",
-            "Newmark_Gamma":"0.50"
+            "Newmark_Gamma":"0.50",
+			"Solver":"BandGeneral"
         },
         "RigidBase":"False",
         "Damping":
